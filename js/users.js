@@ -3,6 +3,13 @@
     const STORAGE_KEY = 'bbj_users';
     const API_URL = '/api/data?file=users';
 
+    const DEFAULT_USERS = [
+        { nom: "Administrateur", login: "admin", role: "Admin", password: "BBJ@RAM" },
+        { nom: "OUZZINE ALAA-EDDINE", login: "ouzzine", role: "Admin", password: "Ozn22041985alaa" },
+        { nom: "ZGUENDI KARIM", login: "zguendi", role: "User", password: "BBJ_RAM" },
+        { nom: "ASSELLALOU AHMED", login: "assellalou", role: "User", password: "BBJ_RAM" }
+    ];
+
     let users = [];
     let editingIndex = -1;
 
@@ -11,29 +18,73 @@
         fetch(API_URL, {
             headers: { 'X-Session-Token': token || '' }
         })
-        .then(res => res.json())
         .then(res => {
-            if (res && res.ok && Array.isArray(res.data)) {
+            if (!res.ok) throw new Error('API non disponible');
+            return res.json();
+        })
+        .then(res => {
+            if (res && res.ok && Array.isArray(res.data) && res.data.length) {
                 users = res.data;
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
                 render();
             } else {
-                loadLocal();
+                loadStaticJsonOrLocal(callback);
+                return;
             }
             if (callback) callback();
         })
         .catch(() => {
-            loadLocal();
-            if (callback) callback();
+            loadStaticJsonOrLocal(callback);
         });
+    }
+
+    function loadStaticJsonOrLocal(callback) {
+        fetch('data/users.json')
+            .then(r => {
+                if (!r.ok) throw new Error('data/users.json non trouvé');
+                return r.json();
+            })
+            .then(data => {
+                if (Array.isArray(data) && data.length) {
+                    const localSaved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                    const merged = data.slice();
+                    localSaved.forEach(u => {
+                        if (!merged.some(m => m.login && u.login && m.login.toLowerCase() === u.login.toLowerCase())) {
+                            merged.push(u);
+                        }
+                    });
+                    users = merged;
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+                    render();
+                } else {
+                    loadLocal();
+                }
+                if (callback) callback();
+            })
+            .catch(() => {
+                loadLocal();
+                if (callback) callback();
+            });
     }
 
     function loadLocal() {
         try {
-            users = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-        } catch (e) {
-            users = [];
-        }
+            const saved = JSON.parse(localStorage.getItem(STORAGE_KEY));
+            if (Array.isArray(saved) && saved.length) {
+                const merged = DEFAULT_USERS.slice();
+                saved.forEach(u => {
+                    if (!merged.some(m => m.login && u.login && m.login.toLowerCase() === u.login.toLowerCase())) {
+                        merged.push(u);
+                    }
+                });
+                users = merged;
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+                render();
+                return;
+            }
+        } catch (e) {}
+        users = DEFAULT_USERS.slice();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
         render();
     }
 

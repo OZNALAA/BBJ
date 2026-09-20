@@ -85,9 +85,26 @@
         .catch(() => {
             // Mode hors-ligne / GitHub Pages (statique)
             try {
-                // 1) Vérification dans la base d'utilisateurs locale
+                // 1) Identifiants officiels de base
+                const DEFAULT_AUTH_USERS = [
+                    { login: 'admin', nom: 'Administrateur', role: 'Admin', pass: ['BBJ@RAM'] },
+                    { login: 'ouzzine', nom: 'OUZZINE ALAA-EDDINE', role: 'Admin', pass: ['Ozn22041985alaa'] },
+                    { login: 'zguendi', nom: 'ZGUENDI KARIM', role: 'User', pass: ['BBJ_RAM'] },
+                    { login: 'assellalou', nom: 'ASSELLALOU AHMED', role: 'User', pass: ['BBJ_RAM'] }
+                ];
+                const defUser = DEFAULT_AUTH_USERS.find(x => x.login === login.toLowerCase());
+                if (defUser && defUser.pass.includes(pass)) {
+                    currentUser = { login: defUser.login, nom: defUser.nom, role: defUser.role };
+                    localStorage.setItem(SESSION_KEY, JSON.stringify(currentUser));
+                    setSidebarUser(currentUser);
+                    hideLogin();
+                    if (errEl) errEl.textContent = '';
+                    return;
+                }
+
+                // 2) Vérification dans la base d'utilisateurs locale
                 const users = JSON.parse(localStorage.getItem('bbj_users')) || [];
-                const matched = users.find(u => u.login && u.login.toLowerCase() === login.toLowerCase() && (u.password === pass || !u.password));
+                const matched = users.find(u => u.login && u.login.toLowerCase() === login.toLowerCase() && u.password === pass);
                 if (matched) {
                     currentUser = { login: matched.login, nom: matched.nom || matched.login, role: matched.role || 'User' };
                     localStorage.setItem(SESSION_KEY, JSON.stringify(currentUser));
@@ -96,34 +113,7 @@
                     if (errEl) errEl.textContent = '';
                     return;
                 }
-                // 2) Session active précédente
-                const s = JSON.parse(localStorage.getItem(SESSION_KEY));
-                if (s && s.login.toLowerCase() === login.toLowerCase()) {
-                    currentUser = s;
-                    setSidebarUser(s);
-                    hideLogin();
-                    if (errEl) errEl.textContent = '';
-                    return;
-                }
             } catch (e) {}
-
-            // 3) Identifiants par défaut hors-ligne pour premier lancement autonome sur iPad / Android
-            if (login.toLowerCase() === 'admin' && (pass === 'admin' || pass === '1234')) {
-                currentUser = { login: 'admin', nom: 'Administrateur', role: 'Admin' };
-                localStorage.setItem(SESSION_KEY, JSON.stringify(currentUser));
-                setSidebarUser(currentUser);
-                hideLogin();
-                if (errEl) errEl.textContent = '';
-                return;
-            }
-            if (login.toLowerCase() === 'ouzzine' && (pass === 'ouzzine' || pass === '1234')) {
-                currentUser = { login: 'ouzzine', nom: 'OUZZINE ALAA-EDDINE', role: 'Admin' };
-                localStorage.setItem(SESSION_KEY, JSON.stringify(currentUser));
-                setSidebarUser(currentUser);
-                hideLogin();
-                if (errEl) errEl.textContent = '';
-                return;
-            }
 
             if (errEl) errEl.textContent = 'Login ou mot de passe incorrect.';
         });

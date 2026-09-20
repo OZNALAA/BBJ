@@ -12,5 +12,26 @@
     "fonction": "CDB",
     "grade": "ARA",
     "posit": "ARA"
+  },
+  {
+    "nom": "ABDOUN",
+    "matricule": "10452",
+    "fonction": "OPL",
+    "grade": "DDA",
+    "posit": "DDA"
+  },
+  {
+    "nom": "EL ATIAOUI",
+    "matricule": "11234",
+    "fonction": "CDB",
+    "grade": "AAA",
+    "posit": "AAA"
+  },
+  {
+    "nom": "ZGUENDI KARIM",
+    "matricule": "13420",
+    "fonction": "OPL",
+    "grade": "DDA",
+    "posit": "DDA"
   }
 ]

@@ -3,24 +3,28 @@
     "nom": "Administrateur",
     "login": "admin",
     "role": "Admin",
-    "password_hash": "a983883690eebe95dfc12d9565219f17$2ee7bd567dbda6e6b37a4c5e87eadeb6c7b3971c5aa17670686f7f53a40d4855"
+    "password": "BBJ@RAM",
+    "password_hash": "e6869f14f1a3a24146ae4e8882b08dd3$1537169b3c195f4d24c57c1c18ee997cd468ee020e482219d4e38628ff180968"
   },
   {
     "nom": "OUZZINE ALAA-EDDINE",
     "login": "ouzzine",
     "role": "Admin",
-    "password_hash": "0df5157c238833bf72ca559a947f7dd4$5111bd642ea67b36b691e573fb72b8b8ac035f39213d486f5d6aeb7eb93f8eae"
+    "password": "Ozn22041985alaa",
+    "password_hash": "e5c84bd1e6a5073777e1cd2ca03d697d$e8bb2bc6e3a241d327fa6d3421a3d043d7da92e1aa0bd403a4b9287a5639371b"
   },
   {
     "nom": "ZGUENDI KARIM",
     "login": "zguendi",
     "role": "User",
-    "password_hash": "b265b347b4b519f8b07a211307b6041c$47a89d34b5b05acaa5e26dec541474fdc70da6da74d17ff75c87955582d13c18"
+    "password": "BBJ_RAM",
+    "password_hash": "003638ea71f3ce1222359e04c0f7eda3$6684f991f1e74d0df4ada1de3d0cfe32ff3db64619fd90b30b32f5af4375fee8"
   },
   {
     "nom": "ASSELLALOU AHMED",
     "login": "assellalou",
     "role": "User",
-    "password_hash": "a06e5ed3af49d218e880f0a505998f52$9f86530a3ba59c198685e636a37d89c2e6768b81e57730078856445d061d1454"
+    "password": "BBJ_RAM",
+    "password_hash": "cfd15e3c8d288c6337f9a845a7c6fee6$2c0bc0fffb076fa3a6d562ac9a38ac8adc8327edd19df9fc87b75d1bf375eddf"
   }
 ]

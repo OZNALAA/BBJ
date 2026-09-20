@@ -19,10 +19,11 @@
     };
 
     const DEFAULT_CREW = [
-        { nom: "OUZZINE ALAA-EDDINE", matricule: "12583", fonction: "CDB", grade: "AAA" },
-        { nom: "ASSELLALOU AHMED", matricule: "9202", fonction: "CDB", grade: "ARA" },
-        { nom: "ABDOUN", matricule: "10452", fonction: "OPL", grade: "DDA" },
-        { nom: "EL ATIAOUI", matricule: "11234", fonction: "CDB", grade: "AAA" }
+        { nom: "OUZZINE ALAA-EDDINE", matricule: "12583", fonction: "CDB", grade: "AAA", posit: "AAA" },
+        { nom: "ASSELLALOU AHMED", matricule: "9202", fonction: "CDB", grade: "ARA", posit: "ARA" },
+        { nom: "ABDOUN", matricule: "10452", fonction: "OPL", grade: "DDA", posit: "DDA" },
+        { nom: "EL ATIAOUI", matricule: "11234", fonction: "CDB", grade: "AAA", posit: "AAA" },
+        { nom: "ZGUENDI KARIM", matricule: "13420", fonction: "OPL", grade: "DDA", posit: "DDA" }
     ];
 
     let crew = [];
@@ -78,25 +79,50 @@
 
     function loadServer(callback) {
         fetch(API_URL)
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) throw new Error('API server non disponible');
+                return res.json();
+            })
             .then(res => {
                 if (res && res.ok && Array.isArray(res.data) && res.data.length) {
                     crew = res.data.map(sanitizeMember);
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(crew));
                     render();
                     if (typeof populateCrewFields === 'function') populateCrewFields();
-                } else if (!crew.length) {
+                } else {
+                    loadStaticJsonOrLocal(callback);
+                    return;
+                }
+                if (callback) callback();
+            })
+            .catch(() => {
+                // Serveur injoignable (ex: GitHub Pages ou hors-ligne): fallback sur data/crew.json
+                loadStaticJsonOrLocal(callback);
+            });
+    }
+
+    function loadStaticJsonOrLocal(callback) {
+        fetch('data/crew.json')
+            .then(r => {
+                if (!r.ok) throw new Error('data/crew.json non trouvé');
+                return r.json();
+            })
+            .then(data => {
+                if (Array.isArray(data) && data.length) {
+                    const localSaved = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+                    crew = (localSaved.length ? localSaved : data).map(sanitizeMember);
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(crew));
+                    render();
+                    if (typeof populateCrewFields === 'function') populateCrewFields();
+                } else {
                     loadLocal();
                     render();
                 }
                 if (callback) callback();
             })
             .catch(() => {
-                // Serveur injoignable (ex: mode hors-ligne)
-                if (!crew.length) {
-                    loadLocal();
-                    render();
-                }
+                loadLocal();
+                render();
                 if (callback) callback();
             });
     }
