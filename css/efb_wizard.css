@@ -1,0 +1,1051 @@
+/* ==========================================================================
+   css/efb_wizard.css — Royal Air Maroc EFB Cockpit Interface for New W&B
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;600;700&family=JetBrains+Mono:wght@400;600;700&family=Space+Grotesk:wght@400;600;700&display=swap');
+
+/* Scope EFB Styles to #panel-newcalc */
+#panel-newcalc {
+  --efb-red: #A51025;
+  --efb-darkred: #780616;
+  --efb-cyan: #38BDF8;
+  --efb-amber: #F59E0B;
+  --efb-green: #00E5A3;
+  --efb-bg: #0B0F14;
+  --efb-surface: #141A22;
+  --efb-panel: #1A222D;
+  --efb-border: #283444;
+  --efb-text: #E2E8F0;
+  --efb-muted: #8492A6;
+  --efb-fuel-glow: #0284c7;
+
+  background-color: var(--efb-bg);
+  color: var(--efb-text);
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  border: 1px solid var(--efb-border);
+}
+
+/* Eliminate white background on the .wizard container */
+#panel-newcalc .wizard {
+  background: var(--efb-bg) !important;
+  border: none !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* Light Cockpit Mode */
+#panel-newcalc.efb-light-mode,
+body.efb-light-mode #panel-newcalc {
+  --efb-bg: #F1F5F9;
+  --efb-surface: #FFFFFF;
+  --efb-panel: #F8FAFC;
+  --efb-border: #CBD5E1;
+  --efb-text: #0F172A;
+  --efb-muted: #64748B;
+  --efb-cyan: #0284C7;
+  --efb-fuel-glow: #0ea5e9;
+}
+
+/* Hide old default banners in newcalc */
+#panel-newcalc .header-images,
+#panel-newcalc .panel-header h1:not(.efb-title),
+#panel-newcalc .panel-header .header-sub {
+  display: none !important;
+}
+
+#panel-newcalc .panel-header {
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+}
+
+/* EFB Cockpit Header */
+.efb-cockpit-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 18px;
+  background: var(--efb-surface);
+  border-bottom: 1px solid var(--efb-border);
+}
+
+.efb-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.efb-crest {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  flex-shrink: 0;
+  padding: 3px;
+  overflow: hidden;
+}
+
+.efb-crest-logo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+body.efb-light-mode .efb-crest {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.efb-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.efb-airline-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.efb-airline {
+  font-family: 'Chakra Petch', sans-serif;
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  color: var(--efb-red);
+}
+
+.efb-acft-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 6px;
+  background: rgba(56, 189, 248, 0.15);
+  color: var(--efb-cyan);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  border-radius: 4px;
+}
+
+.efb-subtitle {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--efb-text);
+  opacity: 0.9;
+}
+
+/* Header Controls & Clocks */
+.efb-header-controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.efb-clocks {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--efb-panel);
+  border: 1px solid var(--efb-border);
+  padding: 4px 12px;
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+}
+
+.efb-clock-col {
+  text-align: center;
+}
+
+.efb-clock-lbl {
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--efb-muted);
+}
+
+.efb-clock-val {
+  font-weight: 700;
+  color: var(--efb-text);
+}
+
+.efb-clock-zulu {
+  color: var(--efb-cyan);
+}
+
+.efb-theme-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--efb-panel);
+  border: 1px solid var(--efb-border);
+  color: var(--efb-text);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.efb-theme-btn:hover {
+  border-color: var(--efb-cyan);
+  background: rgba(56, 189, 248, 0.1);
+}
+
+/* EFB Telemetry Bar */
+.efb-telemetry-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--efb-panel);
+  border-bottom: 1px solid var(--efb-border);
+}
+
+.efb-tele-cell {
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--efb-border);
+  border-radius: 6px;
+  padding: 4px 8px;
+}
+
+.efb-tele-lbl {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--efb-muted);
+}
+
+.efb-tele-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--efb-text);
+}
+
+.efb-tele-val.accent {
+  color: var(--efb-cyan);
+}
+.efb-tele-val.red {
+  color: #F87171;
+}
+
+/* Wizard Steps Ribbon */
+#panel-newcalc .wizard-steps {
+  display: flex;
+  background: var(--efb-surface);
+  border-bottom: 1px solid var(--efb-border);
+  padding: 4px;
+  gap: 4px;
+  overflow-x: auto;
+}
+
+#panel-newcalc .wizard-step {
+  flex: 1;
+  min-width: 130px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: var(--efb-panel);
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+#panel-newcalc .wizard-step.active {
+  background: rgba(165, 16, 37, 0.15);
+  border-color: var(--efb-red);
+  box-shadow: inset 0 0 12px rgba(165, 16, 37, 0.25);
+}
+
+#panel-newcalc .wizard-step.active .wizard-step-num {
+  background: var(--efb-red);
+  color: #fff;
+}
+
+#panel-newcalc .wizard-step.active .wizard-step-title {
+  color: #fff;
+  font-weight: 700;
+}
+
+#panel-newcalc .wizard-step-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--efb-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+#panel-newcalc .wizard-step-title {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--efb-muted);
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Wizard Content */
+#panel-newcalc .wizard-content {
+  padding: 16px;
+  background: var(--efb-bg);
+  min-height: 480px;
+}
+
+#panel-newcalc .wizard-section {
+  background: var(--efb-surface);
+  border: 1px solid var(--efb-border);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin-bottom: 14px;
+}
+
+#panel-newcalc .section-title {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--efb-text);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Inputs & Form Groups in EFB */
+#panel-newcalc .form-group label {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--efb-muted);
+  margin-bottom: 4px;
+  display: block;
+}
+
+#panel-newcalc .input-field {
+  background: var(--efb-panel);
+  border: 1px solid var(--efb-border);
+  color: var(--efb-text);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+  padding: 7px 10px;
+  transition: all 0.2s ease;
+}
+
+#panel-newcalc .input-field:focus {
+  border-color: var(--efb-cyan);
+  outline: none;
+  box-shadow: 0 0 8px rgba(56, 189, 248, 0.3);
+}
+
+#panel-newcalc .input-field.readonly-field {
+  background: rgba(0, 0, 0, 0.25);
+  color: var(--efb-cyan);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+/* Navigation Buttons */
+#panel-newcalc .wizard-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 18px;
+  background: var(--efb-surface);
+  border-top: 1px solid var(--efb-border);
+}
+
+/* ==========================================================================
+   STEP 2: Cockpit & Observers Visual Schematics
+   ========================================================================== */
+.efb-cockpit-schematic {
+  position: relative;
+  background: var(--efb-panel);
+  border: 1px solid var(--efb-border);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: hidden;
+}
+
+.efb-cockpit-svg-wrap {
+  width: 100%;
+  max-width: 580px;
+}
+
+.cockpit-observer-seat,
+.cockpit-cc-seat {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.cockpit-observer-seat.hidden-seat,
+.cockpit-cc-seat.hidden-seat {
+  opacity: 0.12;
+  transform: scale(0.95);
+  pointer-events: none;
+}
+
+.cockpit-observer-seat.active-seat,
+.cockpit-cc-seat.active-seat {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ==========================================================================
+   STEP 3: EFB INSERT & Fuel Uplift Interactive Tanks
+   ========================================================================== */
+.efb-insert-box {
+  background: linear-gradient(180deg, #16202C 0%, #0F161F 100%);
+  border: 1.5px solid #38BDF8;
+  border-radius: 8px;
+  padding: 12px 16px;
+  box-shadow: 0 4px 20px rgba(56, 189, 248, 0.15);
+  position: relative;
+  margin-bottom: 16px;
+}
+
+.efb-insert-badge {
+  position: absolute;
+  top: -10px;
+  left: 16px;
+  background: #38BDF8;
+  color: #070D14;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.efb-fuel-schematic {
+  background: var(--efb-panel);
+  border: 1px solid var(--efb-border);
+  border-radius: 10px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.fuel-tank-readout-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  width: 100%;
+  max-width: 680px;
+  margin-top: 10px;
+}
+
+.fuel-tank-badge {
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--efb-border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  text-align: center;
+}
+
+.fuel-tank-badge.active-fill {
+  border-color: var(--efb-cyan);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+}
+
+.fuel-tank-title {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--efb-muted);
+}
+
+.fuel-tank-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--efb-cyan);
+}
+
+.fuel-tank-cap {
+  font-size: 9px;
+  color: var(--efb-muted);
+}
+
+/* ==========================================================================
+   STEP 4: Cabin LOPA & Dedicated Zone Boxes
+   ========================================================================== */
+.efb-lopa-container {
+  background: var(--efb-panel);
+  border: 1px solid var(--efb-border);
+  border-radius: 10px;
+  padding: 16px 12px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+}
+
+.efb-lopa-svg-wrap {
+  min-width: 820px;
+  position: relative;
+}
+
+/* Zone Indicator & Values Callout Boxes on Cabin Plan */
+.lopa-zone-box-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.lopa-zone-box {
+  background: rgba(20, 26, 34, 0.95);
+  border: 1.5px solid var(--efb-border);
+  border-radius: 6px;
+  padding: 6px 8px;
+  transition: all 0.2s ease;
+}
+
+.lopa-zone-box:hover,
+.lopa-zone-box.has-load {
+  border-color: var(--efb-red);
+  background: rgba(165, 16, 37, 0.08);
+}
+
+.lopa-zone-box.zone-b-highlight {
+  border-color: #F59E0B;
+}
+
+.lopa-box-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 4px;
+}
+
+.lopa-box-title {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: #fff;
+}
+
+.lopa-box-arm {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px;
+  color: var(--efb-muted);
+}
+
+.lopa-box-metric {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--efb-cyan);
+}
+
+.lopa-box-input-wrap {
+  margin-top: 4px;
+}
+
+.lopa-box-input-wrap input {
+  width: 100%;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  padding: 3px 6px;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--efb-border);
+  border-radius: 4px;
+  color: #fff;
+}
+
+/* Zone Total Weight Callout Box */
+.lopa-zone-weight-box {
+  margin-top: 6px;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 5px;
+  padding: 3px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.lopa-weight-lbl {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--efb-muted);
+}
+
+.lopa-weight-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--efb-cyan);
+}
+
+/* Dynamic TTOL Seats on Cabin Schematic */
+.ttol-seat {
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.ttol-seat.empty {
+  fill: rgba(100, 116, 139, 0.25);
+  stroke: rgba(148, 163, 184, 0.4);
+}
+
+.ttol-seat.occupied-staff {
+  fill: #EF4444;
+  stroke: #B91C1C;
+  filter: drop-shadow(0 0 3px rgba(239, 68, 68, 0.7));
+}
+
+.ttol-seat.occupied-cc {
+  fill: #F59E0B;
+  stroke: #D97706;
+  filter: drop-shadow(0 0 3px rgba(245, 158, 11, 0.7));
+}
+
+.ttol-seat.occupied-pax {
+  fill: #38BDF8;
+  stroke: #0284C7;
+  filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.7));
+}
+
+/* Separate 2 Cargo Holds Grid */
+.cargo-holds-dual-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.cargo-hold-card {
+  background: var(--efb-panel);
+  border: 1px solid var(--efb-border);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cargo-hold-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cargo-hold-title {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--efb-text);
+}
+
+.cargo-hold-max {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--efb-muted);
+}
+
+.cargo-hold-bar {
+  height: 8px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--efb-border);
+}
+
+.cargo-hold-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #38BDF8, #0284C7);
+  transition: width 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .efb-cockpit-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .efb-header-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+  .fuel-tank-readout-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .cargo-holds-dual-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+   COCKPIT DAY / LIGHT MODE COMPREHENSIVE CONTRAST & VISIBILITY
+   ========================================================================== */
+
+/* Step 2: Cockpit Schematic in Light Mode */
+#panel-newcalc.efb-light-mode .efb-cockpit-schematic {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+}
+
+#panel-newcalc.efb-light-mode .efb-cockpit-schematic svg path:first-child {
+  fill: #F1F5F9;
+  stroke: #94A3B8;
+}
+
+#panel-newcalc.efb-light-mode #cockpit-zoneb-preview rect {
+  fill: #FFFFFF;
+  stroke: #CBD5E1;
+}
+
+#panel-newcalc.efb-light-mode #cockpit-zoneb-preview text {
+  fill: #334155;
+}
+
+/* Step 3: EFB OPT PERFORMANCE INSERT in Light Mode (Fixes black background) */
+#panel-newcalc.efb-light-mode .efb-insert-box {
+  background: linear-gradient(180deg, #FFFFFF 0%, #F1F5F9 100%);
+  border: 1.5px solid #0284C7;
+  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.12);
+}
+
+#panel-newcalc.efb-light-mode .efb-insert-badge {
+  background: #0284C7;
+  color: #FFFFFF;
+}
+
+#panel-newcalc.efb-light-mode .efb-insert-box .section-title {
+  color: #0F172A;
+}
+
+#panel-newcalc.efb-light-mode .efb-insert-box .opt-tag {
+  color: #0284C7 !important;
+}
+
+/* Step 3: Fuel Uplift & Tanks in Light Mode (Fixes invisible text on grey cards) */
+#panel-newcalc.efb-light-mode .efb-fuel-schematic {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+}
+
+#panel-newcalc.efb-light-mode .efb-fuel-schematic svg path:first-child {
+  fill: #E2E8F0;
+  stroke: #94A3B8;
+}
+
+#panel-newcalc.efb-light-mode .efb-fuel-schematic svg rect:not([id^="svg-tank-fill-"]) {
+  fill: #F1F5F9;
+  stroke: #0284C7;
+}
+
+#panel-newcalc.efb-light-mode .efb-fuel-schematic svg text {
+  fill: #0F172A;
+}
+
+#panel-newcalc.efb-light-mode .fuel-tank-badge {
+  background: #FFFFFF;
+  border: 1.5px solid #CBD5E1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+#panel-newcalc.efb-light-mode .fuel-tank-badge.active-fill {
+  background: #F0F9FF;
+  border-color: #0284C7;
+  box-shadow: 0 0 10px rgba(2, 132, 199, 0.2);
+}
+
+#panel-newcalc.efb-light-mode .fuel-tank-title {
+  color: #1E293B;
+  font-weight: 700;
+}
+
+#panel-newcalc.efb-light-mode .fuel-tank-val {
+  color: #0284C7;
+  font-weight: 800;
+}
+
+#panel-newcalc.efb-light-mode .fuel-tank-cap {
+  color: #475569;
+  font-weight: 600;
+}
+
+/* Step 4: Cabin LOPA & Zone Boxes in Light Mode (Fixes black zone boxes) */
+#panel-newcalc.efb-light-mode .efb-lopa-container {
+  background: #F8FAFC;
+  border-color: #CBD5E1;
+}
+
+#panel-newcalc.efb-light-mode .lopa-zone-box {
+  background: #FFFFFF;
+  border: 1.5px solid #CBD5E1;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+#panel-newcalc.efb-light-mode .lopa-zone-box:hover,
+#panel-newcalc.efb-light-mode .lopa-zone-box.has-load {
+  border-color: var(--efb-red);
+  background: rgba(165, 16, 37, 0.04);
+}
+
+#panel-newcalc.efb-light-mode .lopa-zone-box.zone-b-highlight {
+  border-color: #D97706;
+}
+
+#panel-newcalc.efb-light-mode .lopa-box-title {
+  color: #0F172A;
+}
+
+#panel-newcalc.efb-light-mode .lopa-box-arm {
+  color: #64748B;
+}
+
+#panel-newcalc.efb-light-mode .lopa-box-metric {
+  color: #0284C7;
+}
+
+#panel-newcalc.efb-light-mode .lopa-box-input-wrap label {
+  color: #475569 !important;
+}
+
+#panel-newcalc.efb-light-mode .lopa-box-input-wrap input {
+  background: #F8FAFC;
+  border: 1px solid #CBD5E1;
+  color: #0F172A;
+}
+
+#panel-newcalc.efb-light-mode .lopa-zone-box select {
+  background: #F8FAFC;
+  border: 1px solid #CBD5E1;
+  color: #0F172A;
+}
+
+#panel-newcalc.efb-light-mode .lopa-zone-weight-box {
+  background: #E0F2FE;
+  border-color: #7DD3FC;
+}
+
+#panel-newcalc.efb-light-mode .lopa-weight-lbl {
+  color: #0369A1;
+}
+
+#panel-newcalc.efb-light-mode .lopa-weight-val {
+  color: #0284C7;
+}
+
+#panel-newcalc.efb-light-mode .efb-lopa-svg-wrap svg path:first-child {
+  fill: #F1F5F9;
+  stroke: #94A3B8;
+}
+
+#panel-newcalc.efb-light-mode .efb-lopa-svg-wrap svg rect {
+  fill: #FFFFFF;
+  stroke: #CBD5E1;
+}
+
+#panel-newcalc.efb-light-mode .efb-lopa-svg-wrap svg text {
+  fill: #334155;
+}
+
+#panel-newcalc.efb-light-mode .efb-lopa-svg-wrap svg line {
+  stroke: #CBD5E1;
+}
+
+/* ==========================================================================
+   HIGH-CONTRAST READABLE CYAN FOR LIGHT MODE (Fixes Charge Offerte, etc.)
+   ========================================================================== */
+#panel-newcalc.efb-light-mode .input-field.readonly-field,
+body.efb-light-mode .input-field.readonly-field,
+.efb-light-mode .readonly-field {
+  background: #E0F2FE !important;
+  color: #0369A1 !important; /* Deep WCAG AAA aviation navy blue, 100% visible */
+  border: 1.5px solid #BAE6FD !important;
+  font-weight: 700 !important;
+}
+
+#panel-newcalc.efb-light-mode .efb-tele-val.accent,
+body.efb-light-mode .efb-tele-val.accent,
+#panel-newcalc.efb-light-mode .efb-clock-zulu,
+body.efb-light-mode .efb-clock-zulu,
+#panel-newcalc.efb-light-mode .fuel-tank-val,
+body.efb-light-mode .fuel-tank-val,
+#panel-newcalc.efb-light-mode .lopa-box-metric,
+body.efb-light-mode .lopa-box-metric,
+#panel-newcalc.efb-light-mode .lopa-weight-val,
+body.efb-light-mode .lopa-weight-val,
+#panel-newcalc.efb-light-mode #txt-fill-fwd,
+body.efb-light-mode #txt-fill-fwd {
+  color: #0369A1 !important;
+  font-weight: 800 !important;
+}
+
+#panel-newcalc.efb-light-mode .efb-acft-tag,
+body.efb-light-mode .efb-acft-tag {
+  background: #E0F2FE !important;
+  color: #0369A1 !important;
+  border-color: #BAE6FD !important;
+}
+
+#panel-newcalc.efb-light-mode .opt-tag,
+body.efb-light-mode .opt-tag {
+  color: #0369A1 !important;
+}
+
+#panel-newcalc.efb-light-mode #cockpit-staff-tag {
+  fill: #0369A1 !important;
+}
+
+#panel-newcalc.efb-light-mode .cargo-hold-bar-fill {
+  background: linear-gradient(90deg, #0284C7, #0369A1) !important;
+}
+
+/* Any inline cyan text in light mode converts to deep readable #0369A1 */
+.efb-light-mode [style*="color:#38BDF8"],
+.efb-light-mode [style*="color: #38BDF8"],
+.efb-light-mode [style*="color:#38bdf8"],
+.efb-light-mode [style*="color: #38bdf8"],
+.efb-light-mode [style*="color:var(--efb-cyan)"] {
+  color: #0369A1 !important;
+}
+
+/* ==========================================================================
+   STEP 5: Resume & Save Surfaces (Night & Day Mode)
+   ========================================================================== */
+#panel-newcalc .wz-resume-wrap {
+  background: transparent;
+}
+
+/* Night Mode (Step 5) */
+#panel-newcalc:not(.efb-light-mode) .wz-trim-canvas {
+  background: #141A22 !important;
+  border: 1px solid #243040 !important;
+}
+
+#panel-newcalc:not(.efb-light-mode) .wz-sum-row span {
+  background: #141A22 !important;
+  border: 1px solid #243040 !important;
+  color: #E2E8F0 !important;
+}
+
+#panel-newcalc:not(.efb-light-mode) .wz-sum-row b {
+  color: #38BDF8 !important;
+}
+
+#panel-newcalc:not(.efb-light-mode) .wz-recap-table {
+  background: #141A22 !important;
+  color: #E2E8F0 !important;
+}
+
+#panel-newcalc:not(.efb-light-mode) .wz-recap-table th {
+  background: #1A2433 !important;
+  color: #38BDF8 !important;
+  border-color: #243040 !important;
+}
+
+#panel-newcalc:not(.efb-light-mode) .wz-recap-table td {
+  background: #141A22 !important;
+  color: #CBD5E1 !important;
+  border-color: #243040 !important;
+}
+
+#panel-newcalc:not(.efb-light-mode) .wz-recap-total td {
+  background: #1A2433 !important;
+  color: #38BDF8 !important;
+  border-color: #38BDF8 !important;
+  font-weight: 700 !important;
+}
+
+#panel-newcalc:not(.efb-light-mode) .wz-sugg-block {
+  background: rgba(165, 16, 37, 0.15) !important;
+  border: 1px solid rgba(165, 16, 37, 0.4) !important;
+}
+
+#panel-newcalc:not(.efb-light-mode) .wz-sugg-title {
+  color: #FCA5A5 !important;
+}
+
+#panel-newcalc:not(.efb-light-mode) .wz-prop {
+  background: #1E293B !important;
+  border: 1px solid #EF4444 !important;
+  color: #FCA5A5 !important;
+}
+
+/* Day Mode (Step 5) */
+#panel-newcalc.efb-light-mode .wz-trim-canvas {
+  background: #FFFFFF !important;
+  border: 1.5px solid #CBD5E1 !important;
+}
+
+#panel-newcalc.efb-light-mode .wz-sum-row span {
+  background: #FFFFFF !important;
+  border: 1.5px solid #CBD5E1 !important;
+  color: #0F172A !important;
+}
+
+#panel-newcalc.efb-light-mode .wz-sum-row b {
+  color: #0369A1 !important;
+}
+
+#panel-newcalc.efb-light-mode .wz-recap-table {
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+}
+
+#panel-newcalc.efb-light-mode .wz-recap-table th {
+  background: #F1F5F9 !important;
+  color: #0369A1 !important;
+  border-color: #CBD5E1 !important;
+}
+
+#panel-newcalc.efb-light-mode .wz-recap-table td {
+  background: #FFFFFF !important;
+  color: #0F172A !important;
+  border-color: #E2E8F0 !important;
+}
+
+#panel-newcalc.efb-light-mode .wz-recap-total td {
+  background: #E0F2FE !important;
+  color: #0369A1 !important;
+  border-color: #BAE6FD !important;
+  font-weight: 700 !important;
+}

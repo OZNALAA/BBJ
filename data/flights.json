@@ -1,0 +1,182 @@
+[
+  {
+    "source": "wizard",
+    "flight": {
+      "number": "MRS0603",
+      "date": "2023-10-19",
+      "time": "10:30",
+      "origin": "GMME",
+      "dest": "GMME",
+      "preparedBy": "",
+      "preparedByName": "",
+      "captain": "",
+      "captainName": ""
+    },
+    "config": {
+      "vip": 1,
+      "pilots": 2,
+      "observers": 1,
+      "cabincrew": 2,
+      "extracc": 2,
+      "staff": 4,
+      "premium": 9,
+      "vipLounge": 9,
+      "vipOffice": 2,
+      "vipSuite": 0,
+      "correctedDow": 48950,
+      "correctedDoi": 41.384
+    },
+    "fuel": {
+      "block": 23200,
+      "taxi": 200,
+      "trip": 8200
+    },
+    "load": {
+      "fwd": 1500,
+      "aft": 600,
+      "zoneBOther": 0,
+      "water": 120,
+      "fwdGalley": 0,
+      "midGalley": 0,
+      "zoneLoad": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 0,
+        "E": 0,
+        "F": 0,
+        "G": 0
+      },
+      "payload": 4114,
+      "azfw": 53064
+    },
+    "results": {
+      "dow": 48950,
+      "doi": 41.38,
+      "paxBagWt": 2014,
+      "paxIdx": -4,
+      "cargoWt": 2100,
+      "cargoIdx": -6.2,
+      "zoneWt": 0,
+      "zoneIdx": 0,
+      "zfw": 53064,
+      "zfwIdx": 31.18,
+      "mzfw": 62731,
+      "toFuel": 23000,
+      "toFuelIdx": 0,
+      "tow": 76064,
+      "towIdx": 31.18,
+      "mtow": 79015,
+      "tripFuel": 8200,
+      "law": 67864,
+      "lawIdx": 30.2,
+      "mlw": 66360,
+      "rampWt": 76264,
+      "underload": 2951,
+      "underloadAfterLMC": 2951,
+      "checks": {
+        "zfw": true,
+        "tow": true,
+        "law": false,
+        "ramp": true,
+        "fuel": true,
+        "fuelError": "",
+        "fwdCargo": true,
+        "aftCargo": true
+      },
+      "perfLimit": 74560
+    },
+    "id": 1789915787667,
+    "savedAt": "2026-09-20T14:49:47.667Z"
+  },
+  {
+    "source": "wizard",
+    "flight": {
+      "number": "MRS0603",
+      "date": "2023-10-19",
+      "time": "10:30",
+      "origin": "GMME",
+      "dest": "GMME",
+      "preparedBy": "",
+      "preparedByName": "",
+      "captain": "",
+      "captainName": ""
+    },
+    "config": {
+      "vip": 1,
+      "pilots": 2,
+      "observers": 2,
+      "cabincrew": 1,
+      "extracc": 2,
+      "staff": 8,
+      "premium": 6,
+      "vipLounge": 4,
+      "vipOffice": 3,
+      "vipSuite": 0,
+      "correctedDow": 48950,
+      "correctedDoi": 41.277499999999996
+    },
+    "fuel": {
+      "block": 23000,
+      "taxi": 200,
+      "trip": 17000
+    },
+    "load": {
+      "fwd": 1500,
+      "aft": 600,
+      "zoneBOther": 0,
+      "water": 120,
+      "fwdGalley": 0,
+      "midGalley": 0,
+      "zoneLoad": {
+        "A": 0,
+        "B": 0,
+        "C": 0,
+        "D": 0,
+        "E": 0,
+        "F": 0,
+        "G": 0
+      },
+      "payload": 3862,
+      "azfw": 52812
+    },
+    "results": {
+      "dow": 48950,
+      "doi": 41.28,
+      "paxBagWt": 1762,
+      "paxIdx": -7,
+      "cargoWt": 2100,
+      "cargoIdx": -6.2,
+      "zoneWt": 0,
+      "zoneIdx": 0,
+      "zfw": 52812,
+      "zfwIdx": 28.08,
+      "mzfw": 62731,
+      "toFuel": 22800,
+      "toFuelIdx": -1,
+      "tow": 75612,
+      "towIdx": 27.08,
+      "mtow": 79015,
+      "tripFuel": 17000,
+      "law": 58612,
+      "lawIdx": 31.68,
+      "mlw": 66360,
+      "rampWt": 75812,
+      "underload": 3403,
+      "underloadAfterLMC": 3403,
+      "checks": {
+        "zfw": true,
+        "tow": true,
+        "law": true,
+        "ramp": true,
+        "fuel": true,
+        "fuelError": "",
+        "fwdCargo": true,
+        "aftCargo": true
+      },
+      "perfLimit": 79015
+    },
+    "id": 1789916385089,
+    "savedAt": "2026-09-20T14:59:45.089Z"
+  }
+]

@@ -1,0 +1,16 @@
+{
+  "registration": "CN-RGX",
+  "type": "B787-9",
+  "origin": "GMMN",
+  "destination": "KJFK",
+  "fwdHold": 11500,
+  "midHold": 11500,
+  "aftHold": 11500,
+  "totalLoad": 34500,
+  "blockFuel": 18200,
+  "zfw": 115.16,
+  "tow": 133.36,
+  "macZfw": 29.53,
+  "macGw": 32.26,
+  "timestamp": 1789900452.484375
+}
