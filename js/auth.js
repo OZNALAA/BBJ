@@ -14,10 +14,10 @@
         const settingsPanel = document.getElementById('panel-settings');
         if (!isAdmin && settingsPanel && settingsPanel.classList.contains('active')) {
             settingsPanel.classList.remove('active');
-            const wbNav = document.querySelector('.nav-item[data-panel="wb"]');
-            const wbPanel = document.getElementById('panel-wb');
-            if (wbNav) wbNav.classList.add('active');
-            if (wbPanel) wbPanel.classList.add('active');
+            const defNav = document.querySelector('.nav-item[data-panel="newcalc"]');
+            const defPanel = document.getElementById('panel-newcalc');
+            if (defNav) defNav.classList.add('active');
+            if (defPanel) defPanel.classList.add('active');
         }
     }
 
