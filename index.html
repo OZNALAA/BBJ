@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>BBJ APP - Load & Balance</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/efb_wizard.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#dc2626">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="BBJ L&B">
+    <link rel="apple-touch-icon" href="img/icon-192.png">
+    <link rel="icon" type="image/png" href="img/icon-192.png">
+</head>
+<body>
+    <script>
+        (function() {
+            try {
+                var theme = localStorage.getItem('bbj_cockpit_theme');
+                if (theme === 'light') {
+                    document.body.classList.add('efb-light-mode');
+                    document.body.classList.remove('cockpit-night-mode');
+                } else {
+                    document.body.classList.add('cockpit-night-mode');
+                    document.body.classList.remove('efb-light-mode');
+                }
+            } catch(e) {}
+        })();
+    </script>
+    <!-- Écran de connexion -->
+    <div class="login-screen" id="login-screen" style="display:none;">
+        <div class="login-box">
+            <img src="logo BBJ.jpeg" class="login-logo" alt="BBJ">
+            <h1 class="login-title">BBJ LOAD & BALANCE</h1>
+            <div class="login-sub">CN-MVI | BBJ2 | S/N: 37545</div>
+            <input type="text" id="login-user" class="input-field" placeholder="Login" autocomplete="username">
+            <input type="password" id="login-pass" class="input-field" placeholder="Mot de passe" autocomplete="current-password">
+            <button type="button" id="login-btn" class="btn btn-accent">Se connecter</button>
+            <div class="login-error" id="login-error"></div>
+        </div>
+    </div>
+
+    <!-- Header Mobile avec bouton Burger -->
+    <header class="mobile-header" id="mobile-header">
+        <button type="button" class="btn-burger" id="btn-sidebar-toggle" aria-label="Menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        <div class="mobile-brand">
+            <span class="mobile-logo">BBJ2</span>
+            <span class="mobile-reg">CN-MVI</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:8px;">
+            <button type="button" class="btn-theme-mobile" id="mobile-theme-toggle" title="Mode Cockpit Jour / Nuit">🌙</button>
+            <div class="mobile-user" id="mobile-user"></div>
+        </div>
+    </header>
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <button type="button" class="sidebar-close" id="btn-sidebar-close" aria-label="Fermer le menu">×</button>
+            <div class="logo">BBJ2</div>
+            <div class="reg">CN-MVI</div>
+        </div>
+        <ul class="nav-list">
+            <li class="nav-item active" data-panel="wb">
+                <span class="nav-icon">⚖</span>
+                <span class="nav-label">Old Weight & Balance</span>
+            </li>
+            <li class="nav-item" data-panel="newcalc">
+                <span class="nav-icon">🧮</span>
+                <span class="nav-label">New W&B Calculation</span>
+            </li>
+            <li class="nav-item" data-panel="flightlog">
+                <span class="nav-icon">📋</span>
+                <span class="nav-label">Flight Log</span>
+            </li>
+            <li class="nav-item" data-panel="settings" id="nav-item-settings" style="display:none;">
+                <span class="nav-icon">⚙</span>
+                <span class="nav-label">Settings</span>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <button type="button" class="btn-theme-toggle" id="global-theme-toggle" title="Basculer Mode Jour / Nuit">
+                <span class="theme-icon">🌙</span>
+                <span class="theme-text">Mode Nuit</span>
+            </button>
+            <div class="sidebar-user" id="sidebar-user"></div>
+            <button type="button" id="btn-logout" class="btn btn-small">Déconnexion</button>
+        </div>
+    </nav>
+
+    <main class="content" id="content">
+        <!-- Weight & Balance Panel -->
+        <div class="panel active" id="panel-wb">
+            <div class="panel-header">
+                <div class="panel-header-row">
+                    <div>
+                        <h1>LOAD & BALANCE SHEET BBJ2</h1>
+                        <div class="header-sub">CN-MVI | BBJ2</div>
+                    </div>
+                    <div class="panel-actions">
+                        <button type="button" id="btn-save-flight" class="btn btn-accent">💾 SAVE</button>
+                        <button type="button" class="btn" onclick="printPanel('wb')">🖨️ PRINT</button>
+                    </div>
+                </div>
+                <div class="header-images">
+                    <img src="img/logo_topleft.png" class="header-img" alt="">
+                    <img src="img/banner.png" class="header-img banner-img" alt="">
+                    <img src="img/logo_topright.png" class="header-img" alt="">
+                    <img src="img/diagram_right.png" class="header-img" alt="">
+                </div>
+                <h1>LOAD & BALANCE SHEET BBJ2</h1>
+                <div class="header-sub">CN-MVI | BBJ2</div>
+            </div>
+
+            <div class="wb-layout">
+                <!-- Left: Inputs -->
+                <div class="wb-inputs">
+                    <div class="section">
+                        <h2 class="section-title">Flight Information</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Origin</label>
+                                <div class="airport-picker" id="origin-picker">
+                                    <div class="airport-trigger">
+                                        <span class="airport-trigger-text">—</span>
+                                        <span class="airport-caret">▾</span>
+                                    </div>
+                                    <div class="airport-dropdown">
+                                        <div class="airport-search-wrap">
+                                            <input type="text" class="airport-search" placeholder="Rechercher aéroport…">
+                                        </div>
+                                        <div class="airport-list" id="origin-picker-list"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Destination</label>
+                                <div class="airport-picker" id="dest-picker">
+                                    <div class="airport-trigger">
+                                        <span class="airport-trigger-text">—</span>
+                                        <span class="airport-caret">▾</span>
+                                    </div>
+                                    <div class="airport-dropdown">
+                                        <div class="airport-search-wrap">
+                                            <input type="text" class="airport-search" placeholder="Rechercher aéroport…">
+                                        </div>
+                                        <div class="airport-list" id="dest-picker-list"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Flight Number</label>
+                                <div class="flight-field">
+                                    <span class="flight-prefix">MRS</span>
+                                    <input type="text" id="inp-flight" value="0603" inputmode="numeric" pattern="[0-9]*" class="input-field" oninput="this.value=this.value.replace(/\D/g,''); recalcAll();">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" id="inp-date" value="2023-10-19" class="input-field">
+                            </div>
+                            <div class="form-group">
+                                <label>Time (UTC)</label>
+                                <input type="text" id="inp-time" value="10:30" inputmode="numeric" class="input-field" placeholder="HH:MM" oninput="this.value=this.value.replace(/\D/g,'').slice(0,4).replace(/^(\d\d)(?=\d)/, '$1:'); validateTime(); recalcAll();">
+                                <span class="field-error" id="inp-time-err" style="display:none;"></span>
+                            </div>
+                            <div class="form-group">
+                                <label>Prepared by</label>
+                                <select id="inp-preparedby" class="input-field" onchange="recalcAll()"></select>
+                            </div>
+                            <div class="form-group">
+                                <label>Captain</label>
+                                <select id="inp-captain" class="input-field" onchange="recalcAll()"></select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title">Configuration</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>VIP Configuration</label>
+                                <select id="inp-vip" class="input-field" onchange="recalcAll()">
+                                    <option value="YES" selected>YES</option>
+                                    <option value="NO">NO</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title">Crew & Passengers</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Pilots</label>
+                                <input type="number" id="inp-pilots" value="3" min="0" max="3" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                            </div>
+                            <div class="form-group">
+                                <label>Observers</label>
+                                <input type="number" id="inp-observers" value="1" min="0" max="2" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                            </div>
+                            <div class="form-group">
+                                <label>Cabin Crew</label>
+                                <input type="number" id="inp-cabincrew" value="2" min="0" max="2" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                            </div>
+                            <div class="form-group">
+                                <label>Staff (Zone B)</label>
+                                <input type="number" id="inp-staff" value="8" min="0" max="16" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                            </div>
+                            <div class="form-group">
+                                <label>Extra CC in Zone B</label>
+                                <input type="number" id="inp-extracc" value="2" min="0" max="8" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                            </div>
+                            <div class="form-group">
+                                <label>Premium PAX (Zone D)</label>
+                                <input type="number" id="inp-premium" value="0" min="0" max="12" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                            </div>
+                            <div class="form-group">
+                                <label>VIP Lounge (Zone E)</label>
+                                <input type="number" id="inp-viplounge" value="0" min="0" max="9" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                            </div>
+                            <div class="form-group">
+                                <label>VIP Office (Zone F)</label>
+                                <input type="number" id="inp-vipoffice" value="0" min="0" max="4" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                            </div>
+                            <div class="form-group">
+                                <label>VIP Master Suite (Zone G)</label>
+                                <input type="number" id="inp-vipsuite" value="0" min="0" max="1" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                            </div>
+                            <div class="form-group">
+                                <label>Other Load Zone B (kg)</label>
+                                <input type="number" id="inp-zonebother" value="100" min="0" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title">Fuel</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>Block Fuel (kg)</label>
+                                <input type="number" id="inp-blockfuel" value="18000" min="0" max="28585" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                            </div>
+                            <div class="form-group">
+                                <label>Taxi Fuel (kg)</label>
+                                <input type="number" id="inp-taxifuel" value="200" min="0" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                            </div>
+                            <div class="form-group">
+                                <label>Trip Fuel (kg)</label>
+                                <input type="number" id="inp-tripfuel" value="8200" min="0" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section">
+                        <h2 class="section-title">Cargo & Other</h2>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label>FWD Hold (kg)</label>
+                                <input type="number" id="inp-fwdhold" value="150" min="0" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                            </div>
+                            <div class="form-group">
+                                <label>AFT Hold (kg)</label>
+                                <input type="number" id="inp-aftfold" value="0" min="0" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                            </div>
+                            <div class="form-group">
+                                <label>Water Qty (US Gal)</label>
+                                <input type="number" id="inp-water" value="120" min="0" class="input-field" oninput="recalcAll()">
+                            </div>
+                            <div class="form-group">
+                                <label>FWD Galley (kg)</label>
+                                <input type="number" id="inp-fwdgalley" value="200" min="0" class="input-field" oninput="recalcAll()">
+                            </div>
+                            <div class="form-group">
+                                <label>Mid Galley (kg)</label>
+                                <input type="number" id="inp-midgalley" value="300" min="0" class="input-field" oninput="recalcAll()">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Results -->
+                <div class="wb-results">
+                    <div class="section result-section">
+                        <h2 class="section-title">Weight & Balance Summary</h2>
+
+                        <div class="result-table">
+                            <div class="result-row header-row">
+                                <div class="result-cell label-cell"></div>
+                                <div class="result-cell value-cell">Weight (kg)</div>
+                                <div class="result-cell value-cell">Index</div>
+                                <div class="result-cell limit-cell">Max (kg)</div>
+                                <div class="result-cell limit-cell">MAC %</div>
+                            </div>
+
+                            <div class="result-row">
+                                <div class="result-cell label-cell">DOW / DOI</div>
+                                <div class="result-cell value-cell highlight" id="res-dow">48,704</div>
+                                <div class="result-cell value-cell" id="res-doi">42.72</div>
+                                <div class="result-cell limit-cell"></div>
+                                <div class="result-cell limit-cell"></div>
+                            </div>
+
+                            <div class="result-row">
+                                <div class="result-cell label-cell">PAX + Cabin Bag</div>
+                                <div class="result-cell value-cell" id="res-paxbag">0</div>
+                                <div class="result-cell value-cell" id="res-paxidx">0</div>
+                                <div class="result-cell limit-cell"></div>
+                                <div class="result-cell limit-cell"></div>
+                            </div>
+
+                            <div class="result-row">
+                                <div class="result-cell label-cell">Cargo Hold</div>
+                                <div class="result-cell value-cell" id="res-cargo">150</div>
+                                <div class="result-cell value-cell" id="res-cargoidx">0</div>
+                                <div class="result-cell limit-cell"></div>
+                                <div class="result-cell limit-cell"></div>
+                            </div>
+
+                            <div class="result-row separator-row">
+                                <div class="result-cell label-cell"><strong>ZERO FUEL WEIGHT</strong></div>
+                                <div class="result-cell value-cell highlight" id="res-zfw">48,854</div>
+                                <div class="result-cell value-cell" id="res-zfwidx">42.72</div>
+                                <div class="result-cell limit-cell" id="res-mzfw">62,731</div>
+                                <div class="result-cell limit-cell" id="res-mzfwmac"></div>
+                            </div>
+
+                            <div class="result-row">
+                                <div class="result-cell label-cell">Take Off Fuel</div>
+                                <div class="result-cell value-cell" id="res-tofuel">18,000</div>
+                                <div class="result-cell value-cell" id="res-tofuelidx">-5.35</div>
+                                <div class="result-cell limit-cell"></div>
+                                <div class="result-cell limit-cell"></div>
+                            </div>
+
+                            <div class="result-row separator-row">
+                                <div class="result-cell label-cell"><strong>TAKE OFF WEIGHT</strong></div>
+                                <div class="result-cell value-cell highlight" id="res-tow">66,854</div>
+                                <div class="result-cell value-cell" id="res-towidx">37.38</div>
+                                <div class="result-cell limit-cell" id="res-mtow">79,015</div>
+                                <div class="result-cell limit-cell" id="res-towmac">18.00</div>
+                            </div>
+
+                            <div class="result-row">
+                                <div class="result-cell label-cell">Trip Fuel</div>
+                                <div class="result-cell value-cell" id="res-tripfuel">8,200</div>
+                                <div class="result-cell value-cell" id="res-tripfuelidx"></div>
+                                <div class="result-cell limit-cell"></div>
+                                <div class="result-cell limit-cell"></div>
+                            </div>
+
+                            <div class="result-row separator-row">
+                                <div class="result-cell label-cell"><strong>LANDING WEIGHT</strong></div>
+                                <div class="result-cell value-cell highlight" id="res-law">58,654</div>
+                                <div class="result-cell value-cell" id="res-lawidx">43.37</div>
+                                <div class="result-cell limit-cell" id="res-mlw">66,360</div>
+                                <div class="result-cell limit-cell" id="res-lawmac"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section result-section">
+                        <h2 class="section-title">TRIM SHEET</h2>
+                        <div class="trim-wrap">
+                            <canvas id="trim-canvas"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="section result-section">
+                        <h2 class="section-title">Checks</h2>
+                        <div class="checks-grid" id="checks-container">
+                            <div class="check-item ok" id="check-mzf">
+                                <span class="check-icon">✓</span>
+                                <span>ZFW vs MZFW</span>
+                            </div>
+                            <div class="check-item ok" id="check-mtow">
+                                <span class="check-icon">✓</span>
+                                <span>TOW vs MTOW</span>
+                            </div>
+                            <div class="check-item ok" id="check-mlw">
+                                <span class="check-icon">✓</span>
+                                <span>LAW vs MLW</span>
+                            </div>
+                            <div class="check-item ok" id="check-mrw">
+                                <span class="check-icon">✓</span>
+                                <span>Ramp WT vs MRW</span>
+                            </div>
+                            <div class="check-item ok" id="check-fuel">
+                                <span class="check-icon">✓</span>
+                                <span>Block Fuel vs Max Tank</span>
+                            </div>
+                            <div class="check-item ok" id="check-fwdhold">
+                                <span class="check-icon">✓</span>
+                                <span>FWD Hold <= 2,948 kg</span>
+                            </div>
+                            <div class="check-item ok" id="check-afthold">
+                                <span class="check-icon">✓</span>
+                                <span>AFT Hold <= 1,588 kg</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section result-section">
+                        <h2 class="section-title">Underload</h2>
+                        <div class="underload-grid">
+                            <div class="underload-item">
+                                <div class="underload-label">Underload (before LMC)</div>
+                                <div class="underload-value" id="res-underload">12,161</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section result-section">
+                        <h2 class="section-title">Last Minute Change (LMC)</h2>
+                        <div class="lmc-grid">
+                            <div class="lmc-header">
+                                <div>DEST</div>
+                                <div>SPEC</div>
+                                <div>CL/COMPT</div>
+                                <div>+/- WT</div>
+                                <div>+/- IDX</div>
+                            </div>
+                            <div class="lmc-row" id="lmc-rows">
+                                <input type="text" class="input-field lmc-input" placeholder="DEST">
+                                <input type="text" class="input-field lmc-input" placeholder="SPEC">
+                                <input type="text" class="input-field lmc-input" placeholder="CL/COMPT">
+                                <input type="number" class="input-field lmc-input" placeholder="+/- WT" oninput="recalcAll()">
+                                <input type="number" class="input-field lmc-input" placeholder="+/- IDX" oninput="recalcAll()">
+                            </div>
+                            <div class="lmc-total">
+                                <span>Underload after LMC:</span>
+                                <span id="res-underload-lmc">12,161</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- New W&B Calculation Panel -->
+        <!-- New W&B Calculation Panel (EFB Cockpit Layout) -->
+        <div class="panel" id="panel-newcalc">
+            <div class="efb-cockpit-header">
+                <div class="efb-brand">
+                    <div class="efb-crest">
+                        <img src="img/logo_topleft.png" class="efb-crest-logo" alt="RAM Logo">
+                    </div>
+                    <div class="efb-titles">
+                        <div class="efb-airline-row">
+                            <span class="efb-airline">ROYAL AIR MAROC</span>
+                            <span class="efb-acft-tag">BBJ2 | CN-MVI</span>
+                        </div>
+                        <h1 class="efb-title efb-subtitle">EFB Masse &amp; Centrage (Weight &amp; Balance)</h1>
+                    </div>
+                </div>
+
+                <div class="efb-header-controls">
+                    <div class="efb-clocks">
+                        <div class="efb-clock-col">
+                            <span class="efb-clock-lbl">DATE</span>
+                            <span class="efb-clock-val" id="wz-clock-date">-- --- ----</span>
+                        </div>
+                        <div class="efb-clock-col">
+                            <span class="efb-clock-lbl">UTC</span>
+                            <span class="efb-clock-val efb-clock-zulu" id="wz-clock-zulu">--:-- UTC</span>
+                        </div>
+                    </div>
+
+                    <button type="button" class="efb-theme-btn" id="wz-theme-toggle" title="Mode Cockpit Jour / Nuit">
+                        <span id="wz-theme-icon">🌙</span>
+                        <span id="wz-theme-label">NUIT</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- EFB Live Telemetry Strip -->
+            <div class="efb-telemetry-strip" id="wz-telemetry-strip">
+                <div class="efb-tele-cell">
+                    <span class="efb-tele-lbl">OEW</span>
+                    <span class="efb-tele-val" id="wz-strip-oew">48,704 kg</span>
+                </div>
+                <div class="efb-tele-cell">
+                    <span class="efb-tele-lbl">Corr. DOW</span>
+                    <span class="efb-tele-val" id="wz-strip-dow">48,950 kg</span>
+                </div>
+                <div class="efb-tele-cell">
+                    <span class="efb-tele-lbl">Payload</span>
+                    <span class="efb-tele-val accent" id="wz-strip-payload">822 kg</span>
+                </div>
+                <div class="efb-tele-cell">
+                    <span class="efb-tele-lbl">ZFW / MZFW</span>
+                    <span class="efb-tele-val" id="wz-strip-zfw">49,772 kg</span>
+                </div>
+                <div class="efb-tele-cell">
+                    <span class="efb-tele-lbl">Block Fuel</span>
+                    <span class="efb-tele-val accent" id="wz-strip-fuel">18,000 kg</span>
+                </div>
+                <div class="efb-tele-cell">
+                    <span class="efb-tele-lbl">Est. TOW</span>
+                    <span class="efb-tele-val" id="wz-strip-tow">67,572 kg</span>
+                </div>
+            </div>
+
+            <div class="wizard">
+                <div class="wizard-steps" id="wizard-steps"></div>
+                <div class="wizard-content" id="wizard-content"></div>
+                <div class="wizard-nav">
+                    <button type="button" class="btn" id="wizard-prev">← Précédent</button>
+                    <button type="button" class="btn btn-accent" id="wizard-next">Suivant →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flight Log Panel -->
+        <div class="panel" id="panel-flightlog">
+            <div class="panel-header">
+                <div class="panel-header-row">
+                    <div>
+                        <h1>FLIGHT LOG AND PAY CLAIM REPORT</h1>
+                        <div class="header-sub">Rapports — cliquez sur une ligne pour ouvrir / modifier</div>
+                    </div>
+                    <div class="panel-actions">
+                        <button type="button" id="fl-new" class="btn btn-accent">＋ Nouveau rapport</button>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-body">
+                <div class="flightlog-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Mois</th>
+                                <th>Secteurs</th>
+                                <th>Crew</th>
+                                <th>Statut</th>
+                                <th>Enregistré le</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="fl-records-tbody"></tbody>
+                    </table>
+                    <div class="crew-empty" id="fl-records-empty">Aucun rapport. Cliquez sur « ＋ Nouveau rapport ».</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Flight Log Report Modal -->
+        <div class="modal" id="fl-modal">
+            <div class="modal-panel">
+                <div class="modal-panel-header">
+                    <h2 id="fl-modal-title">Nouveau rapport</h2>
+                    <button type="button" class="modal-close" id="fl-modal-close">×</button>
+                </div>
+                <div class="modal-body" id="fl-form">
+                    <div id="fl-status-alert" class="fl-incomplete-alert" style="display:none;"></div>
+                    <div class="fl-report-header">
+                        <img src="img/flightlog_logo.png" class="fl-logo" alt="">
+                        <div class="fl-month">
+                            <label>Month</label>
+                            <input type="text" id="fl-month" class="input-field" value="Septembre">
+                        </div>
+                    </div>
+
+                    <div class="section result-section">
+                        <h2 class="section-title">Sectors</h2>
+                        <div class="fl-table-wrap">
+                            <table class="data-table fl-table">
+                                <thead>
+                                    <tr>
+                                        <th class="fl-num">N°</th>
+                                        <th>FLIGHT</th>
+                                        <th>ORIGIN<br><small>AIRPORT</small></th>
+                                        <th>DEPARTURE<br><small>DATE</small></th>
+                                        <th>OFF-BLOCK<br><small>TIME</small></th>
+                                        <th>DESTINATION<br><small>AIRPORT</small></th>
+                                        <th>ARRIVAL<br><small>DATE</small></th>
+                                        <th>ON-BLOCK<br><small>TIME</small></th>
+                                        <th>NIGHT<br><small>TIME</small></th>
+                                        <th class="fl-del-col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="fl-sectors-tbody"></tbody>
+                            </table>
+                            <button type="button" class="btn fl-add" id="fl-add-sector">+ Ajouter secteur</button>
+                        </div>
+                    </div>
+
+                    <div class="section result-section">
+                        <h2 class="section-title">Crew</h2>
+                        <div class="fl-table-wrap">
+                            <table class="data-table fl-table">
+                                <thead>
+                                    <tr>
+                                        <th>NAME</th>
+                                        <th>EMP NUM</th>
+                                        <th>POSIT</th>
+                                        <th>SECTORS</th>
+                                        <th class="fl-del-col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="fl-crew-tbody"></tbody>
+                            </table>
+                            <button type="button" class="btn fl-add" id="fl-add-crew">+ Ajouter membre</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" id="fl-cancel">Annuler</button>
+                    <button type="button" class="btn" id="fl-print">🖨️ PRINT</button>
+                    <button type="button" class="btn btn-accent" id="fl-save">💾 Enregistrer</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Popup Ajout Membre d'Équipage (Settings Crew Database) depuis Flight Log -->
+        <div class="modal" id="fl-crew-modal" style="z-index: 1060;">
+            <div class="modal-box" style="max-width: 480px; width: 92vw; text-align: left; padding: 24px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; border-bottom:1px solid var(--border); padding-bottom:12px;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-size:22px;">👤</span>
+                        <h3 style="font-size:17px; font-weight:700; margin:0; color:var(--text-primary);">Nouveau membre d'équipage</h3>
+                    </div>
+                    <button type="button" class="modal-close" id="fl-cm-close" style="position:static; font-size:26px; line-height:1; cursor:pointer;">×</button>
+                </div>
+                <p style="font-size:12.5px; color:var(--text-secondary); margin-bottom:16px;">
+                    Renseignez les données pour enregistrer ce navigant dans la base Crew et l'assigner à ce vol.
+                </p>
+                <div style="display:flex; flex-direction:column; gap:12px;">
+                    <div class="form-group">
+                        <label style="font-size:12px; font-weight:600; margin-bottom:4px; display:block;">Nom &amp; prénom</label>
+                        <input type="text" id="fl-cm-nom" class="input-field" placeholder="Ex: ASSELLALOU AHMED" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:12px; font-weight:600; margin-bottom:4px; display:block;">Matricule</label>
+                        <input type="text" id="fl-cm-matricule" class="input-field" placeholder="Ex: 9202" inputmode="numeric">
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                        <div class="form-group">
+                            <label style="font-size:12px; font-weight:600; margin-bottom:4px; display:block;">Fonction</label>
+                            <select id="fl-cm-fonction" class="input-field">
+                                <option value="CDB" selected>CDB</option>
+                                <option value="OPL">OPL</option>
+                                <option value="CC">CC</option>
+                                <option value="PNC">PNC</option>
+                                <option value="Observateur">Observateur</option>
+                                <option value="Mécanicien">Mécanicien</option>
+                                <option value="Autre">Autre</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size:12px; font-weight:600; margin-bottom:4px; display:block;">Grade</label>
+                            <select id="fl-cm-grade" class="input-field">
+                                <option value="AAA">AAA</option>
+                                <option value="ARA">ARA</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div id="fl-cm-error" style="color:var(--danger, #ef4444); font-size:12px; font-weight:600; margin-top:10px; display:none;"></div>
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px; padding-top:14px; border-top:1px solid var(--border);">
+                    <button type="button" class="btn" id="fl-cm-cancel">Annuler</button>
+                    <button type="button" class="btn btn-accent" id="fl-cm-save">💾 Enregistrer et assigner</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Panel -->
+        <div class="panel" id="panel-settings">
+            <div class="panel-header">
+                <h1>Settings</h1>
+                <div class="header-sub">Données importées des feuillets Excel (Limitations, TRIM SHEET INPUT, DATA, FUEL)</div>
+            </div>
+            <div class="settings-body">
+                <div class="section result-section">
+                    <h2 class="section-title">Crew Database</h2>
+                    <div class="crew-form">
+                        <input type="text" id="crew-nom" class="input-field crew-input" placeholder="Nom & prénom">
+                        <input type="text" id="crew-matricule" class="input-field crew-input" placeholder="Matricule" inputmode="numeric">
+                        <select id="crew-fonction" class="input-field crew-input">
+                            <option value="CDB">CDB</option>
+                            <option value="OPL">OPL</option>
+                            <option value="CC">CC</option>
+                            <option value="PNC">PNC</option>
+                            <option value="Observateur">Observateur</option>
+                            <option value="Mécanicien">Mécanicien</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                        <select id="crew-grade" class="input-field crew-input"></select>
+                        <button type="button" id="crew-save" class="btn btn-accent">Ajouter</button>
+                        <button type="button" id="crew-cancel" class="btn" style="display:none;">Annuler</button>
+                    </div>
+                    <div class="crew-table-wrap">
+                        <table class="data-table crew-table">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Matricule</th>
+                                    <th>Fonction</th>
+                                    <th>Grade</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="crew-tbody"></tbody>
+                        </table>
+                        <div class="crew-empty" id="crew-empty">Aucun membre enregistré.</div>
+                    </div>
+                </div>
+                <div class="section result-section">
+                    <h2 class="section-title">USERS</h2>
+                    <div class="crew-form">
+                        <input type="text" id="user-nom" class="input-field crew-input" placeholder="Nom & prénom">
+                        <input type="text" id="user-login" class="input-field crew-input" placeholder="Login">
+                        <input type="password" id="user-pass" class="input-field crew-input" placeholder="Mot de passe" autocomplete="new-password">
+                        <select id="user-role" class="input-field crew-input">
+                            <option value="User" selected>User</option>
+                            <option value="Admin">Admin</option>
+                        </select>
+                        <button type="button" id="user-save" class="btn btn-accent">Ajouter</button>
+                        <button type="button" id="user-cancel" class="btn" style="display:none;">Annuler</button>
+                    </div>
+                    <div class="crew-table-wrap">
+                        <table class="data-table crew-table">
+                            <thead>
+                                <tr>
+                                    <th>Nom</th>
+                                    <th>Login</th>
+                                    <th>Mot de passe</th>
+                                    <th>Droits</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="user-tbody"></tbody>
+                        </table>
+                        <div class="crew-empty" id="user-empty">Aucun utilisateur enregistré.</div>
+                    </div>
+                </div>
+                <div class="section result-section">
+                    <div class="awb-head">
+                        <h2 class="section-title" style="margin:0;">AIRCRAFT WEIGHT AND BALANCE</h2>
+                        <div class="awb-actions">
+                            <button type="button" id="awb-cancel-btn" class="btn" style="display:none;">Annuler</button>
+                            <button type="button" id="awb-edit-btn" class="btn btn-accent">Edit</button>
+                        </div>
+                    </div>
+                    <div class="table-scroll">
+                        <table class="data-table awb-table">
+                            <thead>
+                                <tr>
+                                    <th>Rev</th>
+                                    <th>Date</th>
+                                    <th>Pantry</th>
+                                    <th>DOW (kg)</th>
+                                    <th>DOI</th>
+                                    <th>MTGW (kg)</th>
+                                    <th>MTOW (kg)</th>
+                                    <th>MLW (kg)</th>
+                                    <th>MZFW (kg)</th>
+                                    <th>Fuel Cap (kg)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td id="awb-rev">FWB001-2022</td>
+                                    <td id="awb-date">15/04/2022</td>
+                                    <td class="awb-locked">V</td>
+                                    <td id="awb-dow">48704</td>
+                                    <td id="awb-doi">42,72</td>
+                                    <td class="awb-locked">79242</td>
+                                    <td class="awb-locked">79015</td>
+                                    <td class="awb-locked">66360</td>
+                                    <td class="awb-locked">62731</td>
+                                    <td class="awb-locked">28585</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <ol class="notes">
+                        <li>Basic weight on this document and on load sheet includes full chimical water and permanent fly away kit<br>(Basic Weight = MVE + full chimical water + permanent fly away kit (FAK) )</li>
+                        <li>DOW (DOI) = MVE + Standard Crew (2/2) + permanent FAK + Full Potable Water + Full Chimical Water + Pantry</li>
+                    </ol>
+                </div>
+                <div class="section result-section">
+                    <h2 class="section-title">History (Vols enregistrés)</h2>
+                    <div class="flightlog-wrap" id="history-wrap">
+                        <table class="data-table history-table">
+                            <thead>
+                                <tr>
+                                    <th>N° Vol</th>
+                                    <th>Date</th>
+                                    <th>Heure</th>
+                                    <th>Route</th>
+                                    <th>CDB</th>
+                                    <th>ZFW</th>
+                                    <th>TOW</th>
+                                    <th>LAW</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-tbody"></tbody>
+                        </table>
+                        <div class="crew-empty" id="history-empty">Aucun vol enregistré. Cliquez sur SAVE dans Weight & Balance.</div>
+                    </div>
+                </div>
+
+                <div class="section result-section">
+                    <h2 class="section-title">Sauvegarde & Restauration des données</h2>
+                    <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:8px;">
+                        <button type="button" id="btn-backup-export" class="btn btn-accent">📥 Exporter sauvegarde complète (JSON)</button>
+                        <button type="button" id="btn-backup-import-trigger" class="btn">📤 Importer une sauvegarde</button>
+                        <input type="file" id="inp-backup-file" accept=".json" style="display:none;">
+                    </div>
+                    <div class="header-sub" style="margin-top:8px; font-size:12px; color:#6b7280;">
+                        Permet de créer une copie de sécurité ou de transférer vos équipages, vols et utilisateurs vers un autre appareil.
+                    </div>
+                </div>
+
+                <div class="settings-tabs" id="settings-tabs"></div>
+                <div class="settings-table-wrap">
+                    <table class="data-table" id="settings-table">
+                        <thead></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Zone d'impression (remplie dynamiquement par printPanel) -->
+    <div id="print-area"></div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Image Zoom Modal -->
+    <div class="modal" id="img-modal">
+        <span class="modal-close" id="img-modal-close">×</span>
+        <img id="img-modal-photo" src="" alt="Zoom">
+    </div>
+
+    <!-- Trim Sheet Zoom Modal -->
+    <div class="modal" id="trim-modal">
+        <span class="modal-close" id="trim-modal-close">×</span>
+        <div class="trim-modal-box">
+            <canvas id="trim-canvas-lg"></canvas>
+        </div>
+    </div>
+
+    <!-- Modal Confirmation New W&B -> Flight Log -->
+    <div class="modal" id="wz-confirm-modal">
+        <div class="modal-box" style="border-radius:14px; padding:28px 24px; max-width:440px; width:92vw; text-align:center;">
+            <div style="font-size:42px; margin-bottom:12px;">✅</div>
+            <h3 style="font-size:18px; font-weight:700; margin-bottom:8px; color:var(--text-primary);">Vol et Flight Log enregistrés !</h3>
+            <p style="font-size:13.5px; color:var(--text-secondary); line-height:1.5; margin-bottom:22px;">
+                Les données de l'étape 1/5 ont été enregistrées avec succès dans un nouveau rapport du <strong>Flight Log</strong>.<br><br>
+                Voulez-vous ouvrir le Flight Log pour compléter le rapport maintenant, ou rester ici ?
+            </p>
+            <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                <button type="button" class="btn" id="btn-wz-stay" style="flex:1; min-width:140px; padding:10px 14px;">Rester ici</button>
+                <button type="button" class="btn btn-accent" id="btn-wz-open-fl" style="flex:1; min-width:140px; padding:10px 14px;">📋 Ouvrir Flight Log</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/airports.js"></script>
+    <script src="js/sheets/limitations.js"></script>
+    <script src="js/sheets/trims.js"></script>
+    <script src="js/sheets/sheetdata.js"></script>
+    <script src="js/sheets/fuel.js"></script>
+    <script src="js/calculations.js"></script>
+    <script src="js/trim.js"></script>
+    <script src="js/settings.js"></script>
+    <script src="js/crew.js"></script>
+    <script src="js/users.js"></script>
+    <script src="js/wizard.js"></script>
+    <script src="js/flights.js"></script>
+    <script src="js/flightlog.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('sw.js').catch(function(e) {
+                    console.warn('SW non enregistré (HTTPS requis) :', e);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
