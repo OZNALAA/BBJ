@@ -173,19 +173,23 @@ window.FLIGHTLOG = (() => {
 
     function _crewItems() {
         const list = window.CREW ? window.CREW.list() : [];
-        return list.map(m => ({
-            value: m.matricule || m.nom,
-            code: m.matricule || '',
-            label: (m.fonction ? m.fonction + ' ' : '') + m.nom,
-            labelDetail: (m.fonction ? m.fonction + ' ' : '') + m.nom + (m.grade ? ' — ' + m.grade : ''),
-            member: m
-        }));
+        return list.map(m => {
+            const rank = m.rank || m.fonction || '';
+            const posit = m.posit || m.grade || '';
+            return {
+                value: m.matricule || m.nom,
+                code: m.matricule || '',
+                label: (rank ? rank + ' ' : '') + m.nom,
+                labelDetail: (rank ? rank + ' ' : '') + m.nom + (posit ? ' · POSIT: ' + posit : ''),
+                member: m
+            };
+        });
     }
 
     function _crewMatch(it, q) {
         if (!q) return true;
         const words = q.toLowerCase().split(/\s+/);
-        const s = (it.value + ' ' + it.code + ' ' + it.label + ' ' + (it.member.grade || '')).toLowerCase();
+        const s = (it.value + ' ' + it.code + ' ' + it.label + ' ' + (it.member.posit || it.member.grade || '') + ' ' + (it.member.cin || '')).toLowerCase();
         return words.every(w => s.includes(w));
     }
 
@@ -580,7 +584,7 @@ window.FLIGHTLOG = (() => {
             onSelect: function(v, it) {
                 if (it && it.member) {
                     empInp.value = it.member.matricule || '';
-                    positInp.value = it.member.grade || it.member.fonction || '';
+                    positInp.value = it.member.posit || it.member.grade || it.member.fonction || '';
                 }
                 _refreshModalStatusAlert();
             }

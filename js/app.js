@@ -439,6 +439,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     document.getElementById('btn-save-flight').addEventListener('click', saveFlight);
 
+    const btnGotoCrew = document.getElementById('btn-goto-crewcontact');
+    if (btnGotoCrew) {
+        btnGotoCrew.addEventListener('click', function() {
+            const navCrew = document.querySelector('.nav-item[data-panel="crewcontact"]');
+            if (navCrew) navCrew.click();
+        });
+    }
+
     populateCrewFields();
     recalcAll();
     window.FLIGHTS && window.FLIGHTS.renderHistory();

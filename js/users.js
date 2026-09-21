@@ -4,11 +4,98 @@
     const API_URL = '/api/data?file=users';
 
     const DEFAULT_USERS = [
-        { nom: "Administrateur", login: "admin", role: "Admin", password: "BBJ@RAM" },
-        { nom: "OUZZINE ALAA-EDDINE", login: "ouzzine", role: "Admin", password: "Ozn22041985alaa" },
-        { nom: "ZGUENDI KARIM", login: "zguendi", role: "User", password: "BBJ_RAM" },
-        { nom: "ASSELLALOU AHMED", login: "assellalou", role: "User", password: "BBJ_RAM" }
-    ];
+        {
+                "nom": "Administrateur",
+                "login": "admin",
+                "role": "Admin",
+                "password": "BBJ@RAM"
+        },
+        {
+                "nom": "ASSELLALOU AHMED",
+                "login": "9402",
+                "role": "User",
+                "password": "BBJ_RAM"
+        },
+        {
+                "nom": "EL ATIAOUI ABDELMAJID",
+                "login": "9410",
+                "role": "User",
+                "password": "BBJ_RAM"
+        },
+        {
+                "nom": "LEAMARI ZAKARIA",
+                "login": "9997",
+                "role": "User",
+                "password": "BBJ_RAM"
+        },
+        {
+                "nom": "ZGUENDI KARIM",
+                "login": "12326",
+                "role": "User",
+                "password": "BBJ_RAM"
+        },
+        {
+                "nom": "FIKRI BOUCHAIB",
+                "login": "12323",
+                "role": "User",
+                "password": "BBJ_RAM"
+        },
+        {
+                "nom": "BIDAD MOHAMED REDA",
+                "login": "12314",
+                "role": "User",
+                "password": "BBJ_RAM"
+        },
+        {
+                "nom": "BOUGZOUL OMAR",
+                "login": "12315",
+                "role": "User",
+                "password": "BBJ_RAM"
+        },
+        {
+                "nom": "OUZZINE ALAA EDDINE",
+                "login": "12583",
+                "role": "Admin",
+                "password": "Ozn22041985alaa"
+        },
+        {
+                "nom": "TAMIM AMINE",
+                "login": "45555",
+                "role": "User",
+                "password": "BBJ_RAM"
+        },
+        {
+                "nom": "DAIF ADIL",
+                "login": "22269",
+                "role": "User",
+                "password": "BBJ_RAM"
+        },
+        {
+                "nom": "CHANA ALI",
+                "login": "22271",
+                "role": "User",
+                "password": "BBJ_RAM"
+        },
+        {
+                "nom": "RAQAQ YOUSSEF",
+                "login": "22280",
+                "role": "User",
+                "password": "BBJ_RAM"
+        },
+        {
+                "nom": "AMRANI EL MAHDI",
+                "login": "45627",
+                "role": "User",
+                "password": "BBJ_RAM"
+        },
+        {
+                "nom": "TAZI THAMI",
+                "login": "44527",
+                "role": "User",
+                "password": "BBJ_RAM"
+        }
+];
+
 
     let users = [];
     let editingIndex = -1;

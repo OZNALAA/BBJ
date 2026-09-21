@@ -87,12 +87,150 @@
             try {
                 // 1) Identifiants officiels de base
                 const DEFAULT_AUTH_USERS = [
-                    { login: 'admin', nom: 'Administrateur', role: 'Admin', pass: ['BBJ@RAM'] },
-                    { login: 'ouzzine', nom: 'OUZZINE ALAA-EDDINE', role: 'Admin', pass: ['Ozn22041985alaa'] },
-                    { login: 'zguendi', nom: 'ZGUENDI KARIM', role: 'User', pass: ['BBJ_RAM'] },
-                    { login: 'assellalou', nom: 'ASSELLALOU AHMED', role: 'User', pass: ['BBJ_RAM'] }
-                ];
-                const defUser = DEFAULT_AUTH_USERS.find(x => x.login === login.toLowerCase());
+                {
+                                "login": "admin",
+                                "aliases": [],
+                                "nom": "Administrateur",
+                                "role": "Admin",
+                                "pass": [
+                                                "BBJ@RAM"
+                                ]
+                },
+                {
+                                "login": "9402",
+                                "aliases": [
+                                                "assellalou"
+                                ],
+                                "nom": "ASSELLALOU AHMED",
+                                "role": "User",
+                                "pass": [
+                                                "BBJ_RAM"
+                                ]
+                },
+                {
+                                "login": "9410",
+                                "aliases": [],
+                                "nom": "EL ATIAOUI ABDELMAJID",
+                                "role": "User",
+                                "pass": [
+                                                "BBJ_RAM"
+                                ]
+                },
+                {
+                                "login": "9997",
+                                "aliases": [],
+                                "nom": "LEAMARI ZAKARIA",
+                                "role": "User",
+                                "pass": [
+                                                "BBJ_RAM"
+                                ]
+                },
+                {
+                                "login": "12326",
+                                "aliases": [
+                                                "zguendi"
+                                ],
+                                "nom": "ZGUENDI KARIM",
+                                "role": "User",
+                                "pass": [
+                                                "BBJ_RAM"
+                                ]
+                },
+                {
+                                "login": "12323",
+                                "aliases": [],
+                                "nom": "FIKRI BOUCHAIB",
+                                "role": "User",
+                                "pass": [
+                                                "BBJ_RAM"
+                                ]
+                },
+                {
+                                "login": "12314",
+                                "aliases": [],
+                                "nom": "BIDAD MOHAMED REDA",
+                                "role": "User",
+                                "pass": [
+                                                "BBJ_RAM"
+                                ]
+                },
+                {
+                                "login": "12315",
+                                "aliases": [],
+                                "nom": "BOUGZOUL OMAR",
+                                "role": "User",
+                                "pass": [
+                                                "BBJ_RAM"
+                                ]
+                },
+                {
+                                "login": "12583",
+                                "aliases": [
+                                                "ouzzine"
+                                ],
+                                "nom": "OUZZINE ALAA EDDINE",
+                                "role": "Admin",
+                                "pass": [
+                                                "Ozn22041985alaa"
+                                ]
+                },
+                {
+                                "login": "45555",
+                                "aliases": [],
+                                "nom": "TAMIM AMINE",
+                                "role": "User",
+                                "pass": [
+                                                "BBJ_RAM"
+                                ]
+                },
+                {
+                                "login": "22269",
+                                "aliases": [],
+                                "nom": "DAIF ADIL",
+                                "role": "User",
+                                "pass": [
+                                                "BBJ_RAM"
+                                ]
+                },
+                {
+                                "login": "22271",
+                                "aliases": [],
+                                "nom": "CHANA ALI",
+                                "role": "User",
+                                "pass": [
+                                                "BBJ_RAM"
+                                ]
+                },
+                {
+                                "login": "22280",
+                                "aliases": [],
+                                "nom": "RAQAQ YOUSSEF",
+                                "role": "User",
+                                "pass": [
+                                                "BBJ_RAM"
+                                ]
+                },
+                {
+                                "login": "45627",
+                                "aliases": [],
+                                "nom": "AMRANI EL MAHDI",
+                                "role": "User",
+                                "pass": [
+                                                "BBJ_RAM"
+                                ]
+                },
+                {
+                                "login": "44527",
+                                "aliases": [],
+                                "nom": "TAZI THAMI",
+                                "role": "User",
+                                "pass": [
+                                                "BBJ_RAM"
+                                ]
+                }
+];
+                
+                const defUser = DEFAULT_AUTH_USERS.find(x => x.login === login.toLowerCase() || (x.aliases && x.aliases.includes(login.toLowerCase())));
                 if (defUser && defUser.pass.includes(pass)) {
                     currentUser = { login: defUser.login, nom: defUser.nom, role: defUser.role };
                     localStorage.setItem(SESSION_KEY, JSON.stringify(currentUser));

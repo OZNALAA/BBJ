@@ -80,6 +80,10 @@
                 <span class="nav-icon">📋</span>
                 <span class="nav-label">Flight Log</span>
             </li>
+            <li class="nav-item" data-panel="crewcontact">
+                <span class="nav-icon">👥</span>
+                <span class="nav-label">CREW Contact</span>
+            </li>
             <li class="nav-item" data-panel="settings" id="nav-item-settings" style="display:none;">
                 <span class="nav-icon">⚙</span>
                 <span class="nav-label">Settings</span>
@@ -671,6 +675,135 @@
             </div>
         </div>
 
+        <!-- CREW Contact Panel -->
+        <div class="panel" id="panel-crewcontact">
+            <div class="panel-header">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                    <div>
+                        <h1>CREW Contact &amp; Database</h1>
+                        <div class="header-sub">Annuaire &amp; base des navigants B737 / BBJ (RAM)</div>
+                    </div>
+                    <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+                        <input type="file" id="inp-crew-csv-cc" accept=".csv, .txt" style="display:none;">
+                        <button type="button" class="btn" id="btn-update-crew-csv-cc" title="Importer un fichier CSV Crew Info ou Contacts">📥 UPDATE CREW (CSV)</button>
+                        <button type="button" class="btn btn-accent" id="btn-toggle-crew-form">
+                            <span id="btn-toggle-crew-text">＋ Ajouter un navigant</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulaire d'ajout / modification (collapsible) -->
+            <div id="crew-contact-form-box" class="section result-section" style="display:none; margin-bottom:18px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                    <h3 id="crew-form-title" style="font-size:16px; font-weight:700; color:var(--text-primary);">Nouveau membre d'équipage</h3>
+                    <button type="button" class="btn btn-small" id="btn-close-crew-form">✕ Fermer</button>
+                </div>
+                <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+                    <div class="form-group">
+                        <label style="font-size:12px; font-weight:600; margin-bottom:4px; display:block;">Nom &amp; Prénom *</label>
+                        <input type="text" id="cc-nom" class="input-field" placeholder="Ex: ASSELLALOU AHMED" required>
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:12px; font-weight:600; margin-bottom:4px; display:block;">Matricule *</label>
+                        <input type="text" id="cc-matricule" class="input-field" placeholder="Ex: 9402" inputmode="numeric" required>
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:12px; font-weight:600; margin-bottom:4px; display:block;">Rank</label>
+                        <select id="cc-rank" class="input-field">
+                            <option value="CDB" selected>CDB</option>
+                            <option value="OPL">OPL</option>
+                            <option value="CC">CC</option>
+                            <option value="CA">CA</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:12px; font-weight:600; margin-bottom:4px; display:block;">POSIT (Flight Log)</label>
+                        <input type="text" id="cc-posit" class="input-field" placeholder="Ex: ARA / DDA / MRA / MMA">
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:12px; font-weight:600; margin-bottom:4px; display:block;">N° CIN</label>
+                        <input type="text" id="cc-cin" class="input-field" placeholder="Ex: BK319500">
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:12px; font-weight:600; margin-bottom:4px; display:block;">Date de Naissance (DOB)</label>
+                        <input type="text" id="cc-dob" class="input-field" placeholder="JJ/MM/AAAA ou 27Jul1968">
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:12px; font-weight:600; margin-bottom:4px; display:block;">Other Qual (BBJ, TRE, TRI, MP...)</label>
+                        <input type="text" id="cc-other-qual" class="input-field" placeholder="Ex: AR, MP, TRE, TRI">
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:12px; font-weight:600; margin-bottom:4px; display:block;">Airp Qual</label>
+                        <input type="text" id="cc-airp-qual" class="input-field" placeholder="Ex: AHU, ERH, GVA, NCE, ZRH...">
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:12px; font-weight:600; margin-bottom:4px; display:block;">A/C Qual</label>
+                        <input type="text" id="cc-ac-qual" class="input-field" placeholder="Ex: B737, B7M8">
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:12px; font-weight:600; margin-bottom:4px; display:block;">Restrictions</label>
+                        <input type="text" id="cc-restrictions" class="input-field" placeholder="Ex: Néant ou E90...">
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:12px; font-weight:600; margin-bottom:4px; display:block;">Téléphone</label>
+                        <input type="tel" id="cc-tel" class="input-field" placeholder="Ex: 0661233427">
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:12px; font-weight:600; margin-bottom:4px; display:block;">Email</label>
+                        <input type="email" id="cc-email" class="input-field" placeholder="Ex: exemple@ram.ma">
+                    </div>
+                </div>
+                <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px; padding-top:12px; border-top:1px solid var(--border);">
+                    <button type="button" class="btn" id="cc-cancel">Annuler</button>
+                    <button type="button" class="btn btn-accent" id="cc-save">💾 Enregistrer</button>
+                </div>
+            </div>
+
+            <!-- Barre d'outils, filtres & recherche -->
+            <div class="crew-contact-toolbar" style="margin-bottom:16px; display:flex; flex-direction:column; gap:12px;">
+                <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+                    <div style="flex:1; min-width:240px; position:relative;">
+                        <input type="search" id="crew-contact-search" class="input-field" placeholder="🔍 Rechercher par nom, matricule, CIN, qualification (BBJ, TRE...)..." style="padding-left:36px;">
+                        <span style="position:absolute; left:12px; top:50%; transform:translateY(-50%); font-size:14px; opacity:0.6; pointer-events:none;">🔍</span>
+                    </div>
+                    <div class="crew-filter-pills" style="display:flex; gap:6px; flex-wrap:wrap;">
+                        <button type="button" class="btn btn-small filter-pill active" data-filter="all">Tous (<span id="cc-count-all">0</span>)</button>
+                        <button type="button" class="btn btn-small filter-pill" data-filter="bbj">⭐ Qualifiés BBJ (<span id="cc-count-bbj">0</span>)</button>
+                        <button type="button" class="btn btn-small filter-pill" data-filter="tre_tri">🎓 Instructeurs TRE/TRI (<span id="cc-count-instructors">0</span>)</button>
+                    </div>
+                </div>
+                <div style="display:flex; justify-content:space-between; align-items:center; font-size:12.5px; color:var(--text-muted);">
+                    <span id="cc-summary-text">Chargement des membres...</span>
+                </div>
+            </div>
+
+            <!-- Table des contacts -->
+            <div class="crew-table-wrap" style="overflow-x:auto; border-radius:10px; border:1px solid var(--border);">
+                <table class="data-table crew-contact-table" style="width:100%; border-collapse:collapse; font-size:13px;">
+                    <thead>
+                        <tr style="background:var(--bg-input);">
+                            <th style="width:85px; text-align:center;">Matricule</th>
+                            <th style="min-width:170px;">Nom &amp; Prénom</th>
+                            <th style="width:70px; text-align:center;">Rank</th>
+                            <th style="width:75px; text-align:center;">POSIT</th>
+                            <th style="width:85px;">CIN</th>
+                            <th style="width:95px;">DOB</th>
+                            <th style="min-width:140px;">Other Qual</th>
+                            <th style="min-width:140px;">Airp Qual</th>
+                            <th style="width:105px;">A/C Qual</th>
+                            <th style="width:85px;">Restrictions</th>
+                            <th style="min-width:140px;">Contact (Tél)</th>
+                            <th style="width:90px; text-align:center;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="crew-contact-tbody"></tbody>
+                </table>
+                <div class="crew-empty" id="crew-contact-empty" style="display:none; padding:32px; text-align:center;">Aucun membre d'équipage trouvé.</div>
+            </div>
+        </div>
+
         <!-- Settings Panel -->
         <div class="panel" id="panel-settings">
             <div class="panel-header">
@@ -679,37 +812,16 @@
             </div>
             <div class="settings-body">
                 <div class="section result-section">
-                    <h2 class="section-title">Crew Database</h2>
-                    <div class="crew-form">
-                        <input type="text" id="crew-nom" class="input-field crew-input" placeholder="Nom & prénom">
-                        <input type="text" id="crew-matricule" class="input-field crew-input" placeholder="Matricule" inputmode="numeric">
-                        <select id="crew-fonction" class="input-field crew-input">
-                            <option value="CDB">CDB</option>
-                            <option value="OPL">OPL</option>
-                            <option value="CC">CC</option>
-                            <option value="PNC">PNC</option>
-                            <option value="Observateur">Observateur</option>
-                            <option value="Mécanicien">Mécanicien</option>
-                            <option value="Autre">Autre</option>
-                        </select>
-                        <select id="crew-grade" class="input-field crew-input"></select>
-                        <button type="button" id="crew-save" class="btn btn-accent">Ajouter</button>
-                        <button type="button" id="crew-cancel" class="btn" style="display:none;">Annuler</button>
-                    </div>
-                    <div class="crew-table-wrap">
-                        <table class="data-table crew-table">
-                            <thead>
-                                <tr>
-                                    <th>Nom</th>
-                                    <th>Matricule</th>
-                                    <th>Fonction</th>
-                                    <th>Grade</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="crew-tbody"></tbody>
-                        </table>
-                        <div class="crew-empty" id="crew-empty">Aucun membre enregistré.</div>
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+                        <div>
+                            <h2 class="section-title" style="margin:0;">CREW Database &amp; Contacts</h2>
+                            <div class="header-sub">Mise à jour rapide des navigants via fichier CSV (Crew Info ou Contacts).</div>
+                        </div>
+                        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                            <input type="file" id="inp-crew-csv" accept=".csv, .txt" style="display:none;">
+                            <button type="button" class="btn btn-accent" id="btn-update-crew-csv">📥 UPDATE CREW (Importer CSV)</button>
+                            <button type="button" class="btn" id="btn-goto-crewcontact">👥 Ouvrir CREW Contact</button>
+                        </div>
                     </div>
                 </div>
                 <div class="section result-section">

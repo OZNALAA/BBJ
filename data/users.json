@@ -4,27 +4,104 @@
     "login": "admin",
     "role": "Admin",
     "password": "BBJ@RAM",
-    "password_hash": "e6869f14f1a3a24146ae4e8882b08dd3$1537169b3c195f4d24c57c1c18ee997cd468ee020e482219d4e38628ff180968"
-  },
-  {
-    "nom": "OUZZINE ALAA-EDDINE",
-    "login": "ouzzine",
-    "role": "Admin",
-    "password": "Ozn22041985alaa",
-    "password_hash": "e5c84bd1e6a5073777e1cd2ca03d697d$e8bb2bc6e3a241d327fa6d3421a3d043d7da92e1aa0bd403a4b9287a5639371b"
-  },
-  {
-    "nom": "ZGUENDI KARIM",
-    "login": "zguendi",
-    "role": "User",
-    "password": "BBJ_RAM",
-    "password_hash": "003638ea71f3ce1222359e04c0f7eda3$6684f991f1e74d0df4ada1de3d0cfe32ff3db64619fd90b30b32f5af4375fee8"
+    "password_hash": "0aa5cd05f1b0212719d56e305629f16e$31c239fc366b08d6a31a5d8ff1cd636bd31fd94e303362a5cac7231f715e690c"
   },
   {
     "nom": "ASSELLALOU AHMED",
-    "login": "assellalou",
+    "login": "9402",
     "role": "User",
     "password": "BBJ_RAM",
-    "password_hash": "cfd15e3c8d288c6337f9a845a7c6fee6$2c0bc0fffb076fa3a6d562ac9a38ac8adc8327edd19df9fc87b75d1bf375eddf"
+    "password_hash": "d8c0e2115654cda954687b3401e3dc0a$dea8bca644ef71a1cd1ee03072dec789e32873a0c6dfcda9c552a0ba8f380382"
+  },
+  {
+    "nom": "EL ATIAOUI ABDELMAJID",
+    "login": "9410",
+    "role": "User",
+    "password": "BBJ_RAM",
+    "password_hash": "82b9a630e709a97b5c17d9094a1c547e$d455c659ac31e0ea4159af7631a09255f18e8c50d40d49ca5b83611c6873ea67"
+  },
+  {
+    "nom": "LEAMARI ZAKARIA",
+    "login": "9997",
+    "role": "User",
+    "password": "BBJ_RAM",
+    "password_hash": "9d7d18b4ef9d67b741f58189a31dfb83$2d89d24d3234c822eee61626cd2c8ddb945c0c93a69431257c348064105ebb71"
+  },
+  {
+    "nom": "ZGUENDI KARIM",
+    "login": "12326",
+    "role": "User",
+    "password": "BBJ_RAM",
+    "password_hash": "40d2ebce0455740cb95e70f460e73b42$f0eaec36de7c8e5743c543505eab56f8dab6a09a2ef7398e47f1b628d889fe5d"
+  },
+  {
+    "nom": "FIKRI BOUCHAIB",
+    "login": "12323",
+    "role": "User",
+    "password": "BBJ_RAM",
+    "password_hash": "05bd8815c259281e4b8caad8f4ade180$85a1286f4e70b60292a09f1ece9e26cdbd9b1fe94ebd4b3e93034b078ca6544c"
+  },
+  {
+    "nom": "BIDAD MOHAMED REDA",
+    "login": "12314",
+    "role": "User",
+    "password": "BBJ_RAM",
+    "password_hash": "67469724697dabe4e75958135aebed79$1eefc449cc28606d252c6b8f18a95749990cf32257a6471175e88fadff5c9df5"
+  },
+  {
+    "nom": "BOUGZOUL OMAR",
+    "login": "12315",
+    "role": "User",
+    "password": "BBJ_RAM",
+    "password_hash": "9d182c822abb12045f4797705d1790ab$21abec2b9d9b26ed0a6001ce9e679883be7cc4908d24e98532c5e0bfe7055995"
+  },
+  {
+    "nom": "OUZZINE ALAA EDDINE",
+    "login": "12583",
+    "role": "Admin",
+    "password": "Ozn22041985alaa",
+    "password_hash": "f2116be075e1d12e75189f5b6fb2217c$adf53737d069547dbf05eb970f44fb63b746f80beab5b7cc6493564bbf306aed"
+  },
+  {
+    "nom": "TAMIM AMINE",
+    "login": "45555",
+    "role": "User",
+    "password": "BBJ_RAM",
+    "password_hash": "9afa58659b426be6dcf2ecdf2bfe5e69$35e7befb1b1eed15f4926fab7bcde6cb247d4daca93b33ea8ed725d9d35939d2"
+  },
+  {
+    "nom": "DAIF ADIL",
+    "login": "22269",
+    "role": "User",
+    "password": "BBJ_RAM",
+    "password_hash": "04a18cf953516dea8b2e3d3b744ace90$236b5cb9a7263f439d99399cd723f8958d9e5aa440c8495560a9cb7339c5a1b3"
+  },
+  {
+    "nom": "CHANA ALI",
+    "login": "22271",
+    "role": "User",
+    "password": "BBJ_RAM",
+    "password_hash": "5cea439a106baa7d72d7356eecc382f6$585cb31f6509bd03e5aa037beca55da09a314e78ee88123e8db0d308535fbce9"
+  },
+  {
+    "nom": "RAQAQ YOUSSEF",
+    "login": "22280",
+    "role": "User",
+    "password": "BBJ_RAM",
+    "password_hash": "ac0a9018e6dc53fe665b2eee1b9627a9$48390c9b1f621deab13036586aebb182aa2589027316ae839b2edb5e253ef48c"
+  },
+  {
+    "nom": "AMRANI EL MAHDI",
+    "login": "45627",
+    "role": "User",
+    "password": "BBJ_RAM",
+    "password_hash": "da1dbacd81714613d4853cd53ad3269a$a277195ff0725c7c93dea90be08076c485cb63eacfe4f32625dd5674ece79734"
+  },
+  {
+    "nom": "TAZI THAMI",
+    "login": "44527",
+    "role": "User",
+    "password": "BBJ_RAM",
+    "password_hash": "9b369c94b2851be2ea1d06d02eba3e6b$9bd27f6a9a4f0bb01205c7faac2cbb83cf1f302ff8da046c963e4d85e1fe41e9"
   }
 ]
