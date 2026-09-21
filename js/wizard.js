@@ -104,8 +104,15 @@ window.BBJ_WIZARD = (() => {
         }
         if (window.fillCrewSelect && window.CREW) {
             const all = window.CREW.list();
-            fillCrewSelect(document.getElementById('wz-preparedby'), all, '— Préparé par —');
-            fillCrewSelect(document.getElementById('wz-captain'), all.filter(m => m.fonction === 'CDB'), '— Sélectionner CDB —');
+            const pilots = all.filter(function(m) {
+                const r = (m.rank || m.fonction || '').toUpperCase();
+                return r === 'CDB' || r === 'OPL';
+            });
+            const cdbs = all.filter(function(m) {
+                return (m.rank || m.fonction || '').toUpperCase() === 'CDB';
+            });
+            fillCrewSelect(document.getElementById('wz-preparedby'), pilots, '— Préparé par —');
+            fillCrewSelect(document.getElementById('wz-captain'), cdbs, '— Sélectionner CDB —');
         }
         const flightEl = document.getElementById('wz-flight');
         if (flightEl) {
@@ -1439,7 +1446,7 @@ function wizardInputs() {
         const crewL = (window.CREW ? window.CREW.list() : []);
         function crewName(mr) {
             const m = crewL.find(function(x) { return x.matricule === mr; });
-            return m ? m.fonction + ' ' + m.nom : '';
+            return m ? (m.rank || m.fonction || '') + ' ' + m.nom : '';
         }
         const prepName = prepEl ? crewName(prepEl.value) : '';
         const capName = capEl ? crewName(capEl.value) : '';

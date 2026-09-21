@@ -353,9 +353,11 @@ function getFlightTime() {
 }
 
 function fillCrewSelect(el, members, emptyText) {
+    if (!el) return;
     let html = '<option value="">' + (emptyText || '— Aucun —') + '</option>';
     for (const m of members) {
-        html += '<option value="' + m.matricule + '">' + m.fonction + ' ' + m.nom + '</option>';
+        const rank = m.rank || m.fonction || '';
+        html += '<option value="' + m.matricule + '">' + (rank ? rank + ' ' : '') + m.nom + '</option>';
     }
     el.innerHTML = html;
 }
@@ -363,9 +365,18 @@ function fillCrewSelect(el, members, emptyText) {
 function populateCrewFields() {
     if (!window.CREW) return;
     const all = window.CREW.list();
-    fillCrewSelect(document.getElementById('inp-preparedby'), all, '— Préparé par —');
-    const cdbs = all.filter(m => m.fonction === 'CDB');
+    const pilots = all.filter(function(m) {
+        const r = (m.rank || m.fonction || '').toUpperCase();
+        return r === 'CDB' || r === 'OPL';
+    });
+    const cdbs = all.filter(function(m) {
+        return (m.rank || m.fonction || '').toUpperCase() === 'CDB';
+    });
+
+    fillCrewSelect(document.getElementById('inp-preparedby'), pilots, '— Préparé par —');
     fillCrewSelect(document.getElementById('inp-captain'), cdbs, '— Sélectionner CDB —');
+    fillCrewSelect(document.getElementById('wz-preparedby'), pilots, '— Préparé par —');
+    fillCrewSelect(document.getElementById('wz-captain'), cdbs, '— Sélectionner CDB —');
 }
 
 document.addEventListener('DOMContentLoaded', function() {
