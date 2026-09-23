@@ -129,12 +129,30 @@
                 ctx.stroke();
                 ctx.setLineDash([]);
                 if (ml.label !== false) {
-                    const top = ml.points[ml.points.length - 1];
-                    ctx.fillStyle = '#6b7280';
+                    const isOdd = (ml.pct % 2 !== 0);
+                    const t = isOdd ? 0.74 : 0.48; // Impairs au centre en haut, pairs au centre
+                    const p0 = ml.points[0];
+                    const p1 = ml.points[1];
+                    const midX = p0[0] + t * (p1[0] - p0[0]);
+                    const midY = p0[1] + t * (p1[1] - p0[1]);
+                    const px = X(midX);
+                    const py = Y(midY);
+
+                    const txt = ml.pct + '%';
                     ctx.font = 'bold 9px Arial, sans-serif';
-                    ctx.textAlign = 'left';
+                    ctx.textAlign = 'center';
                     ctx.textBaseline = 'middle';
-                    ctx.fillText(ml.pct + '%', X(top[0]) + 7, Y(top[1]));
+
+                    const tw = ctx.measureText(txt).width;
+                    const padX = 2.5;
+                    const padY = 5;
+
+                    const canvasBg = isLight ? '#ffffff' : '#141A22';
+                    ctx.fillStyle = canvasBg;
+                    ctx.fillRect(px - tw / 2 - padX, py - padY, tw + padX * 2, padY * 2);
+
+                    ctx.fillStyle = isLight ? '#334155' : '#cbd5e1';
+                    ctx.fillText(txt, px, py);
                 }
             }
             ctx.restore();

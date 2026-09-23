@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bbj-app-v2';
+const CACHE_NAME = 'bbj-app-v3.2';
 
 const CORE_ASSETS = [
     'index.html',
