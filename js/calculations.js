@@ -51,6 +51,60 @@ function getGalleyIndexInterp(kg, zoneCol) {
     return prev[zoneCol] + f * (next[zoneCol] - prev[zoneCol]);
 }
 
+function calculateGeometricMac(idx, wtKg) {
+    if (typeof BBJ_DATA === 'undefined' || !BBJ_DATA.macLines || !BBJ_DATA.macLines.length) return null;
+    if (!wtKg || wtKg <= 0 || idx == null || isNaN(idx)) return null;
+
+    const lines = BBJ_DATA.macLines;
+    const y = wtKg / 1000;
+    const x = parseFloat(idx);
+
+    function getSignedDistance(ml) {
+        const p1 = ml.points[0], p2 = ml.points[1];
+        const dx = p2[0] - p1[0];
+        const dy = p2[1] - p1[1];
+        return (dy * (x - p1[0]) - dx * (y - p1[1])) / Math.hypot(dx, dy);
+    }
+
+    const dists = lines.map(function(ml) {
+        return { pct: ml.pct, d: getSignedDistance(ml) };
+    });
+
+    // Cas 1 : Point situé à gauche de la première ligne (<= 6%)
+    if (dists[0].d <= 0) {
+        const d0 = dists[0].d, d1 = dists[1].d;
+        if (Math.abs(d1 - d0) < 1e-6) return dists[0].pct;
+        const t = d0 / (d1 - d0);
+        return dists[0].pct + t * (dists[1].pct - dists[0].pct);
+    }
+
+    // Cas 2 : Point situé à droite de la dernière ligne (>= 37%)
+    const last = dists[dists.length - 1];
+    if (last.d >= 0) {
+        const dA = dists[dists.length - 2].d, dB = last.d;
+        if (Math.abs(dB - dA) < 1e-6) return last.pct;
+        const t = dB / (dB - dA);
+        return last.pct + t * (last.pct - dists[dists.length - 2].pct);
+    }
+
+    // Cas 3 : Point situé entre deux lignes de MAC consécutives (projection parallèle)
+    for (let i = 0; i < dists.length - 1; i++) {
+        if (dists[i].d >= 0 && dists[i + 1].d <= 0) {
+            const dA = dists[i].d;
+            const dB = -dists[i + 1].d;
+            const denom = dA + dB;
+            if (denom < 1e-6) return dists[i].pct;
+            const t = dA / denom;
+            return dists[i].pct + t * (dists[i + 1].pct - dists[i].pct);
+        }
+    }
+
+    return null;
+}
+if (typeof window !== 'undefined') {
+    window.calculateGeometricMac = calculateGeometricMac;
+}
+
 function calculate(inputs) {
     const isVip = inputs.vip === 'YES';
 
@@ -155,8 +209,8 @@ const totalZoneB = staff + extraCC;
 
     function indexToMac(index, weight) {
         if (!weight || weight <= 0) return 0;
-        const mac = (((500 * index - 32500) / weight + 0.804) * 100) / 3.682;
-        return Math.round(mac * 100) / 100;
+        const mac = calculateGeometricMac(index, weight);
+        return mac !== null ? Math.round(mac * 100) / 100 : 0;
     }
 
     const zfwMac = indexToMac(zfwIdx, zfw);
@@ -226,8 +280,11 @@ const totalZoneB = staff + extraCC;
 
 function indexToMac(index, weight) {
     if (!weight || weight <= 0) return 0;
-    const mac = (((500 * index - 32500) / weight + 0.804) * 100) / 3.682;
-    return Math.round(mac * 100) / 100;
+    const mac = calculateGeometricMac(index, weight);
+    return mac !== null ? Math.round(mac * 100) / 100 : 0;
+}
+if (typeof window !== 'undefined') {
+    window.indexToMac = indexToMac;
 }
 
 function round2(n) {

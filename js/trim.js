@@ -220,8 +220,10 @@
             if (wt == null || idx == null) continue;
             const w2 = wt / 1000;
             const y = Y(w2), x = X(idx);
+
+            // Crosshair horizontal & vertical
             ctx.strokeStyle = p.color;
-            ctx.lineWidth = 1.6;
+            ctx.lineWidth = 1.4;
             ctx.setLineDash([5, 4]);
             ctx.beginPath();
             ctx.moveTo(padL, y); ctx.lineTo(padL + pw, y);
@@ -230,6 +232,53 @@
             ctx.moveTo(x, padT); ctx.lineTo(x, padT + ph);
             ctx.stroke();
             ctx.setLineDash([]);
+
+            // Ligne oblique de lecture % MAC passant par le point (parallèle aux lignes de MAC)
+            if (typeof BBJ_DATA !== 'undefined' && BBJ_DATA.macLines) {
+                const lines = BBJ_DATA.macLines;
+                const dists = lines.map(function(ml) {
+                    const p1 = ml.points[0], p2 = ml.points[1];
+                    const dxx = p2[0] - p1[0], dyy = p2[1] - p1[1];
+                    return { pct: ml.pct, ml: ml, d: (dyy * (idx - p1[0]) - dxx * (w2 - p1[1])) / Math.hypot(dxx, dyy) };
+                });
+                let dirX = 0, dirY = 1;
+                for (let i = 0; i < dists.length - 1; i++) {
+                    if (dists[i].d >= 0 && dists[i + 1].d <= 0) {
+                        const dA = dists[i].d, dB = -dists[i + 1].d;
+                        const t = (dA + dB > 1e-6) ? (dA / (dA + dB)) : 0;
+                        const mlA = dists[i].ml, mlB = dists[i + 1].ml;
+                        const dxA = mlA.points[1][0] - mlA.points[0][0], dyA = mlA.points[1][1] - mlA.points[0][1];
+                        const dxB = mlB.points[1][0] - mlB.points[0][0], dyB = mlB.points[1][1] - mlB.points[0][1];
+                        dirX = (1 - t) * dxA + t * dxB;
+                        dirY = (1 - t) * dyA + t * dyB;
+                        break;
+                    }
+                }
+                if (Math.abs(dirY) > 1e-6) {
+                    const yTop = 80;
+                    const xTop = idx + (yTop - w2) * (dirX / dirY);
+                    const yBot = 36;
+                    const xBot = idx + (yBot - w2) * (dirX / dirY);
+                    ctx.save();
+                    ctx.strokeStyle = p.color;
+                    ctx.lineWidth = 1.8;
+                    ctx.setLineDash([2, 3]);
+                    ctx.beginPath();
+                    ctx.moveTo(X(xBot), Y(yBot));
+                    ctx.lineTo(X(xTop), Y(yTop));
+                    ctx.stroke();
+                    ctx.restore();
+                }
+            }
+
+            // Marqueur du point (intersection)
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(x, y, 4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = 1.5;
+            ctx.stroke();
         }
 
         // Legend

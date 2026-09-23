@@ -47,6 +47,10 @@
     function hideLogin() {
         const screen = document.getElementById('login-screen');
         if (screen) screen.style.display = 'none';
+        const activeNav = document.querySelector('.nav-item.active');
+        if (activeNav && activeNav.dataset.panel === 'newcalc' && typeof window.showWbDisclaimerModal === 'function') {
+            window.showWbDisclaimerModal();
+        }
     }
 
     function attempt() {

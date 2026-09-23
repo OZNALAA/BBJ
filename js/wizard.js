@@ -2,20 +2,32 @@
 window.BBJ_WIZARD = (() => {
     let current = 0;
     let correctedDow = 48950;
-    let correctedDoi = 39.72;
+    let correctedDoi = 41.38;
     let perfLimit = 0;
     let envelopeFilter = null;
     let blockFuelState = 0;
     let taxiFuelState = 200;
     let azfwState = 49772;
     let payloadState = 822;
+    let vipVersionState = true;
+
+    const wzFlightInfo = {
+        origin: 'GMME',
+        dest: 'GMME',
+        flightNum: '0603',
+        date: '2023-10-19',
+        time: '10:30',
+        preparedBy: '',
+        captain: ''
+    };
 
     const wzState = {
         observers: 1, cabincrew: 2, extracc: 2,
         staff: 8, premium: 0, viplounge: 0, vipoffice: 0,
         perftow: 79015, perfldg: 66360, perfzwf: 62731,
-        load: { A: 0, B: 0, C: 0, D: 0, E: 0, F: 0, G: 0 },
-        fwdhold: 150, afthold: 0, tripfuel: 8200
+        load: { A: 200, B: 0, C: 300, D: 0, E: 0, F: 0, G: 0 },
+        fwdhold: 150, afthold: 0, tripfuel: 8200,
+        waterQty: 120
     };
 
     function domGet(id) {
@@ -59,11 +71,11 @@ window.BBJ_WIZARD = (() => {
         const zfwEl = document.getElementById('wz-strip-zfw');
         const fuelEl = document.getElementById('wz-strip-fuel');
         const towEl = document.getElementById('wz-strip-tow');
-        if (dowEl) dowEl.textContent = (correctedDow || 48950).toLocaleString() + ' kg';
-        if (payEl) payEl.textContent = (payloadState || 822).toLocaleString() + ' kg';
-        if (zfwEl) zfwEl.textContent = (azfwState || 49772).toLocaleString() + ' kg';
-        if (fuelEl) fuelEl.textContent = (blockFuelState || 18000).toLocaleString() + ' kg';
-        const estTow = (azfwState || 49772) + (blockFuelState || 18000) - (taxiFuelState || 200);
+        if (dowEl) dowEl.textContent = (correctedDow != null ? correctedDow : 48704).toLocaleString() + ' kg';
+        if (payEl) payEl.textContent = (payloadState != null ? payloadState : 0).toLocaleString() + ' kg';
+        if (zfwEl) zfwEl.textContent = (azfwState != null ? azfwState : 48704).toLocaleString() + ' kg';
+        if (fuelEl) fuelEl.textContent = (blockFuelState != null ? blockFuelState : 0).toLocaleString() + ' kg';
+        const estTow = (azfwState || 0) + (blockFuelState || 0) - (taxiFuelState || 0);
         if (towEl) towEl.textContent = estTow.toLocaleString() + ' kg';
     }
 
@@ -77,19 +89,29 @@ window.BBJ_WIZARD = (() => {
     }
 
     function renderFlightInfo() {
+        const isVip = (vipVersionState !== undefined) ? vipVersionState : true;
         return '<div class="wizard-section">'
-            + '<h2 class="section-title">Flight Information</h2>'
+            + '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; flex-wrap:wrap; gap:12px;">'
+            + '<h2 class="section-title" style="margin:0;">Flight Information</h2>'
+            + '<div class="wz-vip-toggle-wrap">'
+            + '<span class="wz-vip-label">VIP VERSION</span>'
+            + '<label class="vip-switch">'
+            + '<input type="checkbox" id="wz-toggle-vip"' + (isVip ? ' checked' : '') + '>'
+            + '<span class="vip-slider"></span>'
+            + '</label>'
+            + '</div>'
+            + '</div>'
             + '<div class="form-grid">'
             + '<div class="form-group"><label>Origin</label>' + pickerHTML('wz-origin-picker') + '</div>'
             + '<div class="form-group"><label>Destination</label>' + pickerHTML('wz-dest-picker') + '</div>'
             + '<div class="form-group"><label>Flight Number</label>'
             + '<div class="flight-field"><span class="flight-prefix">MRS</span>'
-            + '<input type="text" id="wz-flight" value="0603" inputmode="numeric" pattern="[0-9]*" class="input-field">'
+            + '<input type="text" id="wz-flight" value="' + (wzFlightInfo.flightNum !== undefined ? wzFlightInfo.flightNum : '0603') + '" inputmode="numeric" pattern="[0-9]*" class="input-field">'
             + '</div></div>'
             + '<div class="form-group"><label>Date</label>'
-            + '<input type="date" id="wz-date" value="2023-10-19" class="input-field"></div>'
+            + '<input type="date" id="wz-date" value="' + (wzFlightInfo.date !== undefined ? wzFlightInfo.date : '2023-10-19') + '" class="input-field"></div>'
             + '<div class="form-group"><label>Time (UTC)</label>'
-            + '<input type="time" id="wz-time" value="10:30" class="input-field"></div>'
+            + '<input type="time" id="wz-time" value="' + (wzFlightInfo.time !== undefined ? wzFlightInfo.time : '10:30') + '" class="input-field"></div>'
             + '<div class="form-group"><label>Prepared by</label>'
             + '<select id="wz-preparedby" class="input-field"></select></div>'
             + '<div class="form-group"><label>Captain</label>'
@@ -97,10 +119,90 @@ window.BBJ_WIZARD = (() => {
             + '</div></div>';
     }
 
+    function updateVipControls() {
+        const isVip = (vipVersionState !== undefined) ? vipVersionState : true;
+        const loadA = domGet('wz-load-a');
+        const loadC = domGet('wz-load-c');
+        const waterWrap = domGet('wz-water-section');
+        const waterBadge = domGet('wz-water-badge');
+
+        if (isVip) {
+            wzState.waterQty = 120;
+            wzState.load.A = 200;
+            wzState.load.C = 300;
+            if (loadA) {
+                loadA.value = '200';
+                loadA.readOnly = true;
+                loadA.classList.add('field-locked');
+            }
+            if (loadC) {
+                loadC.value = '300';
+                loadC.readOnly = true;
+                loadC.classList.add('field-locked');
+            }
+            if (waterWrap) {
+                waterWrap.classList.add('water-locked');
+            }
+            if (waterBadge) {
+                waterBadge.textContent = 'Fixe 120 Gal (Inclus DOW)';
+            }
+            const btns = document.querySelectorAll('.wz-water-btn');
+            btns.forEach(b => {
+                b.disabled = true;
+                if (b.getAttribute('data-usg') === '120') b.classList.add('active');
+                else b.classList.remove('active');
+            });
+        } else {
+            if (loadA) {
+                loadA.readOnly = false;
+                loadA.classList.remove('field-locked');
+                if (loadA.value === '200') {
+                    loadA.value = '0';
+                    wzState.load.A = 0;
+                }
+            }
+            if (loadC) {
+                loadC.readOnly = false;
+                loadC.classList.remove('field-locked');
+                if (loadC.value === '300') {
+                    loadC.value = '0';
+                    wzState.load.C = 0;
+                }
+            }
+            if (waterWrap) {
+                waterWrap.classList.remove('water-locked');
+            }
+            const curWater = wzState.waterQty || 120;
+            const segs = [
+                { usg: 30, kg: 113 },
+                { usg: 60, kg: 227 },
+                { usg: 90, kg: 340 },
+                { usg: 120, kg: 454 }
+            ];
+            const curSeg = segs.find(s => s.usg === curWater) || segs[3];
+            if (waterBadge && curSeg) {
+                waterBadge.textContent = curWater + ' USG (' + curSeg.kg + ' kg)';
+            }
+            const btns = document.querySelectorAll('.wz-water-btn');
+            btns.forEach(b => {
+                b.disabled = false;
+                if (parseInt(b.getAttribute('data-usg'), 10) === curWater) b.classList.add('active');
+                else b.classList.remove('active');
+            });
+        }
+        delete stepCache[2];
+        updateCorrected();
+        updatePayload();
+    }
+
     function initFlightInfo() {
         if (window.createAirportPicker) {
-            createAirportPicker(document.getElementById('wz-origin-picker'), 'GMME');
-            createAirportPicker(document.getElementById('wz-dest-picker'), 'GMME');
+            createAirportPicker(document.getElementById('wz-origin-picker'), wzFlightInfo.origin, {
+                onSelect: function(icao) { wzFlightInfo.origin = icao; }
+            });
+            createAirportPicker(document.getElementById('wz-dest-picker'), wzFlightInfo.dest, {
+                onSelect: function(icao) { wzFlightInfo.dest = icao; }
+            });
         }
         if (window.fillCrewSelect && window.CREW) {
             const all = window.CREW.list();
@@ -113,11 +215,87 @@ window.BBJ_WIZARD = (() => {
             });
             fillCrewSelect(document.getElementById('wz-preparedby'), pilots, '— Préparé par —');
             fillCrewSelect(document.getElementById('wz-captain'), cdbs, '— Sélectionner CDB —');
+            const prepEl = document.getElementById('wz-preparedby');
+            if (prepEl && wzFlightInfo.preparedBy) prepEl.value = wzFlightInfo.preparedBy;
+            const capEl = document.getElementById('wz-captain');
+            if (capEl && wzFlightInfo.captain) capEl.value = wzFlightInfo.captain;
         }
         const flightEl = document.getElementById('wz-flight');
         if (flightEl) {
             flightEl.addEventListener('input', function() {
                 flightEl.value = flightEl.value.replace(/\D/g, '');
+                wzFlightInfo.flightNum = flightEl.value;
+            });
+        }
+        const dateEl = document.getElementById('wz-date');
+        if (dateEl) dateEl.addEventListener('change', function() { wzFlightInfo.date = dateEl.value; });
+        const timeEl = document.getElementById('wz-time');
+        if (timeEl) timeEl.addEventListener('change', function() { wzFlightInfo.time = timeEl.value; });
+        const prepEl = document.getElementById('wz-preparedby');
+        if (prepEl) prepEl.addEventListener('change', function() { wzFlightInfo.preparedBy = prepEl.value; });
+        const capEl = document.getElementById('wz-captain');
+        if (capEl) capEl.addEventListener('change', function() { wzFlightInfo.captain = capEl.value; });
+
+        // Toggle VIP VERSION & confirmation popup
+        const vipToggle = document.getElementById('wz-toggle-vip');
+        const vipModal = document.getElementById('wz-vip-modal');
+        const btnVipCancel = document.getElementById('btn-wz-vip-cancel');
+        const btnVipConfirm = document.getElementById('btn-wz-vip-confirm');
+
+        if (vipToggle) {
+            vipToggle.checked = vipVersionState;
+            vipToggle.addEventListener('change', function() {
+                if (!this.checked) {
+                    // Revert visually to checked while waiting for user confirmation
+                    this.checked = true;
+                    if (vipModal) {
+                        vipModal.classList.add('show');
+                    } else if (confirm('Désactiver la VERSION VIP ?')) {
+                        vipVersionState = false;
+                        this.checked = false;
+                        updateVipControls();
+                    }
+                } else {
+                    vipVersionState = true;
+                    updateVipControls();
+                    if (typeof toast === 'function') {
+                        toast('VERSION VIP activée');
+                    }
+                }
+            });
+        }
+
+        if (btnVipCancel && !btnVipCancel._bound) {
+            btnVipCancel._bound = true;
+            btnVipCancel.addEventListener('click', function() {
+                if (vipModal) vipModal.classList.remove('show');
+                const t = document.getElementById('wz-toggle-vip');
+                if (t) t.checked = true;
+            });
+        }
+
+        if (btnVipConfirm && !btnVipConfirm._bound) {
+            btnVipConfirm._bound = true;
+            btnVipConfirm.addEventListener('click', function() {
+                vipVersionState = false;
+                if (vipModal) vipModal.classList.remove('show');
+                const t = document.getElementById('wz-toggle-vip');
+                if (t) t.checked = false;
+                updateVipControls();
+                if (typeof toast === 'function') {
+                    toast('VERSION VIP désactivée');
+                }
+            });
+        }
+
+        if (vipModal && !vipModal._bound) {
+            vipModal._bound = true;
+            vipModal.addEventListener('click', function(e) {
+                if (e.target === vipModal) {
+                    vipModal.classList.remove('show');
+                    const t = document.getElementById('wz-toggle-vip');
+                    if (t) t.checked = vipVersionState;
+                }
             });
         }
     }
@@ -227,22 +405,37 @@ window.BBJ_WIZARD = (() => {
     function updateCorrected() {
         const dowEl = document.getElementById('wz-corrected-dow');
         const doiEl = document.getElementById('wz-corrected-doi');
-        if (!dowEl || !doiEl || typeof BBJ_DATA === 'undefined') return;
+        if (typeof BBJ_DATA === 'undefined') return;
         const observers = wizardNum('wz-observers');
         const cabincrew = wizardNum('wz-cabincrew');
         const extracc = wizardNum('wz-extracc');
-        const w = BBJ_DATA.crew.observer.wt;
-        const paxS = BBJ_DATA.paxIndex;
-        const sIdx = function(n) { const e = paxS[Math.max(0, Math.min(n, 16))]; return e ? e.S : 0; };
-        const dow = 48704 + observers * w + (cabincrew - 2) * w + extracc * w;
+        const w = (BBJ_DATA.crew && BBJ_DATA.crew.observer) ? BBJ_DATA.crew.observer.wt : 82;
+        let dow = 48704 + observers * w + (cabincrew - 2) * w + extracc * w;
         const ccAdj = (2 - cabincrew) * (2.451 / 2);
         const obsIdx = [0, -1.336, -1.336 - 1.332];
-        const doi = 42.72 + obsIdx[Math.max(0, Math.min(observers, 2))] + ccAdj;
-        correctedDow = dow;
+        let doi = 42.72 + obsIdx[Math.max(0, Math.min(observers, 2))] + ccAdj;
+
+        if (!vipVersionState) {
+            // Deduct 500kg (200kg Zone A + 300kg Zone C) and galley index
+            dow -= 500;
+            const gA = (typeof getGalleyIndexInterp === 'function') ? getGalleyIndexInterp(200, 'A') : (typeof getGalleyIndex === 'function' ? getGalleyIndex(200, 'A') : -3);
+            const gC = (typeof getGalleyIndexInterp === 'function') ? getGalleyIndexInterp(300, 'C') : (typeof getGalleyIndex === 'function' ? getGalleyIndex(300, 'C') : -2);
+            doi -= (gA + gC);
+
+            // Water correction from default 120 Gal (454kg, idx +6)
+            const curWater = wzState.waterQty !== undefined ? wzState.waterQty : 120;
+            const wRow = (BBJ_DATA.waterTable || []).find(r => Math.abs(r.usg) === curWater) || { kg: 454, idx: 6 };
+            const deltaWaterKg = wRow.kg - 454;
+            const deltaWaterIdx = wRow.idx - 6;
+            dow += deltaWaterKg;
+            doi += deltaWaterIdx;
+        }
+
+        correctedDow = Math.round(dow);
         correctedDoi = doi;
         azfwState = correctedDow + payloadState;
-        dowEl.value = String(dow);
-        doiEl.value = doi.toFixed(2);
+        if (dowEl) dowEl.value = String(correctedDow);
+        if (doiEl) doiEl.value = correctedDoi.toFixed(2);
         updateTelemetryStrip();
     }
 
@@ -334,7 +527,7 @@ window.BBJ_WIZARD = (() => {
         }
     }
 
-    /* ===== STEP 4: Cabin LOPA with Zone Boxes & 2 Cargo Holds ===== */
+    /* ===== STEP 3: Cabin LOPA with Zone Boxes & 2 Cargo Holds ===== */
     function renderCabinLopaSVG() {
         return '<div class="efb-lopa-container">'
             + '<div class="efb-lopa-svg-wrap">'
@@ -559,10 +752,55 @@ window.BBJ_WIZARD = (() => {
         }
     }
 
+    function renderWaterSelector() {
+        const isVip = (vipVersionState !== undefined) ? vipVersionState : true;
+        const curWater = wzState.waterQty !== undefined ? wzState.waterQty : 120;
+        const segments = [
+            { label: '1/4', usg: 30, kg: 113, idx: '+2' },
+            { label: '1/2', usg: 60, kg: 227, idx: '+3' },
+            { label: '3/4', usg: 90, kg: 340, idx: '+5' },
+            { label: '1/1', usg: 120, kg: 454, idx: '+6' }
+        ];
+
+        let btns = '';
+        segments.forEach(function(s) {
+            const active = (curWater === s.usg) ? ' active' : '';
+            btns += '<button type="button" class="wz-water-btn' + active + '" data-usg="' + s.usg + '"' + (isVip ? ' disabled' : '') + '>'
+                + '<span class="wz-water-btn-fraction">' + s.label + '</span>'
+                + '<span class="wz-water-btn-details">' + s.usg + ' Gal (' + s.kg + ' kg)</span>'
+                + '<span class="wz-water-btn-idx">Idx ' + s.idx + '</span>'
+                + '</button>';
+        });
+
+        const activeSeg = segments.find(s => s.usg === curWater) || segments[3];
+        const badgeText = isVip
+            ? 'Fixe 120 Gal (Inclus DOW)'
+            : (activeSeg.usg + ' USG (' + activeSeg.kg + ' kg)');
+
+        return '<div class="wz-water-section' + (isVip ? ' water-locked' : '') + '" id="wz-water-section">'
+            + '<div class="wz-water-header">'
+            + '<div class="wz-water-title">'
+            + '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--efb-cyan);">'
+            + '<path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>'
+            + '</svg>'
+            + 'POTABLE WATER (EAU POTABLE)'
+            + '</div>'
+            + '<div class="wz-water-badge" id="wz-water-badge">' + badgeText + '</div>'
+            + '</div>'
+            + '<div class="wz-water-selector">' + btns + '</div>'
+            + '</div>';
+    }
+
     function renderCargo() {
+        const isVip = (vipVersionState !== undefined) ? vipVersionState : true;
         const xcc = wzState.extracc || 0;
         const maxStaff = Math.max(0, 16 - xcc);
         const currentStaff = Math.min(wzState.staff || 0, maxStaff);
+
+        const valA = isVip ? 200 : (wzState.load.A || 0);
+        const valC = isVip ? 300 : (wzState.load.C || 0);
+        const lockAttrA = isVip ? ' readonly class="field-locked"' : '';
+        const lockAttrC = isVip ? ' readonly class="field-locked"' : '';
 
         return '<div class="wizard-section">'
             + '<h2 class="section-title">BBJ2 Cabin LOPA &amp; Zone Distribution</h2>'
@@ -571,10 +809,10 @@ window.BBJ_WIZARD = (() => {
             // Zone A
             + '<div class="lopa-zone-box" id="box-zone-a">'
             + '<div class="lopa-box-header"><span class="lopa-box-title">ZONE A</span><span class="lopa-box-arm">73-181"</span></div>'
-            + '<div class="lopa-box-arm">Entrance Area</div>'
-            + '<div class="lopa-box-input-wrap"><label style="font-size:9px; color:var(--efb-muted);">Load (kg)</label>'
-            + '<input type="text" id="wz-load-a" value="' + (wzState.load.A || 0) + '" inputmode="numeric" maxlength="3"></div>'
-            + '<div class="lopa-zone-weight-box"><span class="lopa-weight-lbl">Poids Zone A</span><span class="lopa-weight-val" id="wz-box-wt-a">0 kg</span></div>'
+            + '<div class="lopa-box-arm">Entrance Area' + (isVip ? ' (Galley 200kg)' : '') + '</div>'
+            + '<div class="lopa-box-input-wrap"><label style="font-size:9px; color:var(--efb-muted);">Load (kg)' + (isVip ? ' [Fixe VIP]' : '') + '</label>'
+            + '<input type="text" id="wz-load-a" value="' + valA + '" inputmode="numeric" maxlength="3"' + lockAttrA + '></div>'
+            + '<div class="lopa-zone-weight-box"><span class="lopa-weight-lbl">Poids Zone A</span><span class="lopa-weight-val" id="wz-box-wt-a">' + (isVip ? '200 kg (Inclus DOW)' : valA + ' kg') + '</span></div>'
             + '</div>'
             // Zone B (Staff)
             + '<div class="lopa-zone-box zone-b-highlight" id="box-zone-b">'
@@ -595,10 +833,10 @@ window.BBJ_WIZARD = (() => {
             // Zone C
             + '<div class="lopa-zone-box" id="box-zone-c">'
             + '<div class="lopa-box-header"><span class="lopa-box-title">ZONE C</span><span class="lopa-box-arm">354-465"</span></div>'
-            + '<div class="lopa-box-arm">Galley Area</div>'
-            + '<div class="lopa-box-input-wrap"><label style="font-size:9px; color:var(--efb-muted);">Load (kg)</label>'
-            + '<input type="text" id="wz-load-c" value="' + (wzState.load.C || 0) + '" inputmode="numeric" maxlength="3"></div>'
-            + '<div class="lopa-zone-weight-box"><span class="lopa-weight-lbl">Poids Zone C</span><span class="lopa-weight-val" id="wz-box-wt-c">0 kg</span></div>'
+            + '<div class="lopa-box-arm">Galley Area' + (isVip ? ' (Galley 300kg)' : '') + '</div>'
+            + '<div class="lopa-box-input-wrap"><label style="font-size:9px; color:var(--efb-muted);">Load (kg)' + (isVip ? ' [Fixe VIP]' : '') + '</label>'
+            + '<input type="text" id="wz-load-c" value="' + valC + '" inputmode="numeric" maxlength="3"' + lockAttrC + '></div>'
+            + '<div class="lopa-zone-weight-box"><span class="lopa-weight-lbl">Poids Zone C</span><span class="lopa-weight-val" id="wz-box-wt-c">' + (isVip ? '300 kg (Inclus DOW)' : valC + ' kg') + '</span></div>'
             + '</div>'
             // Zone D (Premium)
             + '<div class="lopa-zone-box" id="box-zone-d">'
@@ -643,6 +881,9 @@ window.BBJ_WIZARD = (() => {
             + '</div>'
             + '</div>'
 
+            // Potable Water Selector (Placed right under the 7 zone boxes)
+            + renderWaterSelector()
+
             // Visual LOPA Schematic
             + renderCabinLopaSVG()
             + '</div>'
@@ -658,13 +899,13 @@ window.BBJ_WIZARD = (() => {
             + '<span class="cargo-hold-max">Max: 2,948 kg</span>'
             + '</div>'
             + '<div class="form-group" style="margin:0;">'
-            + '<input type="text" id="wz-fwdhold" value="' + (wzState.fwdhold || 150) + '" inputmode="numeric" pattern="[0-9]*" maxlength="4" class="input-field" style="font-size:16px; font-weight:700;">'
+            + '<input type="text" id="wz-fwdhold" value="' + (wzState.fwdhold !== undefined ? wzState.fwdhold : 150) + '" inputmode="numeric" pattern="[0-9]*" maxlength="4" class="input-field" style="font-size:16px; font-weight:700;">'
             + '</div>'
             + '<div class="cargo-hold-bar">'
-            + '<div class="cargo-hold-bar-fill" id="bar-fill-fwd" style="width:' + Math.min(100, Math.round(((wzState.fwdhold || 150) / 2948) * 100)) + '%;"></div>'
+            + '<div class="cargo-hold-bar-fill" id="bar-fill-fwd" style="width:' + Math.min(100, Math.round(((wzState.fwdhold || 0) / 2948) * 100)) + '%;"></div>'
             + '</div>'
             + '<div style="display:flex; justify-content:space-between; font-size:11px; font-family:\'JetBrains Mono\'; color:var(--efb-muted);">'
-            + '<span>Remplissage</span><span id="txt-fill-fwd" style="color:var(--efb-cyan); font-weight:700;">' + Math.round(((wzState.fwdhold || 150) / 2948) * 100) + '%</span>'
+            + '<span>Remplissage</span><span id="txt-fill-fwd" style="color:var(--efb-cyan); font-weight:700;">' + Math.round(((wzState.fwdhold || 0) / 2948) * 100) + '%</span>'
             + '</div>'
             + '</div>'
 
@@ -675,7 +916,7 @@ window.BBJ_WIZARD = (() => {
             + '<span class="cargo-hold-max">Max: 1,588 kg</span>'
             + '</div>'
             + '<div class="form-group" style="margin:0;">'
-            + '<input type="text" id="wz-afthold" value="' + (wzState.afthold || 0) + '" inputmode="numeric" pattern="[0-9]*" maxlength="4" class="input-field" style="font-size:16px; font-weight:700;">'
+            + '<input type="text" id="wz-afthold" value="' + (wzState.afthold !== undefined ? wzState.afthold : 0) + '" inputmode="numeric" pattern="[0-9]*" maxlength="4" class="input-field" style="font-size:16px; font-weight:700;">'
             + '</div>'
             + '<div class="cargo-hold-bar">'
             + '<div class="cargo-hold-bar-fill" id="bar-fill-aft" style="width:' + Math.min(100, Math.round(((wzState.afthold || 0) / 1588) * 100)) + '%; background:linear-gradient(90deg, #F59E0B, #D97706);"></div>'
@@ -699,10 +940,14 @@ window.BBJ_WIZARD = (() => {
 
     function updatePayload() {
         syncState();
+        const isVip = (vipVersionState !== undefined) ? vipVersionState : true;
         const paxWt = (typeof BBJ_DATA !== 'undefined') ? BBJ_DATA.paxWeight : 83.9;
         const pax = wzState.staff + wzState.premium + wzState.viplounge + wzState.vipoffice;
         let loads = 0;
-        ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(function(z) { loads += wzState.load[z]; });
+        ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(function(z) {
+            if (isVip && (z === 'A' || z === 'C')) return;
+            loads += wzState.load[z];
+        });
         const cargo = wzState.fwdhold + wzState.afthold;
         const payload = Math.round(pax * paxWt) + loads + cargo;
         payloadState = payload;
@@ -713,25 +958,31 @@ window.BBJ_WIZARD = (() => {
         if (az) az.value = String(azfwState);
 
         // Update Zone Total Weights (Pax weight + Load in cabin)
-        const wtA = wzState.load.A || 0;
+        const wtA = isVip ? 200 : (wzState.load.A || 0);
         const wtB = Math.round(((wzState.staff || 0) + (wzState.extracc || 0)) * paxWt) + (wzState.load.B || 0);
-        const wtC = wzState.load.C || 0;
+        const wtC = isVip ? 300 : (wzState.load.C || 0);
         const wtD = Math.round((wzState.premium || 0) * paxWt) + (wzState.load.D || 0);
         const wtE = Math.round((wzState.viplounge || 0) * paxWt) + (wzState.load.E || 0);
         const wtF = Math.round((wzState.vipoffice || 0) * paxWt) + (wzState.load.F || 0);
         const wtG = wzState.load.G || 0;
 
-        const setWt = function(id, val) {
+        const setWt = function(id, val, isVipIncluded) {
             const d = document.getElementById(id);
-            if (d) d.textContent = val.toLocaleString() + ' kg';
+            if (d) {
+                if (isVipIncluded) {
+                    d.textContent = val.toLocaleString() + ' kg (Inclus DOW)';
+                } else {
+                    d.textContent = val.toLocaleString() + ' kg';
+                }
+            }
         };
-        setWt('wz-box-wt-a', wtA);
-        setWt('wz-box-wt-b', wtB);
-        setWt('wz-box-wt-c', wtC);
-        setWt('wz-box-wt-d', wtD);
-        setWt('wz-box-wt-e', wtE);
-        setWt('wz-box-wt-f', wtF);
-        setWt('wz-box-wt-g', wtG);
+        setWt('wz-box-wt-a', wtA, isVip);
+        setWt('wz-box-wt-b', wtB, false);
+        setWt('wz-box-wt-c', wtC, isVip);
+        setWt('wz-box-wt-d', wtD, false);
+        setWt('wz-box-wt-e', wtE, false);
+        setWt('wz-box-wt-f', wtF, false);
+        setWt('wz-box-wt-g', wtG, false);
 
         // Update Cargo Hold Visual Bars
         const fwdBar = document.getElementById('bar-fill-fwd');
@@ -782,6 +1033,36 @@ window.BBJ_WIZARD = (() => {
             const el = document.getElementById(id);
             if (el) el.addEventListener('input', updatePayload);
         });
+
+        const waterBtns = document.querySelectorAll('.wz-water-btn');
+        waterBtns.forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                if (vipVersionState) {
+                    if (typeof toast === 'function') toast('Eau potable fixée à 120 Gal (1/1) en version VIP');
+                    return;
+                }
+                const usg = parseInt(this.getAttribute('data-usg'), 10);
+                if (usg) {
+                    wzState.waterQty = usg;
+                    waterBtns.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    const badge = document.getElementById('wz-water-badge');
+                    const segs = [
+                        { usg: 30, kg: 113 },
+                        { usg: 60, kg: 227 },
+                        { usg: 90, kg: 340 },
+                        { usg: 120, kg: 454 }
+                    ];
+                    const curSeg = segs.find(s => s.usg === usg);
+                    if (badge && curSeg) {
+                        badge.textContent = usg + ' USG (' + curSeg.kg + ' kg)';
+                    }
+                    updateCorrected();
+                    updatePayload();
+                    updateTelemetryStrip();
+                }
+            });
+        });
     }
 
     function numberField(id, label, value, max, maxLen, readonly) {
@@ -828,7 +1109,7 @@ window.BBJ_WIZARD = (() => {
         });
     }
 
-    /* ===== STEP 3: EFB INSERT & Fuel Uplift Schematics ===== */
+    /* ===== STEP 4: EFB INSERT & Fuel Uplift Schematics ===== */
     function renderFuelTanksSVG() {
         return '<div class="efb-fuel-schematic">'
             + '<div style="width:100%; max-width:680px;">'
@@ -975,9 +1256,9 @@ window.BBJ_WIZARD = (() => {
             + '<div class="wizard-section" style="margin-top:16px;">'
             + '<h2 class="section-title">Fuel Usage &amp; Block Fuel</h2>'
             + '<div class="form-grid">'
-            + numberField('wz-blockfuel', 'Block Fuel (kg)', blockFuelState || 18000, 28585, 5, true)
-            + numberField('wz-taxifuel', 'Taxi Fuel (kg)', taxiFuelState || 200, null, 5)
-            + numberField('wz-tripfuel', 'Trip Fuel (kg)', wzState.tripfuel || 8200, null, 5)
+            + numberField('wz-blockfuel', 'Block Fuel (kg)', (blockFuelState !== undefined && blockFuelState !== null) ? blockFuelState : 18000, 28585, 5, true)
+            + numberField('wz-taxifuel', 'Taxi Fuel (kg)', (taxiFuelState !== undefined && taxiFuelState !== null) ? taxiFuelState : 200, null, 5)
+            + numberField('wz-tripfuel', 'Trip Fuel (kg)', (wzState.tripfuel !== undefined && wzState.tripfuel !== null) ? wzState.tripfuel : 8200, null, 5)
             + '</div></div>'
             + '<div class="wizard-section" style="margin-top:16px;">'
             + '<h2 class="section-title">Computed Limitations</h2>'
@@ -988,7 +1269,7 @@ window.BBJ_WIZARD = (() => {
             + '<div class="form-group wz-lim-group" id="box-perf-calc-ldg">'
             + '<div class="wz-lim-lbl-row"><label>Maximum LDG Weight+TRIP (kg)</label><span class="wz-lim-badge" id="badge-perf-calc-ldg" style="display:none;">LIMITING</span></div>'
             + '<input type="text" id="wz-perf-calc-ldg" class="input-field readonly-field" readonly></div>'
-            + '<div class="form-group wz-lim-group" id="box-perf-calc-zfw">'
+            + '<div class="form-group wz-lim-group" id="box-perf-calc-zfw" style="display:none;">'
             + '<div class="wz-lim-lbl-row"><label>Maximum ZFW+T/O Fuel (kg)</label><span class="wz-lim-badge" id="badge-perf-calc-zfw" style="display:none;">LIMITING</span></div>'
             + '<input type="text" id="wz-perf-calc-zfw" class="input-field readonly-field" readonly></div>'
             + '</div></div>';
@@ -1089,13 +1370,6 @@ window.BBJ_WIZARD = (() => {
             + '<h2 class="section-title" style="margin:0;">Resume & Save</h2>'
             + '<button type="button" id="wz-print-btn" class="btn">🖨️ PRINT</button>'
             + '</div>'
-            + '<div class="wizard-section">'
-            + '<div class="form-grid">'
-            + '<div class="form-group"><label>Charge Offerte (kg)</label>'
-            + '<input type="text" id="wz-charge-offerte" class="input-field readonly-field" readonly></div>'
-            + '<div class="form-group"><label>Maximum Fuel (kg)</label>'
-            + '<input type="text" id="wz-maxfuel" class="input-field readonly-field" readonly></div>'
-            + '</div></div>'
             + '<canvas id="wz-trim-canvas" class="wz-trim-canvas"></canvas>'
             + '<div class="wz-summary" id="wz-summary"></div>'
             + '<div id="wz-suggestions"></div>'
@@ -1110,10 +1384,11 @@ window.BBJ_WIZARD = (() => {
     }
 
 function wizardInputs() {
+        const isVip = (vipVersionState !== undefined) ? vipVersionState : true;
         return {
             correctedDow: correctedDow,
             correctedDoi: correctedDoi,
-            vip: 'YES',
+            vip: isVip ? 'YES' : 'NO',
             pilots: 2,
             observers: 0,
             cabincrew: 0,
@@ -1128,18 +1403,18 @@ function wizardInputs() {
             tripFuel: wzState.tripfuel,
             fwdHold: wzState.fwdhold,
             aftHold: wzState.afthold,
-            water: 120,
+            water: isVip ? 120 : (wzState.waterQty !== undefined ? wzState.waterQty : 120),
             fwdGalley: 0,
             midGalley: 0,
             zoneBOtherLoad: 0,
             zoneLoad: {
-                A: wzState.load.A,
-                B: wzState.load.B,
-                C: wzState.load.C,
-                D: wzState.load.D,
-                E: wzState.load.E,
-                F: wzState.load.F,
-                G: wzState.load.G
+                A: isVip ? 0 : (wzState.load.A || 0),
+                B: wzState.load.B || 0,
+                C: isVip ? 0 : (wzState.load.C || 0),
+                D: wzState.load.D || 0,
+                E: wzState.load.E || 0,
+                F: wzState.load.F || 0,
+                G: wzState.load.G || 0
             }
         };
     }
@@ -1207,7 +1482,7 @@ function wizardInputs() {
     }
 
     function searchZoneProposal(envId) {
-        const keys = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+        const keys = vipVersionState ? ['B', 'D', 'E', 'F', 'G'] : ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
         let best = null;
         for (const from of keys) {
             if (wzState.load[from] <= 0) continue;
@@ -1346,11 +1621,10 @@ function wizardInputs() {
     function applyProposal(p) {
         if (!confirm('Appliquer cette correction ?\n\n' + p.label)) return;
         if (p.kind === 'fuel') {
-            const root = stepCache[2];
-            const bfEl = root ? root.querySelector('#wz-fuelbefore') : null;
-            const densEl = root ? root.querySelector('#wz-density') : null;
-            const supEl = root ? root.querySelector('#wz-supplied') : null;
-            const blockEl = root ? root.querySelector('#wz-blockfuel') : null;
+            const bfEl = domGet('wz-fuelbefore');
+            const densEl = domGet('wz-density');
+            const supEl = domGet('wz-supplied');
+            const blockEl = domGet('wz-blockfuel');
             const before = bfEl ? (parseFloat(bfEl.value) || 0) : 0;
             const dens = densEl ? (parseFloat(densEl.value) || 0) : 0;
             let newBlock = p.newBlock;
@@ -1365,40 +1639,36 @@ function wizardInputs() {
             if (blockEl) blockEl.value = String(newBlock);
             blockFuelState = newBlock;
         } else if (p.kind === 'zone') {
-            const root = stepCache[3];
             const nvFrom = Math.max(0, wzState.load[p.from] - p.x);
             const nvTo = Math.min(454, wzState.load[p.to] + p.x);
             wzState.load[p.from] = nvFrom;
             wzState.load[p.to] = nvTo;
-            const fromEl = root ? root.querySelector('#wz-load-' + p.from.toLowerCase()) : null;
-            const toEl = root ? root.querySelector('#wz-load-' + p.to.toLowerCase()) : null;
+            const fromEl = domGet('wz-load-' + p.from.toLowerCase());
+            const toEl = domGet('wz-load-' + p.to.toLowerCase());
             if (fromEl) fromEl.value = String(nvFrom);
             if (toEl) toEl.value = String(nvTo);
             updatePayload();
         } else if (p.kind === 'paxshift') {
-            const root = stepCache[3];
             const nvStaff = Math.max(0, wzState.staff - p.n);
             const nvPremium = Math.min(12, wzState.premium + p.n);
             wzState.staff = nvStaff;
             wzState.premium = nvPremium;
-            const sEl = root ? root.querySelector('#wz-staff') : null;
-            const pEl = root ? root.querySelector('#wz-premium') : null;
+            const sEl = domGet('wz-staff');
+            const pEl = domGet('wz-premium');
             if (sEl) sEl.value = String(nvStaff);
             if (pEl) pEl.value = String(nvPremium);
             updatePayload();
         } else if (p.kind === 'pax') {
-            const root = stepCache[3];
             const idMap = { staff: 'wz-staff', premium: 'wz-premium', viplounge: 'wz-viplounge', vipoffice: 'wz-vipoffice' };
             const nv = Math.max(0, wzState[p.key] - p.n);
             wzState[p.key] = nv;
-            const el = root ? root.querySelector('#' + idMap[p.key]) : null;
+            const el = domGet(idMap[p.key]);
             if (el) el.value = String(nv);
             updatePayload();
         } else if (p.kind === 'cargo') {
-            const root = stepCache[3];
             const nv = Math.max(0, wzState[p.key] - p.x);
             wzState[p.key] = nv;
-            const el = root ? root.querySelector('#' + (p.key === 'fwdhold' ? 'wz-fwdhold' : 'wz-afthold')) : null;
+            const el = domGet(p.key === 'fwdhold' ? 'wz-fwdhold' : 'wz-afthold');
             if (el) el.value = String(nv);
             updatePayload();
         }
@@ -1506,35 +1776,12 @@ function wizardInputs() {
         });
     }
 
-function macForPoint(idx, wtKg) {
-        if (typeof BBJ_DATA === 'undefined' || !BBJ_DATA.macLines || !BBJ_DATA.macLines.length) return null;
-        const y = wtKg / 1000;
-        const rows = [];
-        for (const ml of BBJ_DATA.macLines) {
-            const p1 = ml.points[0], p2 = ml.points[1];
-            if (p1[1] === p2[1]) continue;
-            const x = p1[0] + (y - p1[1]) * (p2[0] - p1[0]) / (p2[1] - p1[1]);
-            rows.push({ pct: ml.pct, x: x });
+    function macForPoint(idx, wtKg) {
+        if (typeof calculateGeometricMac === 'function') {
+            return calculateGeometricMac(idx, wtKg);
         }
-        rows.sort(function(a, b) { return a.x - b.x; });
-        const clean = [];
-        for (const rw of rows) {
-            if (!clean.length || clean[clean.length - 1].x !== rw.x) clean.push(rw);
-        }
-        if (clean.length < 2) return clean.length ? clean[0].pct : null;
-        if (idx <= clean[0].x) {
-            const a = clean[0], b = clean[1];
-            return a.pct + (idx - a.x) * (b.pct - a.pct) / (b.x - a.x);
-        }
-        if (idx >= clean[clean.length - 1].x) {
-            const a = clean[clean.length - 2], b = clean[clean.length - 1];
-            return a.pct + (idx - a.x) * (b.pct - a.pct) / (b.x - a.x);
-        }
-        for (let i = 0; i < clean.length - 1; i++) {
-            const a = clean[i], b = clean[i + 1];
-            if (idx >= a.x && idx <= b.x) {
-                return a.pct + (idx - a.x) * (b.pct - a.pct) / (b.x - a.x);
-            }
+        if (typeof window !== 'undefined' && typeof window.calculateGeometricMac === 'function') {
+            return window.calculateGeometricMac(idx, wtKg);
         }
         return null;
     }
@@ -1558,31 +1805,68 @@ function macForPoint(idx, wtKg) {
         const sum = document.getElementById('wz-summary');
         if (sum) {
             const ENV_COLORS = { zfw: '#d97706', tow: '#92400e', ldw: '#0891b2' };
-            function toggleSpan(envId, label, wt, idx, alert, out, macVal) {
+
+            function getWeightColorClass(wt, maxWt) {
+                if (wt > maxWt) {
+                    return 'wz-color-red';
+                } else if (wt >= maxWt - 1000) {
+                    return 'wz-color-orange';
+                } else {
+                    return 'wz-color-green';
+                }
+            }
+
+            function toggleSpan(envId, label, wt, maxWt, idx, alert, out, macVal) {
                 const active = envelopeFilter === envId;
                 const red = alert || out;
                 let style = '';
                 if (active && !red) style = ' style="border-color:' + ENV_COLORS[envId] + '; background:#fff; font-weight:600;"';
                 const cls = 'wz-sum-toggle' + (active ? ' active' : '') + (red ? ' wz-sum-alert' : '');
-                const idxHtml = out ? '<span class="idx-alert">' + idx + ' HORS LIMITE</span>' : String(idx);
-                return '<span class="' + cls + '" data-env="' + envId + '"' + style + '>'
-                    + '<b>' + label + '</b> ' + wt.toLocaleString('en-US') + ' kg / idx ' + idxHtml
-                    + ' — <span class="wz-mac">MAC' + label + ' ' + fmtMac(macVal) + '</span>'
-                    + (alert ? ' — <b>\u26a0 D\u00c9PASSE LA LIMITATION DU JOUR</b>' : '')
-                    + '</span>';
+
+                const wtCls = getWeightColorClass(wt, maxWt);
+                const idxCls = out ? 'wz-color-red font-bold' : 'wz-color-green font-bold';
+                const macCls = out ? 'wz-color-red font-bold' : 'wz-color-green font-bold';
+
+                const idxHtml = out
+                    ? '<span class="' + idxCls + '">' + idx + ' (HORS LIMITE)</span>'
+                    : '<span class="' + idxCls + '">' + idx + '</span>';
+
+                const macLabel = 'MAC' + label;
+                const macHtml = out
+                    ? '<span class="' + macCls + '">' + fmtMac(macVal) + ' (HORS LIMITE)</span>'
+                    : '<span class="' + macCls + '">' + fmtMac(macVal) + '</span>';
+
+                return '<div class="' + cls + '" data-env="' + envId + '"' + style + '>'
+                    + '<div class="wz-sum-line-top">'
+                    + '<b class="wz-sum-phase-lbl">' + label + '</b> '
+                    + '<span class="wz-wt-val ' + wtCls + '">' + wt.toLocaleString('en-US') + ' kg</span>'
+                    + '<span class="wz-sum-sep">/</span>'
+                    + '<span class="wz-idx-wrap">idx ' + idxHtml + '</span>'
+                    + '</div>'
+                    + '<div class="wz-sum-line-bottom">'
+                    + '<span class="wz-sum-mac-lbl">' + macLabel + ' :</span> '
+                    + '<span class="wz-sum-mac-badge">' + macHtml + '</span>'
+                    + '</div>'
+                    + (alert ? '<div class="wz-sum-alert-tag">⚠️ DÉPASSE LA LIMITATION DU JOUR</div>' : '')
+                    + '</div>';
             }
+
             const lim = wizardPerfLimit();
+            const maxZfw = (wzState.perfzwf) || (typeof BBJ_DATA !== 'undefined' && BBJ_DATA.limits && BBJ_DATA.limits.MZFW) || 62731;
+            const maxTow = lim;
+            const maxLaw = (wzState.perfldg) || (typeof BBJ_DATA !== 'undefined' && BBJ_DATA.limits && BBJ_DATA.limits.MLW) || 66360;
+
             const macZ = macForPoint(r.zfwIdx, r.zfw);
             const macT = macForPoint(r.towIdx, r.tow);
             const macL = macForPoint(r.lawIdx, r.law);
             const zfwIn = phaseInside('zfw', r.zfwIdx, r.zfw, r);
             const towIn = phaseInside('tow', r.towIdx, r.tow, r);
             const lawIn = phaseInside('ldw', r.lawIdx, r.law, r);
+
             sum.innerHTML = '<div class="wz-sum-row">'
-                + toggleSpan('zfw', 'ZFW', r.zfw, r.zfwIdx, false, !zfwIn, macZ)
-                + toggleSpan('tow', 'TOW', r.tow, r.towIdx, r.tow > lim, !towIn, macT)
-                + toggleSpan('ldw', 'LAW', r.law, r.lawIdx, false, !lawIn, macL)
-                + '<span class="perf-limit-badge">\u26a0 Limitation du jour (Perf) : <b>' + lim.toLocaleString('en-US') + ' kg</b></span>'
+                + toggleSpan('zfw', 'ZFW', r.zfw, maxZfw, r.zfwIdx, r.zfw > maxZfw, !zfwIn, macZ)
+                + toggleSpan('tow', 'TOW', r.tow, maxTow, r.towIdx, r.tow > lim, !towIn, macT)
+                + toggleSpan('ldw', 'LAW', r.law, maxLaw, r.lawIdx, r.law > maxLaw, !lawIn, macL)
                 + '</div>';
             sum.querySelectorAll('.wz-sum-toggle').forEach(function(sp) {
                 sp.addEventListener('click', function() {
@@ -1621,9 +1905,14 @@ function macForPoint(idx, wtKg) {
             const lidx = function(z) { return (typeof getGalleyIndexInterp === 'function') ? getGalleyIndexInterp(wzState.load[z], z) : 0; };
             const zonePaxIdx = { B: px(wzState.staff + wzState.extracc, 'S'), D: px(wzState.premium, 'P'), E: px(wzState.viplounge, 'L'), F: px(wzState.vipoffice, 'O'), G: 0 };
             const zonePaxCnt = { B: wzState.staff, D: wzState.premium, E: wzState.viplounge, F: wzState.vipoffice, G: 0 };
+            const isVip = (vipVersionState !== undefined) ? vipVersionState : true;
             let totalPaxIdx = 0, totalLoad = 0, totalLoadIdx = 0;
             ['B', 'D', 'E', 'F', 'G'].forEach(function(z) { totalPaxIdx += zonePaxIdx[z]; });
-            ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(function(z) { totalLoad += wzState.load[z]; totalLoadIdx += lidx(z); });
+            ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(function(z) {
+                if (isVip && (z === 'A' || z === 'C')) return;
+                totalLoad += wzState.load[z];
+                totalLoadIdx += lidx(z);
+            });
             const fwdIdx = (typeof vlookupTrue !== 'undefined') ? vlookupTrue(BBJ_DATA.cargoIndex.FWD, 'wt', wzState.fwdhold).idx : 0;
             const aftIdx = (typeof vlookupTrue !== 'undefined') ? vlookupTrue(BBJ_DATA.cargoIndex.AFT, 'wt', wzState.afthold).idx : 0;
             let rh = '<div class="wizard-section" style="margin-top:16px;">'
@@ -1636,8 +1925,10 @@ function macForPoint(idx, wtKg) {
                     : (z === 'A' || z === 'C' ? '—' : String(zonePaxCnt[z]));
                 const idxCell = (z === 'A' || z === 'C') ? '—' : fmtIdx(zonePaxIdx[z] || 0);
                 const ccNote = (z === 'B') ? '<span class="wz-note">S(' + (wzState.staff + wzState.extracc) + ')</span>' : '';
+                const loadCell = (isVip && (z === 'A' || z === 'C')) ? (wzState.load[z] + ' <span class="wz-note">(Inclus DOW)</span>') : String(wzState.load[z]);
+                const loadIdxCell = (isVip && (z === 'A' || z === 'C')) ? '<span class="wz-note">Inclus DOW</span>' : fmtIdx(lidx(z));
                 rh += '<tr><td><b>Zone ' + z + '</b></td><td>' + paxCell + '</td><td>' + idxCell + (ccNote ? ' ' + ccNote : '') + '</td>'
-                    + '<td>' + wzState.load[z] + '</td><td>' + fmtIdx(lidx(z)) + '</td></tr>';
+                    + '<td>' + loadCell + '</td><td>' + loadIdxCell + '</td></tr>';
             });
             const totalPaxCount = wzState.staff + wzState.premium + wzState.viplounge + wzState.vipoffice;
             rh += '<tr><td><b>FWD HOLD</b></td><td>—</td><td>—</td><td>' + wzState.fwdhold + '</td><td>' + fmtIdx(fwdIdx) + '</td></tr>'
@@ -1687,8 +1978,8 @@ function macForPoint(idx, wtKg) {
     const STEPS = [
         { name: 'Flight Info', render: renderFlightInfo, init: initFlightInfo },
         { name: 'Configuration', render: renderConfig, init: initConfig },
-        { name: 'Performance Limitations & Fuel', render: renderFuel, init: initFuel },
         { name: 'Staff, Pax, Load & Cargo', render: renderCargo, init: initCargo },
+        { name: 'Performance Limitations & Fuel', render: renderFuel, init: initFuel },
         { name: 'Resume & Save', render: renderResume, init: initResume, refresh: drawWizardChart }
     ];
 
@@ -1698,9 +1989,26 @@ function macForPoint(idx, wtKg) {
         let html = '';
         STEPS.forEach((s, i) => {
             const cls = 'wizard-step' + (i === current ? ' active' : (i < current ? ' done' : ''));
-            html += '<div class="wizard-step ' + cls + '"><span class="ws-num">Étape ' + (i + 1) + '/' + STEPS.length + '</span>' + s.name + '</div>';
+            html += '<div class="' + cls + '" data-step="' + i + '" style="cursor:pointer;" role="button" tabindex="0" title="Étape ' + (i + 1) + ' : ' + s.name + '">'
+                 + '<span class="ws-num">Étape ' + (i + 1) + '/' + STEPS.length + '</span>'
+                 + s.name + '</div>';
         });
         el.innerHTML = html;
+        el.querySelectorAll('.wizard-step').forEach(stepEl => {
+            stepEl.addEventListener('click', function() {
+                const target = parseInt(this.dataset.step, 10);
+                if (!isNaN(target) && target !== current) {
+                    syncState();
+                    go(target);
+                }
+            });
+            stepEl.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.click();
+                }
+            });
+        });
     }
 
     function renderContent() {
@@ -1782,7 +2090,7 @@ function saveWizardFlight() {
                 captainName: crewName(capEl ? capEl.value : '')
             },
             config: {
-                vip: 1,
+                vip: vipVersionState ? 1 : 0,
                 pilots: 2,
                 observers: obsEl ? +obsEl.value : 0,
                 cabincrew: ccEl ? +ccEl.value : 0,
@@ -1800,11 +2108,13 @@ function saveWizardFlight() {
                 fwd: wzState.fwdhold,
                 aft: wzState.afthold,
                 zoneBOther: 0,
-                water: 120,
+                water: vipVersionState ? 120 : (wzState.waterQty !== undefined ? wzState.waterQty : 120),
                 fwdGalley: 0,
                 midGalley: 0,
                 zoneLoad: {
-                    A: wzState.load.A, B: wzState.load.B, C: wzState.load.C,
+                    A: vipVersionState ? 0 : wzState.load.A,
+                    B: wzState.load.B,
+                    C: vipVersionState ? 0 : wzState.load.C,
                     D: wzState.load.D, E: wzState.load.E, F: wzState.load.F, G: wzState.load.G
                 },
                 payload: payloadState,
@@ -1966,6 +2276,8 @@ function saveWizardFlight() {
 
         const prev = document.getElementById('wizard-prev');
         const next = document.getElementById('wizard-next');
+        const clearBtn = document.getElementById('wizard-clear-all');
+        if (clearBtn) clearBtn.addEventListener('click', clearAllWizardData);
         if (prev) prev.addEventListener('click', function() { go(current - 1); });
         if (next) next.addEventListener('click', function() {
             if (current === STEPS.length - 1) {
@@ -1981,6 +2293,68 @@ function saveWizardFlight() {
         if (content) {
             content.addEventListener('input', syncState);
             content.addEventListener('change', syncState);
+        }
+    }
+
+    function clearAllWizardData() {
+        if (!confirm('Voulez-vous réinitialiser toutes les saisies (Reset Inputs) ?')) {
+            return;
+        }
+
+        // Reset VIP VERSION to ON
+        vipVersionState = true;
+        const vipToggle = document.getElementById('wz-toggle-vip');
+        if (vipToggle) vipToggle.checked = true;
+
+        // Reset flight info
+        wzFlightInfo.origin = '';
+        wzFlightInfo.dest = '';
+        wzFlightInfo.flightNum = '';
+        wzFlightInfo.date = '';
+        wzFlightInfo.time = '';
+        wzFlightInfo.preparedBy = '';
+        wzFlightInfo.captain = '';
+
+        // Reset wzState
+        wzState.observers = 0;
+        wzState.cabincrew = 2; // 2 basic crew included in VIP
+        wzState.extracc = 0;
+        wzState.staff = 0;
+        wzState.premium = 0;
+        wzState.viplounge = 0;
+        wzState.vipoffice = 0;
+        wzState.fwdhold = 0;
+        wzState.afthold = 0;
+        wzState.tripfuel = 0;
+        wzState.waterQty = 120;
+
+        wzState.load = {
+            A: 200,
+            B: 0,
+            C: 300,
+            D: 0,
+            E: 0,
+            F: 0,
+            G: 0
+        };
+
+        blockFuelState = 0;
+        taxiFuelState = 0;
+        payloadState = 0;
+
+        // Invalidate step cache so all steps re-render fresh
+        for (const k in stepCache) {
+            delete stepCache[k];
+        }
+
+        update();
+        updateVipControls();
+        updateCorrected();
+        updatePayload();
+        updateTelemetryStrip();
+
+        if (typeof toast === 'function') {
+            toast('Reset Inputs effectué (VERSION VIP active)');
         }
     }
 

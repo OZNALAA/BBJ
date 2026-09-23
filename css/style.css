@@ -640,6 +640,29 @@ body.cockpit-night-mode .btn-theme-mobile {
     word-break: break-word;
 }
 
+.sidebar-app-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding: 6px 0;
+    line-height: 1.3;
+}
+
+.sidebar-app-info .app-version {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--efb-cyan, #38bdf8);
+}
+
+.sidebar-app-info .app-author {
+    font-size: 10px;
+    color: var(--text-muted);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    opacity: 0.9;
+}
+
 /* Panels */
 .panel {
     display: none;
@@ -1070,33 +1093,45 @@ body.cockpit-night-mode .btn-theme-mobile {
 
 .wizard-step {
     flex: 1 1 140px;
-    padding: 10px 12px;
-    border: 1px solid var(--border);
+    padding: 8px 12px;
+    border: 1.5px solid var(--border, #64748b);
     border-radius: 8px;
     text-align: center;
     font-size: 12px;
     font-weight: 600;
-    color: var(--text-muted);
+    color: var(--text-primary);
     background: var(--bg-card);
-    cursor: default;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.wizard-step:hover:not(.active) {
+    border-color: #0284c7;
+    background: rgba(2, 132, 199, 0.08);
 }
 
 .wizard-step .ws-num {
     display: block;
-    font-size: 10px;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
     color: var(--text-muted);
     margin-bottom: 2px;
 }
 
 .wizard-step.active {
-    border-color: var(--accent);
-    color: var(--accent);
-    background: rgba(220, 38, 38, 0.06);
+    border: 2px solid var(--accent, #dc2626);
+    color: #dc2626;
+    background: rgba(220, 38, 38, 0.08);
+    box-shadow: 0 0 10px rgba(220, 38, 38, 0.25);
 }
 
 .wizard-step.done {
-    border-color: #16a34a;
+    border: 1.5px solid #16a34a;
     color: #16a34a;
+    background: rgba(22, 163, 74, 0.06);
 }
 
 .wizard-content {
@@ -1287,13 +1322,28 @@ body.cockpit-night-mode .wz-lim-group.is-limiting .input-field {
 .wz-sum-alert {
     border: 2px solid #dc2626 !important;
     background: #fef2f2 !important;
-    color: #b91c1c !important;
+}
+
+body.cockpit-night-mode .wz-sum-alert {
+    border: 2px solid #ef4444 !important;
+    background: rgba(239, 68, 68, 0.12) !important;
 }
 
 .wz-sum-toggle {
+    flex: 1 1 210px;
+    min-width: 200px;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
     cursor: pointer;
     user-select: none;
     transition: border-color 0.15s, background 0.15s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
 }
 
 .wz-sum-toggle:hover {
@@ -1301,11 +1351,124 @@ body.cockpit-night-mode .wz-lim-group.is-limiting .input-field {
     background: #f9fafb;
 }
 
+.wz-sum-line-top {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+    font-size: 13.5px;
+}
+
+.wz-sum-phase-lbl {
+    font-size: 14px;
+    color: var(--text-strong);
+}
+
+.wz-wt-val {
+    font-weight: 700;
+}
+
+.wz-sum-sep {
+    color: var(--text-muted);
+    opacity: 0.5;
+}
+
+.wz-idx-wrap {
+    font-size: 12.5px;
+    color: var(--text-muted);
+}
+
+.wz-sum-line-bottom {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    padding-top: 5px;
+    border-top: 1px dashed rgba(100, 116, 139, 0.25);
+}
+
+.wz-sum-mac-lbl {
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.3px;
+    color: var(--text-strong);
+}
+
+.wz-sum-mac-badge {
+    font-weight: 700;
+    font-size: 13.5px;
+}
+
+.wz-sum-alert-tag {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #dc2626 !important;
+    margin-top: 2px;
+}
+
+/* Value Status Colors (Weight, Index, MAC) */
+.wz-color-red,
+#panel-newcalc .wz-sum-row .wz-color-red {
+    color: #dc2626 !important;
+}
+
+.wz-color-orange,
+#panel-newcalc .wz-sum-row .wz-color-orange {
+    color: #d97706 !important;
+}
+
+.wz-color-green,
+#panel-newcalc .wz-sum-row .wz-color-green {
+    color: #16a34a !important;
+}
+
+body.cockpit-night-mode .wz-color-red,
+#panel-newcalc:not(.efb-light-mode) .wz-sum-row .wz-color-red {
+    color: #f87171 !important;
+}
+
+body.cockpit-night-mode .wz-color-orange,
+#panel-newcalc:not(.efb-light-mode) .wz-sum-row .wz-color-orange {
+    color: #fbbf24 !important;
+}
+
+body.cockpit-night-mode .wz-color-green,
+#panel-newcalc:not(.efb-light-mode) .wz-sum-row .wz-color-green {
+    color: #34d399 !important;
+}
+
+body.cockpit-night-mode .wz-sum-line-bottom,
+#panel-newcalc:not(.efb-light-mode) .wz-sum-line-bottom {
+    border-top: 1px dashed rgba(255, 255, 255, 0.15);
+}
+
+body.cockpit-night-mode .wz-sum-phase-lbl,
+#panel-newcalc:not(.efb-light-mode) .wz-sum-phase-lbl {
+    color: #38bdf8 !important;
+}
+
+body.cockpit-night-mode .wz-sum-mac-lbl,
+#panel-newcalc:not(.efb-light-mode) .wz-sum-mac-lbl {
+    color: #94a3b8 !important;
+}
+
 .perf-limit-badge {
     border: 2px solid #16a34a !important;
     background: #ecfdf5 !important;
     color: #166534 !important;
     font-weight: 600;
+}
+
+body.cockpit-night-mode .perf-limit-badge,
+#panel-newcalc:not(.efb-light-mode) .perf-limit-badge {
+    border: 1px solid rgba(16, 185, 129, 0.4) !important;
+    background: rgba(16, 185, 129, 0.12) !important;
+    color: #34d399 !important;
+}
+
+body.cockpit-night-mode .perf-limit-badge b,
+#panel-newcalc:not(.efb-light-mode) .perf-limit-badge b {
+    color: #6ee7b7 !important;
 }
 
 .perf-warn {
@@ -1341,18 +1504,15 @@ body.cockpit-night-mode .wz-lim-group.is-limiting .input-field {
     margin-top: 14px;
 }
 
-.wz-sum-row span {
-    flex: 1 1 180px;
-    background: #fff;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 10px 12px;
-    font-size: 13px;
-    color: var(--text-muted);
+.wz-sum-row > span,
+.wz-sum-row > div {
+    flex: 1 1 200px;
 }
 
-.wz-sum-row b {
-    color: var(--text-strong);
+.wz-sum-toggle span {
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
 }
 
 .wizard-nav {
@@ -2565,5 +2725,91 @@ body.cockpit-night-mode .row-bbj-member {
 .crew-contact-table td, .crew-contact-table th {
     padding: 10px 12px;
     vertical-align: middle;
+}
+
+/* Operational Notice / Disclaimer Modal */
+.wb-disclaimer-box {
+    border-radius: 16px;
+    padding: 30px 24px;
+    max-width: 490px;
+    width: 92vw;
+    text-align: center;
+    position: relative;
+    border-top: 4px solid #f59e0b !important;
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.4);
+}
+
+.wb-disclaimer-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #b45309;
+    background: rgba(245, 158, 11, 0.14);
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    margin-bottom: 18px;
+}
+
+.wb-disclaimer-text {
+    font-size: 14.5px;
+    font-weight: 600;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    padding: 16px 18px;
+    border-radius: 10px;
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #92400e;
+    text-align: center;
+}
+
+.wb-disclaimer-close {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 26px;
+    line-height: 1;
+    cursor: pointer;
+    color: var(--text-secondary, #64748b);
+    opacity: 0.7;
+    transition: opacity 0.15s, color 0.15s;
+}
+
+.wb-disclaimer-close:hover {
+    opacity: 1;
+    color: #ef4444;
+}
+
+.wb-disclaimer-actions {
+    display: flex;
+    justify-content: center;
+}
+
+.wb-disclaimer-actions .btn {
+    min-width: 200px;
+    padding: 12px 24px;
+    font-weight: 700;
+    font-size: 14px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+body.cockpit-night-mode .wb-disclaimer-badge {
+    color: #fbbf24;
+    background: rgba(245, 158, 11, 0.18);
+    border-color: rgba(245, 158, 11, 0.4);
+}
+
+body.cockpit-night-mode .wb-disclaimer-text {
+    background: rgba(245, 158, 11, 0.12);
+    border-color: rgba(245, 158, 11, 0.35);
+    color: #fbbf24;
 }
 

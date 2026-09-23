@@ -251,10 +251,10 @@ body.efb-light-mode .efb-crest {
 /* Wizard Steps Ribbon */
 #panel-newcalc .wizard-steps {
   display: flex;
-  background: var(--efb-surface);
-  border-bottom: 1px solid var(--efb-border);
-  padding: 4px;
-  gap: 4px;
+  background: var(--efb-surface, #0f172a);
+  border-bottom: 1px solid var(--efb-border, rgba(255, 255, 255, 0.12));
+  padding: 6px 8px;
+  gap: 8px;
   overflow-x: auto;
 }
 
@@ -262,56 +262,62 @@ body.efb-light-mode .efb-crest {
   flex: 1;
   min-width: 130px;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
+  justify-content: center;
+  text-align: center;
+  gap: 3px;
   padding: 8px 12px;
-  background: var(--efb-panel);
-  border: 1px solid transparent;
-  border-radius: 6px;
+  background: var(--efb-panel, #141a22);
+  border: 1.5px solid #475569;
+  border-radius: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
   user-select: none;
+  color: #e2e8f0;
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-#panel-newcalc .wizard-step.active {
-  background: rgba(165, 16, 37, 0.15);
-  border-color: var(--efb-red);
-  box-shadow: inset 0 0 12px rgba(165, 16, 37, 0.25);
-}
-
-#panel-newcalc .wizard-step.active .wizard-step-num {
-  background: var(--efb-red);
-  color: #fff;
-}
-
-#panel-newcalc .wizard-step.active .wizard-step-title {
-  color: #fff;
-  font-weight: 700;
-}
-
-#panel-newcalc .wizard-step-num {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--efb-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+#panel-newcalc .wizard-step .ws-num {
+  display: block;
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
   font-weight: 700;
-  flex-shrink: 0;
-}
-
-#panel-newcalc .wizard-step-title {
-  font-family: 'Chakra Petch', sans-serif;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--efb-muted);
-  white-space: nowrap;
+  color: #94a3b8;
   letter-spacing: 0.04em;
   text-transform: uppercase;
+}
+
+#panel-newcalc .wizard-step:hover:not(.active) {
+  background: rgba(56, 189, 248, 0.08);
+  border-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.25);
+  transform: translateY(-1px);
+}
+
+#panel-newcalc .wizard-step.done {
+  border: 1.5px solid #10b981;
+  background: rgba(16, 185, 129, 0.08);
+  color: #34d399;
+}
+
+#panel-newcalc .wizard-step.done .ws-num {
+  color: #10b981;
+}
+
+#panel-newcalc .wizard-step.active {
+  background: rgba(165, 16, 37, 0.22);
+  border: 2px solid var(--efb-red, #dc2626);
+  box-shadow: 0 0 12px rgba(220, 38, 38, 0.4);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+#panel-newcalc .wizard-step.active .ws-num {
+  color: #fca5a5;
 }
 
 /* Wizard Content */
@@ -961,7 +967,8 @@ body.efb-light-mode .opt-tag {
   border: 1px solid #243040 !important;
 }
 
-#panel-newcalc:not(.efb-light-mode) .wz-sum-row span {
+#panel-newcalc:not(.efb-light-mode) .wz-sum-row > .wz-sum-toggle,
+#panel-newcalc:not(.efb-light-mode) .wz-sum-row > div {
   background: #141A22 !important;
   border: 1px solid #243040 !important;
   color: #E2E8F0 !important;
@@ -1016,7 +1023,8 @@ body.efb-light-mode .opt-tag {
   border: 1.5px solid #CBD5E1 !important;
 }
 
-#panel-newcalc.efb-light-mode .wz-sum-row span {
+#panel-newcalc.efb-light-mode .wz-sum-row > .wz-sum-toggle,
+#panel-newcalc.efb-light-mode .wz-sum-row > div {
   background: #FFFFFF !important;
   border: 1.5px solid #CBD5E1 !important;
   color: #0F172A !important;
@@ -1049,3 +1057,520 @@ body.efb-light-mode .opt-tag {
   border-color: #BAE6FD !important;
   font-weight: 700 !important;
 }
+
+/* VIP Version Toggle Switch */
+.wz-vip-toggle-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--efb-panel, #1e293b);
+  border: 1px solid var(--efb-border, rgba(255, 255, 255, 0.12));
+  padding: 6px 14px;
+  border-radius: 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.wz-vip-label {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #38bdf8;
+  text-transform: uppercase;
+}
+
+.vip-switch {
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 24px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.vip-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  position: absolute;
+}
+
+.vip-slider {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #475569;
+  transition: 0.25s ease;
+  border-radius: 24px;
+}
+
+.vip-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #ffffff;
+  transition: 0.25s ease;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.vip-switch input:checked + .vip-slider {
+  background-color: #10B981;
+}
+
+.vip-switch input:checked + .vip-slider:before {
+  transform: translateX(20px);
+}
+
+.vip-switch input:focus + .vip-slider {
+  box-shadow: 0 0 1px #10B981;
+}
+
+#panel-newcalc.efb-light-mode .wz-vip-toggle-wrap {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+}
+
+#panel-newcalc.efb-light-mode .wz-vip-label {
+  color: #0369a1;
+}
+
+/* Light Mode Wizard Steps Ribbon & Boxes */
+#panel-newcalc.efb-light-mode .wizard-steps,
+body.efb-light-mode #panel-newcalc .wizard-steps {
+  background: #e2e8f0;
+  border-bottom: 1.5px solid #cbd5e1;
+}
+
+#panel-newcalc.efb-light-mode .wizard-step,
+body.efb-light-mode #panel-newcalc .wizard-step {
+  background: #ffffff;
+  border: 1.5px solid #64748b;
+  color: #0f172a;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+}
+
+#panel-newcalc.efb-light-mode .wizard-step .ws-num,
+body.efb-light-mode #panel-newcalc .wizard-step .ws-num {
+  color: #475569;
+}
+
+#panel-newcalc.efb-light-mode .wizard-step:hover:not(.active),
+body.efb-light-mode #panel-newcalc .wizard-step:hover:not(.active) {
+  border-color: #0284c7;
+  background: #f0f9ff;
+  box-shadow: 0 0 10px rgba(2, 132, 199, 0.2);
+}
+
+#panel-newcalc.efb-light-mode .wizard-step.done,
+body.efb-light-mode #panel-newcalc .wizard-step.done {
+  border: 1.5px solid #059669;
+  background: rgba(5, 150, 105, 0.07);
+  color: #047857;
+}
+
+#panel-newcalc.efb-light-mode .wizard-step.done .ws-num,
+body.efb-light-mode #panel-newcalc .wizard-step.done .ws-num {
+  color: #059669;
+}
+
+#panel-newcalc.efb-light-mode .wizard-step.active,
+body.efb-light-mode #panel-newcalc .wizard-step.active {
+  background: rgba(220, 38, 38, 0.08);
+  border: 2px solid #b91c1c;
+  box-shadow: 0 0 12px rgba(185, 28, 28, 0.25);
+  color: #991b1b;
+}
+
+#panel-newcalc.efb-light-mode .wizard-step.active .ws-num,
+body.efb-light-mode #panel-newcalc .wizard-step.active .ws-num {
+  color: #b91c1c;
+}
+
+/* Wizard Sub-Bar & Clear Button */
+.wizard-sub-bar {
+  display: flex;
+  justify-content: flex-end;
+  padding: 6px 12px 2px 12px;
+}
+
+.btn-wizard-clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #94a3b8;
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  padding: 5px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.btn-wizard-clear:hover {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: #ef4444;
+  color: #f87171;
+  box-shadow: 0 0 8px rgba(239, 68, 68, 0.2);
+}
+
+.btn-clear-icon {
+  font-size: 13px;
+}
+
+#panel-newcalc.efb-light-mode .btn-wizard-clear,
+body.efb-light-mode #panel-newcalc .btn-wizard-clear {
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  color: #64748b;
+}
+
+#panel-newcalc.efb-light-mode .btn-wizard-clear:hover,
+body.efb-light-mode #panel-newcalc .btn-wizard-clear:hover {
+  background: #fef2f2;
+  border-color: #dc2626;
+  color: #b91c1c;
+}
+
+/* Locked / Greyed-out Fields */
+.lopa-box-input-wrap input.field-locked {
+  background: rgba(15, 23, 42, 0.8) !important;
+  color: #64748b !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  cursor: not-allowed !important;
+  font-weight: 700 !important;
+}
+
+#panel-newcalc.efb-light-mode .lopa-box-input-wrap input.field-locked,
+body.efb-light-mode .lopa-box-input-wrap input.field-locked {
+  background: #f1f5f9 !important;
+  color: #94a3b8 !important;
+  border-color: #cbd5e1 !important;
+  cursor: not-allowed !important;
+}
+
+/* ==========================================================================
+   Water Quantity Selector (Étape 3/5) - Night & Light Mode High Contrast
+   ========================================================================== */
+.wz-water-section {
+  margin-top: 14px;
+  background: #141a22;
+  border: 1.5px solid #334155;
+  border-radius: 8px;
+  padding: 12px 14px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  transition: all 0.25s ease;
+}
+
+.wz-water-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.wz-water-title,
+.wz-water-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #38bdf8;
+  text-transform: uppercase;
+}
+
+.wz-water-badge,
+.wz-water-val-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.wz-water-selector {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.wz-water-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 8px;
+  background: #1e293b;
+  border: 1.5px solid #475569;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  text-align: center;
+}
+
+/* Fraction (1/4, 1/2, 3/4, 1/1) - Crisp & White */
+.wz-water-btn .wz-water-btn-fraction,
+.wz-water-btn .ww-frac {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  color: #ffffff !important;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+}
+
+/* Details (USG + kg) - Bright Cyan */
+.wz-water-btn .wz-water-btn-details,
+.wz-water-btn .ww-details {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: #38bdf8 !important;
+  margin-top: 3px;
+  line-height: 1.2;
+}
+
+/* Index (+2, +3, +5, +6) - Vibrant Amber */
+.wz-water-btn .wz-water-btn-idx {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fbbf24 !important;
+  margin-top: 2px;
+  background: rgba(251, 191, 36, 0.15);
+  padding: 1px 6px;
+  border-radius: 3px;
+}
+
+/* Hover effect */
+.wz-water-btn:hover:not(:disabled) {
+  border-color: #38bdf8;
+  background: #283548;
+  transform: translateY(-1px);
+}
+
+/* Active Selection */
+.wz-water-btn.active {
+  background: rgba(56, 189, 248, 0.2) !important;
+  border: 2px solid #38bdf8 !important;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.35);
+}
+
+.wz-water-btn.active .wz-water-btn-fraction,
+.wz-water-btn.active .ww-frac {
+  color: #ffffff !important;
+}
+
+.wz-water-btn.active .wz-water-btn-details,
+.wz-water-btn.active .ww-details {
+  color: #7dd3fc !important;
+}
+
+.wz-water-btn.active .wz-water-btn-idx {
+  color: #fde047 !important;
+  background: rgba(253, 224, 71, 0.25);
+}
+
+/* Water Section Locked in VIP Mode */
+.wz-water-section.water-locked,
+.wz-water-section.locked {
+  background: #111822;
+  border-color: rgba(56, 189, 248, 0.25);
+}
+
+.wz-water-section.water-locked .wz-water-badge,
+.wz-water-section.locked .wz-water-val-badge {
+  color: #10b981;
+  background: rgba(16, 185, 129, 0.12);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.wz-water-section.water-locked .wz-water-btn,
+.wz-water-section.locked .wz-water-btn {
+  cursor: not-allowed;
+  opacity: 1 !important;
+  background: #182230;
+  border-color: #334155;
+}
+
+.wz-water-section.water-locked .wz-water-btn .wz-water-btn-fraction,
+.wz-water-section.locked .wz-water-btn .ww-frac {
+  color: #94a3b8 !important;
+}
+
+.wz-water-section.water-locked .wz-water-btn .wz-water-btn-details,
+.wz-water-section.locked .wz-water-btn .ww-details {
+  color: #64748b !important;
+}
+
+.wz-water-section.water-locked .wz-water-btn .wz-water-btn-idx {
+  color: #64748b !important;
+  background: rgba(100, 116, 139, 0.15);
+}
+
+/* The locked active 1/1 button in VIP mode */
+.wz-water-section.water-locked .wz-water-btn.active,
+.wz-water-section.locked .wz-water-btn.active {
+  background: rgba(16, 185, 129, 0.15) !important;
+  border: 2px solid #10b981 !important;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.25);
+}
+
+.wz-water-section.water-locked .wz-water-btn.active .wz-water-btn-fraction,
+.wz-water-section.locked .wz-water-btn.active .ww-frac {
+  color: #ffffff !important;
+}
+
+.wz-water-section.water-locked .wz-water-btn.active .wz-water-btn-details,
+.wz-water-section.locked .wz-water-btn.active .ww-details {
+  color: #34d399 !important;
+}
+
+.wz-water-section.water-locked .wz-water-btn.active .wz-water-btn-idx {
+  color: #6ee7b7 !important;
+  background: rgba(16, 185, 129, 0.25);
+}
+
+/* Light Mode Overrides for Water Section */
+#panel-newcalc.efb-light-mode .wz-water-section,
+body.efb-light-mode #panel-newcalc .wz-water-section,
+body.efb-light-mode .wz-water-section {
+  background: #ffffff;
+  border-color: #cbd5e1;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.06);
+}
+
+#panel-newcalc.efb-light-mode .wz-water-title,
+#panel-newcalc.efb-light-mode .wz-water-label,
+body.efb-light-mode #panel-newcalc .wz-water-label,
+body.efb-light-mode .wz-water-title {
+  color: #0369a1;
+}
+
+#panel-newcalc.efb-light-mode .wz-water-badge,
+#panel-newcalc.efb-light-mode .wz-water-val-badge,
+body.efb-light-mode #panel-newcalc .wz-water-val-badge,
+body.efb-light-mode .wz-water-badge {
+  background: #f1f5f9;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}
+
+#panel-newcalc.efb-light-mode .wz-water-btn,
+body.efb-light-mode #panel-newcalc .wz-water-btn,
+body.efb-light-mode .wz-water-btn {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+#panel-newcalc.efb-light-mode .wz-water-btn .wz-water-btn-fraction,
+#panel-newcalc.efb-light-mode .wz-water-btn .ww-frac,
+body.efb-light-mode #panel-newcalc .wz-water-btn .ww-frac,
+body.efb-light-mode .wz-water-btn .wz-water-btn-fraction {
+  color: #0f172a !important;
+}
+
+#panel-newcalc.efb-light-mode .wz-water-btn .wz-water-btn-details,
+#panel-newcalc.efb-light-mode .wz-water-btn .ww-details,
+body.efb-light-mode #panel-newcalc .wz-water-btn .ww-details,
+body.efb-light-mode .wz-water-btn .wz-water-btn-details {
+  color: #0284c7 !important;
+}
+
+#panel-newcalc.efb-light-mode .wz-water-btn .wz-water-btn-idx,
+body.efb-light-mode .wz-water-btn .wz-water-btn-idx {
+  color: #b45309 !important;
+  background: rgba(180, 83, 9, 0.1);
+}
+
+#panel-newcalc.efb-light-mode .wz-water-btn:hover:not(:disabled),
+body.efb-light-mode #panel-newcalc .wz-water-btn:hover:not(:disabled),
+body.efb-light-mode .wz-water-btn:hover:not(:disabled) {
+  border-color: #0284c7;
+  background: #f0f9ff;
+}
+
+#panel-newcalc.efb-light-mode .wz-water-btn.active,
+body.efb-light-mode #panel-newcalc .wz-water-btn.active,
+body.efb-light-mode .wz-water-btn.active {
+  background: #e0f2fe !important;
+  border-color: #0284c7 !important;
+  box-shadow: 0 0 10px rgba(2, 132, 199, 0.2);
+}
+
+#panel-newcalc.efb-light-mode .wz-water-btn.active .wz-water-btn-fraction,
+#panel-newcalc.efb-light-mode .wz-water-btn.active .ww-frac,
+body.efb-light-mode #panel-newcalc .wz-water-btn.active .ww-frac,
+body.efb-light-mode .wz-water-btn.active .wz-water-btn-fraction {
+  color: #0284c7 !important;
+}
+
+#panel-newcalc.efb-light-mode .wz-water-section.water-locked,
+#panel-newcalc.efb-light-mode .wz-water-section.locked,
+body.efb-light-mode #panel-newcalc .wz-water-section.locked,
+body.efb-light-mode .wz-water-section.water-locked {
+  background: #f8fafc;
+  border-color: #e2e8f0;
+}
+
+#panel-newcalc.efb-light-mode .wz-water-section.water-locked .wz-water-btn.active,
+#panel-newcalc.efb-light-mode .wz-water-section.locked .wz-water-btn.active,
+body.efb-light-mode #panel-newcalc .wz-water-section.locked .wz-water-btn.active,
+body.efb-light-mode .wz-water-section.water-locked .wz-water-btn.active {
+  background: #ecfdf5 !important;
+  border-color: #059669 !important;
+}
+
+#panel-newcalc.efb-light-mode .wz-water-section.water-locked .wz-water-btn.active .wz-water-btn-fraction,
+#panel-newcalc.efb-light-mode .wz-water-section.locked .wz-water-btn.active .ww-frac,
+body.efb-light-mode #panel-newcalc .wz-water-section.locked .wz-water-btn.active .ww-frac,
+body.efb-light-mode .wz-water-section.water-locked .wz-water-btn.active .wz-water-btn-fraction {
+  color: #059669 !important;
+}
+
+/* Step 5 W&B Summary Color Indicators */
+#panel-newcalc .wz-sum-row .wz-color-red {
+  color: #f87171 !important;
+}
+#panel-newcalc .wz-sum-row .wz-color-orange {
+  color: #fbbf24 !important;
+}
+#panel-newcalc .wz-sum-row .wz-color-green {
+  color: #34d399 !important;
+}
+
+#panel-newcalc.efb-light-mode .wz-sum-row .wz-color-red,
+body.efb-light-mode #panel-newcalc .wz-sum-row .wz-color-red {
+  color: #dc2626 !important;
+}
+#panel-newcalc.efb-light-mode .wz-sum-row .wz-color-orange,
+body.efb-light-mode #panel-newcalc .wz-sum-row .wz-color-orange {
+  color: #d97706 !important;
+}
+#panel-newcalc.efb-light-mode .wz-sum-row .wz-color-green,
+body.efb-light-mode #panel-newcalc .wz-sum-row .wz-color-green {
+  color: #16a34a !important;
+}
+
+.wz-sum-toggle span {
+  background: transparent !important;
+  border: none !important;
+}
+

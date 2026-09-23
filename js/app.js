@@ -441,8 +441,38 @@ document.addEventListener('DOMContentLoaded', function() {
                 populateCrewFields();
                 recalcAll();
             }
+            if (this.dataset.panel === 'newcalc') {
+                showWbDisclaimerModal();
+            }
             closeMobileSidebar();
         });
+    });
+
+    // Modal Disclaimer New W&B Calculation
+    const modalDisc = document.getElementById('wb-disclaimer-modal');
+    const btnAck = document.getElementById('btn-wb-disclaimer-ack');
+    const btnClose = document.getElementById('btn-wb-disclaimer-close');
+
+    function showWbDisclaimerModal() {
+        if (modalDisc) modalDisc.classList.add('show');
+    }
+    window.showWbDisclaimerModal = showWbDisclaimerModal;
+
+    function closeWbDisclaimer() {
+        if (modalDisc) modalDisc.classList.remove('show');
+    }
+
+    if (btnAck) btnAck.addEventListener('click', closeWbDisclaimer);
+    if (btnClose) btnClose.addEventListener('click', closeWbDisclaimer);
+    if (modalDisc) {
+        modalDisc.addEventListener('click', function(e) {
+            if (e.target === modalDisc) closeWbDisclaimer();
+        });
+    }
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modalDisc && modalDisc.classList.contains('show')) {
+            closeWbDisclaimer();
+        }
     });
 
     createAirportPicker(document.getElementById('origin-picker'), 'GMME');
@@ -462,6 +492,14 @@ document.addEventListener('DOMContentLoaded', function() {
     recalcAll();
     window.FLIGHTS && window.FLIGHTS.renderHistory();
     window.FLIGHTLOG && window.FLIGHTLOG.init();
+
+    // Show operational notice disclaimer if New W&B is active and login screen is not visible
+    const loginScreen = document.getElementById('login-screen');
+    const isLoginVisible = loginScreen && loginScreen.style.display !== 'none' && window.getComputedStyle(loginScreen).display !== 'none';
+    const activeNav = document.querySelector('.nav-item.active');
+    if (activeNav && activeNav.dataset.panel === 'newcalc' && !isLoginVisible) {
+        showWbDisclaimerModal();
+    }
 
     let resizeTimer;
     window.addEventListener('resize', function() {

@@ -95,6 +95,10 @@
                 <span class="theme-text">Mode Nuit</span>
             </button>
             <div class="sidebar-user" id="sidebar-user"></div>
+            <div class="sidebar-app-info" id="sidebar-app-info">
+                <span class="app-version">Version 3.0</span>
+                <span class="app-author">© CDB OUZZINE ALAA-EDDINE</span>
+            </div>
             <button type="button" id="btn-logout" class="btn btn-small">Déconnexion</button>
         </div>
     </nav>
@@ -514,6 +518,12 @@
 
             <div class="wizard">
                 <div class="wizard-steps" id="wizard-steps"></div>
+                <div class="wizard-sub-bar">
+                    <button type="button" class="btn-wizard-clear" id="wizard-clear-all" title="Réinitialiser toutes les saisies (Reset Inputs)">
+                        <span class="btn-clear-icon">🗑️</span>
+                        <span>Reset Inputs</span>
+                    </button>
+                </div>
                 <div class="wizard-content" id="wizard-content"></div>
                 <div class="wizard-nav">
                     <button type="button" class="btn" id="wizard-prev">← Précédent</button>
@@ -976,6 +986,38 @@
             <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
                 <button type="button" class="btn" id="btn-wz-stay" style="flex:1; min-width:140px; padding:10px 14px;">Rester ici</button>
                 <button type="button" class="btn btn-accent" id="btn-wz-open-fl" style="flex:1; min-width:140px; padding:10px 14px;">📋 Ouvrir Flight Log</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Confirmation Désactivation VIP VERSION -->
+    <div class="modal" id="wz-vip-modal">
+        <div class="modal-box" style="border-radius:14px; padding:28px 24px; max-width:440px; width:92vw; text-align:center;">
+            <div style="font-size:42px; margin-bottom:12px;">⚠️</div>
+            <h3 style="font-size:18px; font-weight:700; margin-bottom:8px; color:var(--text-primary);">Désactiver la VERSION VIP ?</h3>
+            <p style="font-size:13.5px; color:var(--text-secondary); line-height:1.5; margin-bottom:22px;">
+                Vous êtes sur le point de désactiver la <strong>VERSION VIP</strong> pour ce calcul.<br><br>
+                Êtes-vous certain de vouloir continuer ?
+            </p>
+            <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                <button type="button" class="btn" id="btn-wz-vip-cancel" style="flex:1; min-width:130px; padding:10px 14px;">Annuler</button>
+                <button type="button" class="btn btn-danger" id="btn-wz-vip-confirm" style="flex:1; min-width:130px; padding:10px 14px; background:var(--efb-red, #dc2626); color:#fff; border:none; border-radius:8px; font-weight:700; cursor:pointer;">Désactiver</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Disclaimer New W&B Calculation -->
+    <div class="modal" id="wb-disclaimer-modal" style="z-index: 1080;">
+        <div class="modal-box wb-disclaimer-box">
+            <button type="button" class="wb-disclaimer-close" id="btn-wb-disclaimer-close" aria-label="Fermer">&times;</button>
+            <div class="wb-disclaimer-badge">⚠️ OPERATIONAL NOTICE</div>
+            <div class="wb-disclaimer-text">
+                (*) &quot;The Official  Hard copy &quot;Load &amp; Trim Sheet&quot; remains the sole official document for WT &amp; Balance &amp; Trim computations&quot;
+            </div>
+            <div class="wb-disclaimer-actions">
+                <button type="button" class="btn btn-accent" id="btn-wb-disclaimer-ack">
+                    ✓ J'ai compris / Acknowledge
+                </button>
             </div>
         </div>
     </div>
