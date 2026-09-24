@@ -1913,6 +1913,7 @@ function wizardInputs() {
             const macL = macForPoint(r.lawIdx, r.law);
             const zfwIn = phaseInside('zfw', r.zfwIdx, r.zfw, r);
             const towIn = phaseInside('tow', r.towIdx, r.tow, r);
+            const lawIn = phaseInside('ldw', r.lawIdx, r.law, r);
             const maxFuelVal = Math.min(28585, Math.max(0, lim - r.zfw));
 
             function maxFuelCard(val) {
