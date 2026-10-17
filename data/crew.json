@@ -1,5 +1,37 @@
 [
   {
+    "matricule": "44657",
+    "nom": "ALAOUI ISMAIL",
+    "rank": "OPL",
+    "posit": "DDA",
+    "dob": "",
+    "cin": "",
+    "other_qual": "",
+    "airp_qual": "",
+    "ac_qual": "",
+    "restrictions": "",
+    "tel": "",
+    "email": "",
+    "fonction": "OPL",
+    "grade": "DDA"
+  },
+  {
+    "matricule": "12568",
+    "nom": "ESSATTE HOUSSAM",
+    "rank": "CDB",
+    "posit": "ARA",
+    "dob": "",
+    "cin": "",
+    "other_qual": "",
+    "airp_qual": "",
+    "ac_qual": "",
+    "restrictions": "",
+    "tel": "",
+    "email": "",
+    "fonction": "CDB",
+    "grade": "ARA"
+  },
+  {
     "matricule": "9402",
     "nom": "ASSELLALOU AHMED",
     "rank": "CDB",

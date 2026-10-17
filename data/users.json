@@ -103,5 +103,35 @@
     "role": "User",
     "password": "BBJ_RAM",
     "password_hash": "9b369c94b2851be2ea1d06d02eba3e6b$9bd27f6a9a4f0bb01205c7faac2cbb83cf1f302ff8da046c963e4d85e1fe41e9"
+  },
+  {
+    "nom": "OUZZINE ALAA-EDDINE",
+    "login": "ouzzine",
+    "role": "Admin",
+    "password": "Ozn22041985alaa"
+  },
+  {
+    "nom": "ZGUENDI KARIM",
+    "login": "zguendi",
+    "role": "User",
+    "password": "BBJ_RAM"
+  },
+  {
+    "nom": "ASSELLALOU AHMED",
+    "login": "assellalou",
+    "role": "User",
+    "password": "BBJ_RAM"
+  },
+  {
+    "nom": "ALAOUI ISMAIL",
+    "login": "44657",
+    "role": "User",
+    "password": "BBJ_RAM"
+  },
+  {
+    "nom": "ESSATTE HOUSSAM",
+    "login": "12568",
+    "role": "User",
+    "password": "BBJ_RAM"
   }
 ]

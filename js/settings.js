@@ -244,6 +244,14 @@ function initBackupListeners() {
                             body: JSON.stringify({ data: parsed.crew })
                         }).catch(() => {});
                     }
+                    if (Array.isArray(parsed.users)) {
+                        localStorage.setItem('bbj_users', JSON.stringify(parsed.users));
+                        fetch('/api/data?file=users', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json', 'X-Session-Token': localStorage.getItem('bbj_token') || '' },
+                            body: JSON.stringify({ data: parsed.users })
+                        }).catch(() => {});
+                    }
                     if (Array.isArray(parsed.flights)) {
                         localStorage.setItem('bbj_flights', JSON.stringify(parsed.flights));
                         fetch('/api/data?file=flights', {
