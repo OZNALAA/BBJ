@@ -248,6 +248,48 @@ body.efb-light-mode .efb-crest {
   color: #F87171;
 }
 
+/* TRIP Missing Red Alert */
+.wz-trip-missing-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(239, 68, 68, 0.15);
+  border: 1px solid #EF4444;
+  color: #EF4444 !important;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  animation: pulse-missing 2s infinite ease-in-out;
+}
+
+@keyframes pulse-missing {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(0.98); }
+}
+
+.wz-field-trip-missing {
+  border-color: #EF4444 !important;
+  box-shadow: 0 0 0 1px #EF4444, 0 0 8px rgba(239, 68, 68, 0.25) !important;
+  color: #EF4444 !important;
+}
+
+.wz-trip-missing-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(239, 68, 68, 0.15) !important;
+  border: 1px solid #EF4444 !important;
+  color: #EF4444 !important;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 11.5px;
+  margin-top: 4px;
+}
+
 /* Wizard Steps Ribbon */
 #panel-newcalc .wizard-steps {
   display: flex;
@@ -633,7 +675,8 @@ body.efb-light-mode .efb-crest {
   cursor: pointer;
 }
 
-.ttol-seat.empty {
+.ttol-seat.empty,
+.empty {
   fill: rgba(100, 116, 139, 0.25);
   stroke: rgba(148, 163, 184, 0.4);
 }
@@ -707,11 +750,22 @@ body.efb-light-mode .efb-crest {
   transition: width 0.3s ease;
 }
 
-/* Responsive adjustments */
+/* Responsive adjustments for Tablets (iPad, Android) & Mobile Phones */
+@media (max-width: 1024px) {
+  .lopa-zone-box-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+  }
+}
+
 @media (max-width: 768px) {
   .efb-cockpit-header {
     flex-direction: column;
     align-items: flex-start;
+    gap: 10px;
+  }
+  .efb-brand {
+    width: 100%;
   }
   .efb-header-controls {
     width: 100%;
@@ -723,6 +777,52 @@ body.efb-light-mode .efb-crest {
   .cargo-holds-dual-grid {
     grid-template-columns: 1fr;
   }
+  .wz-water-selector {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .lopa-zone-box-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+  #panel-newcalc .wizard-step {
+    min-width: 95px;
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+  #panel-newcalc .wizard-step .ws-title {
+    font-size: 10px;
+  }
+  .efb-title {
+    font-size: 11px;
+  }
+}
+
+/* Explicit device classes responsive layout */
+body.device-tablet .lopa-zone-box-grid {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+body.device-mobile .lopa-zone-box-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+body.device-mobile .fuel-tank-readout-grid {
+  grid-template-columns: 1fr 1fr;
+}
+
+body.device-mobile .cargo-holds-dual-grid {
+  grid-template-columns: 1fr;
+}
+
+body.device-mobile .wz-water-selector {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+body.device-mobile .wz-trim-canvas {
+  min-height: 240px;
 }
 
 /* ==========================================================================
@@ -1603,4 +1703,172 @@ body.efb-light-mode #panel-newcalc .wz-val-maxfuel {
   color: #0284c7 !important;
 }
 
+.airport-item-code {
+  font-weight: 700;
+  color: var(--accent);
+  font-size: 12px;
+  min-width: 86px;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+}
 
+.airport-item-icao {
+  font-weight: 700;
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.airport-item-iata {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: rgba(14, 165, 233, 0.15);
+  color: #0284c7;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.5px;
+}
+
+#panel-newcalc:not(.efb-light-mode) .airport-item-iata {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+}
+
+/* Zone C Extra CC Overflow Badge */
+.wz-zonec-extracc-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  background: rgba(245, 158, 11, 0.18);
+  border: 1px solid #F59E0B;
+  color: #F59E0B;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 6px;
+  border-radius: 4px;
+  margin-top: 4px;
+  margin-bottom: 2px;
+  text-align: center;
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.25);
+}
+
+.lopa-zone-box.zone-c-overflow {
+  border-color: #F59E0B !important;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.2);
+}
+
+#panel-newcalc.efb-light-mode .wz-zonec-extracc-badge {
+  background: #FEF3C7;
+  border-color: #D97706;
+  color: #B45309;
+}
+
+#panel-newcalc.efb-light-mode .lopa-zone-box.zone-c-overflow {
+  border-color: #D97706 !important;
+}
+
+/* Step 5 Top Persons & Payload Summary Strip */
+.wz-top-summary-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 10px;
+  margin: 10px 0 16px 0;
+}
+
+.wz-top-sum-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--efb-panel, #141a22);
+  border: 1px solid var(--efb-border, rgba(255, 255, 255, 0.12));
+  border-radius: 8px;
+  padding: 10px 14px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+  transition: all 0.2s ease;
+}
+
+.wz-top-sum-card.main-pob {
+  border-left: 3.5px solid #00E5A3;
+  background: linear-gradient(135deg, rgba(0, 229, 163, 0.12), rgba(0, 229, 163, 0.03));
+}
+
+.wz-top-sum-card.main-payload {
+  border-left: 3.5px solid #38BDF8;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.12), rgba(56, 189, 248, 0.03));
+}
+
+.wz-top-sum-icon {
+  font-size: 26px;
+  line-height: 1;
+}
+
+.wz-top-sum-body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.wz-top-sum-lbl {
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--efb-muted, #94A3B8);
+}
+
+.wz-top-sum-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--efb-text, #F8FAFC);
+  line-height: 1.2;
+}
+
+.wz-top-sum-val.accent-val {
+  color: #00E5A3;
+}
+
+.wz-top-sum-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--efb-muted, #94A3B8);
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+body.efb-light-mode .wz-top-sum-card,
+#panel-newcalc.efb-light-mode .wz-top-sum-card {
+  background: #FFFFFF;
+  border-color: #E2E8F0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+body.efb-light-mode .wz-top-sum-card.main-pob,
+#panel-newcalc.efb-light-mode .wz-top-sum-card.main-pob {
+  background: #F0FDF4;
+  border-left-color: #16A34A;
+}
+
+body.efb-light-mode .wz-top-sum-card.main-payload,
+#panel-newcalc.efb-light-mode .wz-top-sum-card.main-payload {
+  background: #F0F9FF;
+  border-left-color: #0284C7;
+}
+
+body.efb-light-mode .wz-top-sum-val,
+#panel-newcalc.efb-light-mode .wz-top-sum-val {
+  color: #0F172A;
+}
+
+body.efb-light-mode .wz-top-sum-val.accent-val,
+#panel-newcalc.efb-light-mode .wz-top-sum-val.accent-val {
+  color: #16A34A;
+}

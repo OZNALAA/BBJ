@@ -28,8 +28,50 @@
                     document.body.classList.remove('efb-light-mode');
                 }
             } catch(e) {}
+
+            try {
+                var ua = navigator.userAgent || '';
+                var isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+                var isIPad = /iPad/i.test(ua) || (isTouch && /Macintosh/i.test(ua) && navigator.maxTouchPoints > 1);
+                var isIPhone = /iPhone|iPod/i.test(ua);
+                var isAndroid = /Android/i.test(ua);
+                var isMobilePhone = isIPhone || (isAndroid && /Mobile/i.test(ua)) || (window.innerWidth <= 600);
+                var isTablet = isIPad || (isAndroid && !/Mobile/i.test(ua)) || (isTouch && window.innerWidth >= 601 && window.innerWidth <= 1366 && !isMobilePhone);
+                var isDesktop = !isMobilePhone && !isTablet && !isTouch;
+
+                var b = document.body.classList;
+                var h = document.documentElement.classList;
+                if (isIPad) { b.add('device-ipad'); h.add('device-ipad'); }
+                if (isAndroid) { b.add('device-android'); h.add('device-android'); }
+                if (isTablet) { b.add('device-tablet'); h.add('device-tablet'); }
+                if (isMobilePhone) { b.add('device-mobile'); h.add('device-mobile'); }
+                if (isDesktop) { b.add('device-desktop'); h.add('device-desktop'); }
+                if (isTouch) { b.add('is-touch'); h.add('is-touch'); }
+            } catch(e) {}
         })();
     </script>
+    <!-- Écran de Sécurité Flotte - Activation PIN -->
+    <div class="fleet-gate-screen" id="fleet-gate-screen" style="display:none;">
+        <div class="fleet-gate-box">
+            <div style="font-size:38px; margin-bottom:8px;">🛡️</div>
+            <h1 class="fleet-gate-title">RAM BBJ • ACCÈS SÉCURISÉ</h1>
+            <div class="fleet-gate-sub">Système EFB Flotte VIP CN-RRN • Accès strictement restreint</div>
+            <p style="font-size:12.5px; color:#94A3B8; margin: 12px 0 18px; line-height:1.45;">
+                Veuillez saisir le code PIN d'autorisation de la flotte pour déverrouiller l'accès sur cette tablette.
+            </p>
+            <div style="width:100%; position:relative; margin-bottom:12px;">
+                <input type="password" id="fleet-pin-input" class="input-field" placeholder="Code PIN Flotte" autocomplete="off" style="text-align:center; font-family:monospace; font-size:16px; letter-spacing:2px; font-weight:700;">
+            </div>
+            <div id="fleet-pin-error" style="color:#EF4444; font-size:12px; font-weight:600; min-height:18px; margin-bottom:12px; display:none;"></div>
+            <button type="button" class="btn btn-accent" id="btn-fleet-unlock" style="width:100%; padding:12px; font-size:14px; font-weight:700;">
+                🔓 Déverrouiller l'EFB
+            </button>
+            <div style="margin-top:16px; font-size:11px; color:#64748B;">
+                Royal Air Maroc • Déverrouillage unique par appareil
+            </div>
+        </div>
+    </div>
+
     <!-- Écran de connexion -->
     <div class="login-screen" id="login-screen" style="display:none;">
         <div class="login-box">
@@ -96,8 +138,9 @@
             </button>
             <div class="sidebar-user" id="sidebar-user"></div>
             <div class="sidebar-app-info" id="sidebar-app-info">
-                <span class="app-version">Version 3.3</span>
+                <span class="app-version">Version 4.0</span>
                 <span class="app-author">© CDB OUZZINE ALAA-EDDINE</span>
+                <span class="app-device-badge" id="sidebar-device-badge">💻 Système PC</span>
             </div>
             <button type="button" id="btn-logout" class="btn btn-small">Déconnexion</button>
         </div>
@@ -167,16 +210,16 @@
                                 <label>Flight Number</label>
                                 <div class="flight-field">
                                     <span class="flight-prefix">MRS</span>
-                                    <input type="text" id="inp-flight" value="0603" inputmode="numeric" pattern="[0-9]*" class="input-field" oninput="this.value=this.value.replace(/\D/g,''); recalcAll();">
+                                    <input type="text" id="inp-flight" value="" inputmode="numeric" pattern="[0-9]*" class="input-field" placeholder="0000" oninput="this.value=this.value.replace(/\D/g,''); recalcAll();">
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label>Date</label>
-                                <input type="date" id="inp-date" value="2023-10-19" class="input-field">
+                                <input type="date" id="inp-date" value="" class="input-field">
                             </div>
                             <div class="form-group">
                                 <label>Time (UTC)</label>
-                                <input type="text" id="inp-time" value="10:30" inputmode="numeric" class="input-field" placeholder="HH:MM" oninput="this.value=this.value.replace(/\D/g,'').slice(0,4).replace(/^(\d\d)(?=\d)/, '$1:'); validateTime(); recalcAll();">
+                                <input type="text" id="inp-time" value="" inputmode="numeric" class="input-field" placeholder="HH:MM" oninput="this.value=this.value.replace(/\D/g,'').slice(0,4).replace(/^(\d\d)(?=\d)/, '$1:'); validateTime(); recalcAll();">
                                 <span class="field-error" id="inp-time-err" style="display:none;"></span>
                             </div>
                             <div class="form-group">
@@ -208,11 +251,11 @@
                         <div class="form-grid">
                             <div class="form-group">
                                 <label>Pilots</label>
-                                <input type="number" id="inp-pilots" value="3" min="0" max="3" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                                <input type="number" id="inp-pilots" value="2" min="0" max="3" inputmode="numeric" class="input-field" oninput="recalcAll()">
                             </div>
                             <div class="form-group">
                                 <label>Observers</label>
-                                <input type="number" id="inp-observers" value="1" min="0" max="2" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                                <input type="number" id="inp-observers" value="0" min="0" max="2" inputmode="numeric" class="input-field" oninput="recalcAll()">
                             </div>
                             <div class="form-group">
                                 <label>Cabin Crew</label>
@@ -220,11 +263,11 @@
                             </div>
                             <div class="form-group">
                                 <label>Staff (Zone B)</label>
-                                <input type="number" id="inp-staff" value="8" min="0" max="16" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                                <input type="number" id="inp-staff" value="0" min="0" max="16" inputmode="numeric" class="input-field" oninput="recalcAll()">
                             </div>
                             <div class="form-group">
                                 <label>Extra CC in Zone B</label>
-                                <input type="number" id="inp-extracc" value="2" min="0" max="8" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                                <input type="number" id="inp-extracc" value="0" min="0" max="8" inputmode="numeric" class="input-field" oninput="recalcAll()">
                             </div>
                             <div class="form-group">
                                 <label>Premium PAX (Zone D)</label>
@@ -244,7 +287,7 @@
                             </div>
                             <div class="form-group">
                                 <label>Other Load Zone B (kg)</label>
-                                <input type="number" id="inp-zonebother" value="100" min="0" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                                <input type="number" id="inp-zonebother" value="0" min="0" inputmode="numeric" class="input-field" oninput="recalcAll()">
                             </div>
                         </div>
                     </div>
@@ -254,15 +297,18 @@
                         <div class="form-grid">
                             <div class="form-group">
                                 <label>Block Fuel (kg)</label>
-                                <input type="number" id="inp-blockfuel" value="18000" min="0" max="28585" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                                <input type="number" id="inp-blockfuel" value="0" min="0" max="28585" inputmode="numeric" class="input-field" oninput="recalcAll()">
                             </div>
                             <div class="form-group">
                                 <label>Taxi Fuel (kg)</label>
-                                <input type="number" id="inp-taxifuel" value="200" min="0" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                                <input type="number" id="inp-taxifuel" value="0" min="0" inputmode="numeric" class="input-field" oninput="recalcAll()">
                             </div>
                             <div class="form-group">
-                                <label>Trip Fuel (kg)</label>
-                                <input type="number" id="inp-tripfuel" value="8200" min="0" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                                <div style="display:flex; justify-content:space-between; align-items:center;">
+                                    <label>Trip Fuel (kg)</label>
+                                    <span id="inp-tripfuel-alert" class="wz-trip-missing-badge" style="font-size:10px; padding:1px 5px;">⚠️ TRIP Missing</span>
+                                </div>
+                                <input type="number" id="inp-tripfuel" value="0" min="0" inputmode="numeric" class="input-field wz-field-trip-missing" oninput="recalcAll()">
                             </div>
                         </div>
                     </div>
@@ -272,7 +318,7 @@
                         <div class="form-grid">
                             <div class="form-group">
                                 <label>FWD Hold (kg)</label>
-                                <input type="number" id="inp-fwdhold" value="150" min="0" inputmode="numeric" class="input-field" oninput="recalcAll()">
+                                <input type="number" id="inp-fwdhold" value="0" min="0" inputmode="numeric" class="input-field" oninput="recalcAll()">
                             </div>
                             <div class="form-group">
                                 <label>AFT Hold (kg)</label>
@@ -457,6 +503,11 @@
         <div class="panel active" id="panel-newcalc">
             <div class="efb-cockpit-header">
                 <div class="efb-brand">
+                    <button type="button" class="btn-burger efb-burger-btn" id="btn-efb-sidebar-toggle" aria-label="Menu navigation">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
                     <div class="efb-crest">
                         <img src="img/logo_topleft.png" class="efb-crest-logo" alt="RAM Logo">
                     </div>
@@ -496,23 +547,28 @@
                 </div>
                 <div class="efb-tele-cell">
                     <span class="efb-tele-lbl">Corr. DOW</span>
-                    <span class="efb-tele-val" id="wz-strip-dow">48,950 kg</span>
+                    <span class="efb-tele-val" id="wz-strip-dow">48,704 kg</span>
                 </div>
                 <div class="efb-tele-cell">
                     <span class="efb-tele-lbl">Payload</span>
-                    <span class="efb-tele-val accent" id="wz-strip-payload">822 kg</span>
+                    <span class="efb-tele-val accent" id="wz-strip-payload">0 kg</span>
                 </div>
                 <div class="efb-tele-cell">
                     <span class="efb-tele-lbl">ZFW / MZFW</span>
-                    <span class="efb-tele-val" id="wz-strip-zfw">49,772 kg</span>
+                    <span class="efb-tele-val" id="wz-strip-zfw">48,704 kg</span>
                 </div>
                 <div class="efb-tele-cell">
                     <span class="efb-tele-lbl">Block Fuel</span>
-                    <span class="efb-tele-val accent" id="wz-strip-fuel">18,000 kg</span>
+                    <span class="efb-tele-val accent" id="wz-strip-fuel">0 kg</span>
                 </div>
                 <div class="efb-tele-cell">
                     <span class="efb-tele-lbl">Est. TOW</span>
-                    <span class="efb-tele-val" id="wz-strip-tow">67,572 kg</span>
+                    <span class="efb-tele-val" id="wz-strip-tow">48,704 kg</span>
+                </div>
+                <div class="efb-tele-cell" id="wz-strip-trip-cell">
+                    <span class="efb-tele-lbl">Trip Fuel</span>
+                    <span class="efb-tele-val accent" id="wz-strip-trip">0 kg</span>
+                    <span id="wz-strip-trip-alert" class="wz-trip-missing-badge" style="font-size:10px; padding:1px 4px; margin-top:2px;">⚠️ TRIP Missing</span>
                 </div>
             </div>
 
@@ -541,6 +597,7 @@
                         <div class="header-sub">Rapports — cliquez sur une ligne pour ouvrir / modifier</div>
                     </div>
                     <div class="panel-actions">
+                        <button type="button" id="fl-export-excel" class="btn" title="Exporter tous les rapports au format Excel">📊 Export Excel</button>
                         <button type="button" id="fl-new" class="btn btn-accent">＋ Nouveau rapport</button>
                     </div>
                 </div>
@@ -627,8 +684,52 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn" id="fl-cancel">Annuler</button>
+                    <button type="button" class="btn" id="fl-export-excel-current" title="Exporter ce rapport en Excel">📊 Export Excel</button>
                     <button type="button" class="btn" id="fl-print">🖨️ PRINT</button>
                     <button type="button" class="btn btn-accent" id="fl-save">💾 Enregistrer</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Recherche & Sélection d'un Membre d'Équipage (Flight Log) -->
+        <div class="modal" id="fl-crew-picker-modal" style="z-index: 1055;">
+            <div class="modal-box" style="max-width: 580px; width: 94vw; text-align: left; padding: 20px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; border-bottom:1px solid var(--border); padding-bottom:10px;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-size:22px;">👥</span>
+                        <div>
+                            <h3 style="font-size:16px; font-weight:700; margin:0; color:var(--text-primary);">Sélection Membre d'Équipage</h3>
+                            <div style="font-size:11px; color:var(--text-muted);">Recherchez un navigant dans la base Crew ou ajoutez-en un nouveau</div>
+                        </div>
+                    </div>
+                    <button type="button" class="modal-close" id="fl-cpm-close" style="position:static; font-size:26px; line-height:1; cursor:pointer;">×</button>
+                </div>
+
+                <div style="display:flex; gap:8px; margin-bottom:12px;">
+                    <div style="position:relative; flex:1;">
+                        <input type="text" id="fl-cpm-search" class="input-field" placeholder="🔍 Rechercher par nom, matricule, fonction…" autocomplete="off" style="width:100%; padding-left:12px;">
+                    </div>
+                    <button type="button" id="fl-cpm-btn-add" class="btn btn-accent" style="white-space:nowrap; flex-shrink:0;" title="Ajouter un nouveau membre dans la base Crew">
+                        ＋ Nouveau
+                    </button>
+                </div>
+
+                <div class="fl-cpm-filter-pills" id="fl-cpm-filters" style="display:flex; gap:6px; margin-bottom:12px; overflow-x:auto;">
+                    <button type="button" class="btn btn-sm fl-cpm-pill active" data-filter="all">Tous</button>
+                    <button type="button" class="btn btn-sm fl-cpm-pill" data-filter="CDB">CDB</button>
+                    <button type="button" class="btn btn-sm fl-cpm-pill" data-filter="OPL">OPL</button>
+                    <button type="button" class="btn btn-sm fl-cpm-pill" data-filter="CC">CC</button>
+                    <button type="button" class="btn btn-sm fl-cpm-pill" data-filter="PNC">PNC</button>
+                </div>
+
+                <div id="fl-cpm-list" class="fl-cpm-list" style="max-height: 48vh; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-right: 4px;">
+                    <!-- Rempli dynamiquement -->
+                </div>
+
+                <div id="fl-cpm-empty" style="display:none; text-align:center; padding:24px 12px; color:var(--text-muted); font-size:13px;">
+                    <div style="font-size:28px; margin-bottom:6px;">🔍</div>
+                    <div>Aucun membre d'équipage trouvé.</div>
+                    <button type="button" id="fl-cpm-empty-add" class="btn btn-accent btn-sm" style="margin-top:10px;">＋ Ajouter à la base Crew</button>
                 </div>
             </div>
         </div>
@@ -681,6 +782,46 @@
                 <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px; padding-top:14px; border-top:1px solid var(--border);">
                     <button type="button" class="btn" id="fl-cm-cancel">Annuler</button>
                     <button type="button" class="btn btn-accent" id="fl-cm-save">💾 Enregistrer et assigner</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal Notification Mise à Jour Automatique (GitHub / PWA) -->
+        <div class="modal" id="update-modal" style="z-index: 1070;">
+            <div class="modal-box update-modal-box">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; border-bottom:1px solid var(--border); padding-bottom:12px;">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="font-size:26px;">🚀</span>
+                        <div>
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <h3 style="font-size:16px; font-weight:700; margin:0; color:var(--text-primary);">Mise à jour EFB disponible</h3>
+                                <span class="update-version-tag" id="update-modal-version">Version 4.0</span>
+                            </div>
+                            <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;" id="update-modal-date">Mise à jour officielle disponible sur GitHub</div>
+                        </div>
+                    </div>
+                    <span id="update-modal-build" style="font-size:10.5px; color:var(--text-muted); font-family:monospace; background:rgba(255,255,255,0.06); padding:3px 6px; border-radius:4px;"></span>
+                </div>
+
+                <div class="update-notes-box">
+                    <div style="font-size:12px; font-weight:700; color:var(--accent, #38BDF8); margin-bottom:4px; display:flex; align-items:center; gap:6px;">
+                        <span>📋</span> Nouveautés &amp; Améliorations :
+                    </div>
+                    <div id="update-modal-notes" style="font-size:12.5px; color:var(--text-secondary); line-height:1.45; white-space:pre-line;">
+                        Améliorations de performance, affichage adapté et nouvelles fonctionnalités EFB.
+                    </div>
+                </div>
+
+                <div class="update-safety-box">
+                    <span style="font-size:20px; flex-shrink:0;">🛡️</span>
+                    <div style="font-size:11.5px; color:var(--text-secondary); line-height:1.4;">
+                        <strong style="color:var(--text-primary);">Données 100% sécurisées :</strong> Vos vols enregistrés, historiques Flight Log et base Crew sont conservés intacts sur votre appareil.
+                    </div>
+                </div>
+
+                <div style="display:flex; justify-content:flex-end; gap:10px; padding-top:14px; border-top:1px solid var(--border);">
+                    <button type="button" class="btn" id="btn-update-later">Plus tard</button>
+                    <button type="button" class="btn btn-accent" id="btn-update-now" style="font-weight:700;">🔄 Mettre à jour maintenant</button>
                 </div>
             </div>
         </div>
@@ -1022,6 +1163,8 @@
         </div>
     </div>
 
+    <script src="js/crypto-js.min.js"></script>
+    <script src="js/security.js"></script>
     <script src="js/data.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/airports.js"></script>
@@ -1037,6 +1180,7 @@
     <script src="js/wizard.js"></script>
     <script src="js/flights.js"></script>
     <script src="js/flightlog.js"></script>
+    <script src="js/updater.js"></script>
     <script src="js/app.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
