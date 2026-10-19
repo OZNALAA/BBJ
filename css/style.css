@@ -2073,39 +2073,65 @@ tr.flight-incomplete:hover {
     #print-area.wz-print img.wz-print-graph {
         width: 100% !important;
         max-width: 100% !important;
+        max-height: 480px !important;
         height: auto !important;
+        object-fit: contain !important;
         display: block !important;
-        page-break-inside: avoid;
-        margin: 10px 0;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin: 6px auto !important;
+    }
+
+    #print-area.wz-print .wz-print-graph-wrap {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        width: 100% !important;
+        text-align: center !important;
     }
 
     #print-area.wz-print img.wz-print-logo {
-        width: 160px !important;
-        max-width: 160px !important;
+        width: 140px !important;
+        max-width: 140px !important;
         height: auto !important;
         float: right;
     }
 
+    #print-area.wz-print table.data-table,
     #print-area .data-table,
     #print-area .wz-recap-table {
         width: 100% !important;
+        max-width: 100% !important;
+        table-layout: fixed !important;
         border-collapse: collapse !important;
-        page-break-inside: avoid;
-        margin-bottom: 12px;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-bottom: 8px !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
     }
 
+    #print-area.wz-print table.data-table th,
+    #print-area.wz-print table.data-table td,
     #print-area .data-table th,
     #print-area .data-table td {
         border: 1px solid #333333 !important;
         color: #000000 !important;
-        padding: 4px 8px !important;
-        font-size: 11px !important;
+        padding: 4px 6px !important;
+        font-size: 10.5px !important;
+        line-height: 1.25 !important;
         background: transparent !important;
+        box-sizing: border-box !important;
     }
 
     #print-area .data-table th {
         background: #F1F5F9 !important;
         font-weight: 700 !important;
+    }
+
+    #print-area.wz-print .wz-print-recap {
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        margin-top: 6px !important;
     }
 
     #print-area .panel-header button,
@@ -3577,6 +3603,63 @@ body.cockpit-night-mode .update-safety-box {
     letter-spacing: 0.6px;
     font-weight: 700;
 }
+
+/* ==========================================================================
+   W&B Out-of-Limits Diagnostic & Correction Box
+   ========================================================================== */
+.wz-sugg-diag-box {
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: 8px;
+    padding: 10px 12px;
+    margin: 8px 0 10px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+body.cockpit-night-mode .wz-sugg-diag-box,
+#panel-newcalc:not(.efb-light-mode) .wz-sugg-diag-box {
+    background: rgba(127, 29, 29, 0.25);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #F8FAFC;
+}
+
+.wz-sugg-diag-status {
+    color: #EF4444;
+    font-weight: 600;
+    margin-bottom: 3px;
+}
+
+body.cockpit-night-mode .wz-sugg-diag-status,
+#panel-newcalc:not(.efb-light-mode) .wz-sugg-diag-status {
+    color: #FCA5A5;
+}
+
+.wz-sugg-diag-target {
+    color: var(--text-secondary, #64748B);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    margin-bottom: 4px;
+}
+
+body.cockpit-night-mode .wz-sugg-diag-target,
+#panel-newcalc:not(.efb-light-mode) .wz-sugg-diag-target {
+    color: #94A3B8;
+}
+
+.wz-sugg-diag-advice {
+    color: #0284C7;
+    font-weight: 600;
+    margin-top: 4px;
+    padding-top: 4px;
+    border-top: 1px dashed rgba(100, 116, 139, 0.25);
+}
+
+body.cockpit-night-mode .wz-sugg-diag-advice,
+#panel-newcalc:not(.efb-light-mode) .wz-sugg-diag-advice {
+    color: #38BDF8;
+}
+
 
 
 
