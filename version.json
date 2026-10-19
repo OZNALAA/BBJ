@@ -1,6 +1,6 @@
 {
-  "version": "4.1",
-  "build": 2026101902,
+  "version": "4.2",
+  "build": 2026101903,
   "releaseDate": "19/10/2026",
-  "notes": "Version 4.1 : Optimisation de l'impression sur iPad (ajustement parfait des 5 colonnes du tableau, respect du ratio naturel du graphique sans coupure en mode paysage) et ajout des cercles repères aux intersections et sommets du graphique de centrage."
+  "notes": "Version 4.2 : Mémorisation permanente de l'autorisation de l'appareil (le PIN n'est plus redemandé après la première connexion réussie), synchronisation du système de mise à jour pour éviter les popups répétitives, optimisation de l'impression iPad (5 colonnes calibrées et ratio de graphe naturel) et cercles repères aux sommets du graphique de centrage."
 }
