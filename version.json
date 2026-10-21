@@ -1,6 +1,6 @@
 {
-  "version": "4.2",
-  "build": 2026101903,
-  "releaseDate": "19/10/2026",
-  "notes": "Version 4.2 : Mémorisation permanente de l'autorisation de l'appareil (le PIN n'est plus redemandé après la première connexion réussie), synchronisation du système de mise à jour pour éviter les popups répétitives, optimisation de l'impression iPad (5 colonnes calibrées et ratio de graphe naturel) et cercles repères aux sommets du graphique de centrage."
+  "version": "4.5",
+  "build": 2026102103,
+  "releaseDate": "21/10/2026",
+  "notes": "Version 4.5 : Correction critique du volet de recherche et des filtres CREW Contact (recherche instantanée par nom, prénom, matricule, CIN, téléphone, BBJ/TRE, et filtres Tous/BBJ/Instructeurs entièrement opérationnels)."
 }
