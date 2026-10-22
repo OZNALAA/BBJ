@@ -1,6 +1,6 @@
 {
-  "version": "4.7",
-  "build": 2026102202,
+  "version": "5.0",
+  "build": 2026102204,
   "releaseDate": "22/10/2026",
-  "notes": "Version 4.7 : Saisie sécurisée dans New W&B Calculation — Les cases de chargement (zones, soutes) et carburant (Block, Taxi, Trip) sont désormais vides par défaut avec alertes visuelles instantanées (bordure rouge, badge 'Non renseigné') et blocage de validation pour éviter tout oubli."
+  "notes": "Version 5.0 : Modal popup universel de recherche d'aéroports avec filtres par région dans New W&B (identique à Flight Log) ; Clavier numérique forcé sur mobile/iPad et assainissement strict des saisies numériques (Load, ZFW, Soutes, Fuel, N° Vol)."
 }
