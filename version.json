@@ -1,6 +1,6 @@
 {
-  "version": "4.5",
-  "build": 2026102103,
-  "releaseDate": "21/10/2026",
-  "notes": "Version 4.5 : Correction critique du volet de recherche et des filtres CREW Contact (recherche instantanée par nom, prénom, matricule, CIN, téléphone, BBJ/TRE, et filtres Tous/BBJ/Instructeurs entièrement opérationnels)."
+  "version": "4.7",
+  "build": 2026102202,
+  "releaseDate": "22/10/2026",
+  "notes": "Version 4.7 : Saisie sécurisée dans New W&B Calculation — Les cases de chargement (zones, soutes) et carburant (Block, Taxi, Trip) sont désormais vides par défaut avec alertes visuelles instantanées (bordure rouge, badge 'Non renseigné') et blocage de validation pour éviter tout oubli."
 }

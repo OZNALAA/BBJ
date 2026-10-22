@@ -138,7 +138,7 @@
             </button>
             <div class="sidebar-user" id="sidebar-user"></div>
             <div class="sidebar-app-info" id="sidebar-app-info">
-                <span class="app-version">Version 4.5</span>
+                <span class="app-version">Version 4.7</span>
                 <span class="app-author">© CDB OUZZINE ALAA-EDDINE</span>
                 <span class="app-device-badge" id="sidebar-device-badge">💻 Système PC</span>
             </div>
@@ -692,6 +692,45 @@
         </div>
 
         <!-- Modal Recherche & Sélection d'un Membre d'Équipage (Flight Log) -->
+        <!-- Modal Recherche & Sélection d'un Aéroport (Flight Log) -->
+        <div class="modal" id="fl-airport-picker-modal" style="z-index: 1055;">
+            <div class="modal-box" style="max-width: 580px; width: 94vw; text-align: left; padding: 20px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; border-bottom:1px solid var(--border); padding-bottom:10px;">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-size:22px;">🛫</span>
+                        <div>
+                            <h3 style="font-size:16px; font-weight:700; margin:0; color:var(--text-primary);" id="fl-apm-title">Sélection Aéroport</h3>
+                            <div style="font-size:11px; color:var(--text-muted);">Recherchez par code OACI, IATA, nom de ville ou pays</div>
+                        </div>
+                    </div>
+                    <button type="button" class="modal-close" id="fl-apm-close" style="position:static; font-size:26px; line-height:1; cursor:pointer;">&times;</button>
+                </div>
+
+                <div style="display:flex; gap:8px; margin-bottom:12px;">
+                    <div style="position:relative; flex:1;">
+                        <input type="text" id="fl-apm-search" class="input-field" placeholder="🔍 Ex: GMMN, CMN, Casablanca, Paris, Madrid..." autocomplete="off" style="width:100%; padding-left:12px;">
+                    </div>
+                </div>
+
+                <div class="fl-cpm-filter-pills" id="fl-apm-filters" style="display:flex; gap:6px; margin-bottom:12px; overflow-x:auto;">
+                    <button type="button" class="btn btn-sm fl-apm-pill active" data-filter="all">Tous</button>
+                    <button type="button" class="btn btn-sm fl-apm-pill" data-filter="MA">🇲🇦 Maroc</button>
+                    <button type="button" class="btn btn-sm fl-apm-pill" data-filter="EU">🇪🇺 Europe</button>
+                    <button type="button" class="btn btn-sm fl-apm-pill" data-filter="AF">🌍 Afrique</button>
+                    <button type="button" class="btn btn-sm fl-apm-pill" data-filter="ME">🕌 Moyen-Orient</button>
+                </div>
+
+                <div id="fl-apm-list" class="fl-cpm-list" style="max-height: 48vh; overflow-y: auto; display: flex; flex-direction: column; gap: 6px; padding-right: 4px;">
+                    <!-- Rempli dynamiquement -->
+                </div>
+
+                <div id="fl-apm-empty" style="display:none; text-align:center; padding:24px 12px; color:var(--text-muted); font-size:13px;">
+                    <div style="font-size:28px; margin-bottom:6px;">✈️</div>
+                    <div>Aucun aéroport trouvé pour cette recherche.</div>
+                </div>
+            </div>
+        </div>
+
         <div class="modal" id="fl-crew-picker-modal" style="z-index: 1055;">
             <div class="modal-box" style="max-width: 580px; width: 94vw; text-align: left; padding: 20px;">
                 <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; border-bottom:1px solid var(--border); padding-bottom:10px;">
@@ -795,7 +834,7 @@
                         <div>
                             <div style="display:flex; align-items:center; gap:8px;">
                                 <h3 style="font-size:16px; font-weight:700; margin:0; color:var(--text-primary);">Mise à jour EFB disponible</h3>
-                                <span class="update-version-tag" id="update-modal-version">Version 4.5</span>
+                                <span class="update-version-tag" id="update-modal-version">Version 4.7</span>
                             </div>
                             <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;" id="update-modal-date">Mise à jour officielle disponible sur GitHub</div>
                         </div>
