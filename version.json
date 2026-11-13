@@ -1,6 +1,6 @@
 {
   "version": "5.0",
-  "build": 2026102204,
-  "releaseDate": "22/10/2026",
-  "notes": "Version 5.0 : Modal popup universel de recherche d'aéroports avec filtres par région dans New W&B (identique à Flight Log) ; Clavier numérique forcé sur mobile/iPad et assainissement strict des saisies numériques (Load, ZFW, Soutes, Fuel, N° Vol)."
+  "build": 2026111301,
+  "releaseDate": "13/11/2026",
+  "notes": "Version 5.0 : Ajout du compte utilisateur BOUSBINA GHALI (44499)."
 }

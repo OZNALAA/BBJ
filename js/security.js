@@ -1,1 +1,240 @@
-function _0x4712(_0x5aec2d,_0x10a357){_0x5aec2d=_0x5aec2d-0xde;const _0x3c171e=_0x3c17();let _0x471277=_0x3c171e[_0x5aec2d];if(_0x4712['eWShoA']===undefined){var _0x431339=function(_0x4b6db1){const _0x464a5d='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789+/=';let _0x323be2='',_0x56dd22='';for(let _0x166f94=0x0,_0x2b4ec9,_0x1646e0,_0x10f879=0x0;_0x1646e0=_0x4b6db1['charAt'](_0x10f879++);~_0x1646e0&&(_0x2b4ec9=_0x166f94%0x4?_0x2b4ec9*0x40+_0x1646e0:_0x1646e0,_0x166f94++%0x4)?_0x323be2+=String['fromCharCode'](0xff&_0x2b4ec9>>(-0x2*_0x166f94&0x6)):0x0){_0x1646e0=_0x464a5d['indexOf'](_0x1646e0);}for(let _0x255cfa=0x0,_0x380644=_0x323be2['length'];_0x255cfa<_0x380644;_0x255cfa++){_0x56dd22+='%'+('00'+_0x323be2['charCodeAt'](_0x255cfa)['toString'](0x10))['slice'](-0x2);}return decodeURIComponent(_0x56dd22);};_0x4712['ehMqUZ']=_0x431339,_0x4712['gkRzcF']={},_0x4712['eWShoA']=!![];}const _0x3069f0=_0x3c171e[0x0];_0x4712['IRDHxK']!==_0x3069f0&&(_0x4712['gkRzcF']={},_0x4712['IRDHxK']=_0x3069f0);const _0x357566=_0x4712['gkRzcF'][_0x5aec2d];return _0x357566===undefined?(_0x471277=_0x4712['ehMqUZ'](_0x471277),_0x4712['gkRzcF'][_0x5aec2d]=_0x471277):_0x471277=_0x357566,_0x471277;}function _0x3c17(){const _0x2ad67a=['C3bSAxq','ue1Qy0i','DezYA1y','Dhncz3K','v25pBNy','u3Pus3q','sujzDNG','BM9Uzq','r0HqtNq','mtjKAgDYr2y','nJuZmdeXEM5xuM1R','z2v0rwXLBwvUDej5swq','DMfSDwu','yxLpsha','z2v0sxrLBq','zMXLzxqTCgLUlwvYCM9Y','vxrMoa','mdK2otKXndaZzdq4y2q0ogmXnZu2m2mWndmYyZeZztmKzdu1nZK0zgfLzdK3n2vHntm0yti2yMiYmtrIowzKyJq1mwy1otnJmJGYmdG2ntuXndHHmde2y2iXytKWntCYyG','qKjku2vJDxjPDhK','yMXVy2S','s0zlvgO','DgT6q2q','qvvusa','uhfJq0O','zMXLzxqTCgLUlwLUChv0','whjQwuq','z3Ldq1q','mJi4mZm4ohHHEe5yEq','shDNvwe','mJa2nJaYmhHyA3HxtG','CMvXDwLYzuXVz2LU','BuHsB0u','zgLZCgXHEq','mJi2mtq5qLj0qwfR','re9nq29UDgvUDeXVywrLza','C3r5Bgu','zw5JCNLWDa','yMLUza','w0jcsLnLy3vYAxr5xsbezwnYExb0Aw9UihDHCM5PBMC6','C3rHCNrZv2L0Aa','v29YzefYCMf5','uKfnx0jcsL9bvvrit1jjwKvex0nox1jstL8Ymdi2','Bg9NAw4TC2nYzwvU','B3bHy2L0Eq','A2v5','w0jcsLnLy3vYAxr5xsbfBMnYExb0Aw9UigvYCM9YoG','mJiZntK0swzvBfzS','ywrKrxzLBNrmAxn0zw5LCG','t3rZyNy','A1zUtw8','Dg9tDhjPBMC','Bg9JywXtDg9YywDL','CMvHzhLtDgf0zq','yMjQx2zSzwv0x2f1DgHVCML6zwq','DhjHBNnPDgLVBG','rw50zxi','t0zRy3a','qNjiv2q','CMfUzg9T','ALPqtfm','u0HbmJu2','yNrUlwzSzwv0lxvUBg9JAW','Aw5JBhvKzxm','zw5J','rg5tq0u','BgLI','vMv1AwXSzxOGC2fPC2LYigXLignVzguGueLoiezSB3r0zs4','CvDIrxm','vKfZzei','yMjQx2zSAwDODgXVz19YzwnVCMrZ','vtjgC2rhvMTymq','zNvUy3rPB24','mJCYnJGYmhzgr1PAuq','A2v5zg93BG','ntq2nhHXwen5uG','seXivM4','yMjQx3nHDMvKx2zSAwDODhm','zM9JDxm','uejlreyY','ywXNBW','qKjkx1jbtv9dtI1suK5FquvtmJu2x09grKLdsufmx0vgqL9wqvvmvf8Ymdi2','zMXLEa','sgv4','v0HZAwe','C2v0sxrLBq','DhjPBq','EwfHuLa','rhbfwu4','txvZAKS','yMjQx2nYzxDFzgf0ywjHC2u','zgvJCNLWDa','nte5m0POB1zlBW','AK95Agq','yMjQx3vZzxjZ','vxPmuw0','quvt','C3rYAw5N','y2XPy2S'];_0x3c17=function(){return _0x2ad67a;};return _0x3c17();}(function(_0x46024d,_0x2e059f){const _0x555544=_0x4712,_0x3dd2ee=_0x46024d();while(!![]){try{const _0x42187d=-parseInt(_0x555544(0x115))/0x1+parseInt(_0x555544(0x126))/0x2+-parseInt(_0x555544(0x12c))/0x3+-parseInt(_0x555544(0xf1))/0x4+parseInt(_0x555544(0x128))/0x5+parseInt(_0x555544(0x114))/0x6*(parseInt(_0x555544(0x139))/0x7)+-parseInt(_0x555544(0xf3))/0x8*(-parseInt(_0x555544(0x104))/0x9);if(_0x42187d===_0x2e059f)break;else _0x3dd2ee['push'](_0x3dd2ee['shift']());}catch(_0x3bba05){_0x3dd2ee['push'](_0x3dd2ee['shift']());}}}(_0x3c17,0x93296),(function(){'use strict';const _0x4bdd18=_0x4712,_0x1ac7e3={'yaaRP':function(_0x4a29e9,_0x27920a){return _0x4a29e9!==_0x27920a;},'WnOnv':function(_0x16d4e3,_0x828392){return _0x16d4e3!==_0x828392;},'KFKTj':_0x4bdd18(0x109),'PEgYj':'U2FsdGVkX1','tsBgy':function(_0x212609){return _0x212609();},'BrHWd':_0x4bdd18(0x131),'hRgLS':function(_0x1b0d23){return _0x1b0d23();},'AicJk':function(_0x17c223,_0x168594){return _0x17c223+_0x168594;},'gyCCT':function(_0x4ac157,_0x22bb3b){return _0x4ac157+_0x22bb3b;},'RakRx':function(_0x5ef9e8,_0xb670a1){return _0x5ef9e8/_0xb670a1;},'PqcCJ':function(_0x1356e2,_0x3d6a93){return _0x1356e2===_0x3d6a93;},'tiivT':function(_0x25073f,_0x37e2ea){return _0x25073f(_0x37e2ea);},'ayOHp':function(_0x2c74d5,_0x70543e){return _0x2c74d5===_0x70543e;},'Otsbv':function(_0x2c6cd4,_0x576637){return _0x2c6cd4(_0x576637);},'kVnMo':_0x4bdd18(0xeb),'XrjYD':_0x4bdd18(0x11e),'nAwqC':function(_0x40cc1e,_0x37a1ee){return _0x40cc1e(_0x37a1ee);},'jOyhd':_0x4bdd18(0x112),'GgcKu':function(_0x53ff3e,_0x28dd2b,_0x22b59f){return _0x53ff3e(_0x28dd2b,_0x22b59f);},'OFkcp':'Code\x20PIN\x20incorrect.\x20Accès\x20Flotte\x20refusé.','VAsdB':function(_0x2c3626,_0x31b5f1){return _0x2c3626===_0x31b5f1;},'WHsia':'fleet-gate-screen','IBYvx':function(_0x55cc40){return _0x55cc40();},'ocMqJ':_0x4bdd18(0xfa),'gtqaF':_0x4bdd18(0x135),'DnSCE':_0x4bdd18(0xe6),'PMjcB':_0x4bdd18(0x10a),'MusjK':_0x4bdd18(0xee),'lpdGp':_0x4bdd18(0x102),'tFrkV':_0x4bdd18(0x106),'GHPNt':_0x4bdd18(0x11c),'HLHVn':_0x4bdd18(0xde),'qWbEs':_0x4bdd18(0x134),'jZPLS':'loading','tkzCd':_0x4bdd18(0x12d)};const _0xa931c=_0x4bdd18(0xf9),_0xbef840=[_0x4bdd18(0xf5),_0x1ac7e3[_0x4bdd18(0x101)],_0x1ac7e3['lpdGp'],_0x1ac7e3[_0x4bdd18(0x10d)],_0x4bdd18(0xde)],_0x10afc9=_0x1ac7e3[_0x4bdd18(0x113)],_0x3b614d=_0x1ac7e3[_0x4bdd18(0xf4)],_0x1d8f7c=_0x1ac7e3[_0x4bdd18(0xec)];function _0x4eef86(){const _0x47b7c8=_0x4bdd18;return _0x1ac7e3[_0x47b7c8(0xff)](typeof CryptoJS,'undefined')&&CryptoJS[_0x47b7c8(0x108)];}function _0x565429(_0x7358fb,_0x24382b){const _0x52f0f3=_0x4bdd18;if(!_0x7358fb||typeof _0x7358fb!==_0x52f0f3(0x109))return _0x7358fb;if(!_0x4eef86())return _0x7358fb;try{const _0x52a37d=_0x24382b||_0xa931c;return CryptoJS[_0x52f0f3(0x108)][_0x52f0f3(0x12f)](_0x7358fb,_0x52a37d)['toString']();}catch(_0x40a1da){return console['error'](_0x52f0f3(0x138),_0x40a1da),_0x7358fb;}}function _0x59662c(_0x24076a,_0x214c3f){const _0x5cd785=_0x4bdd18;if(!_0x24076a||_0x1ac7e3[_0x5cd785(0x10f)](typeof _0x24076a,_0x1ac7e3[_0x5cd785(0x11f)]))return _0x24076a;if(!_0x24076a[_0x5cd785(0x132)](_0x1ac7e3['PEgYj']))return _0x24076a;if(!_0x1ac7e3[_0x5cd785(0x10e)](_0x4eef86))return _0x24076a;try{const _0x58c774=_0x214c3f||_0xa931c,_0xc45f54=CryptoJS['AES'][_0x5cd785(0x103)](_0x24076a,_0x58c774),_0x561078=_0xc45f54[_0x5cd785(0x13d)](CryptoJS[_0x5cd785(0xe8)][_0x5cd785(0x11b)]);return _0x561078||_0x24076a;}catch(_0x5eec3b){return console['warn'](_0x1ac7e3[_0x5cd785(0xe2)],_0x5eec3b),_0x24076a;}}function _0x34b903(_0x4e80e8,_0x41b20b){const _0x52aafa=_0x4bdd18;if(!_0x1ac7e3['hRgLS'](_0x4eef86))return _0x4e80e8;!_0x41b20b&&(_0x41b20b=CryptoJS[_0x52aafa(0xea)][_0x52aafa(0x133)][_0x52aafa(0xe3)](0x10)[_0x52aafa(0x13d)](CryptoJS[_0x52aafa(0xe8)]['Hex']));const _0x326ef7=CryptoJS[_0x52aafa(0xf7)](_0x4e80e8,_0x41b20b,{'keySize':0x100/0x20,'iterations':0x186a0,'hasher':CryptoJS[_0x52aafa(0xf8)][_0x52aafa(0xe5)]});return _0x1ac7e3['AicJk'](_0x1ac7e3[_0x52aafa(0x125)](_0x41b20b,'$'),_0x326ef7[_0x52aafa(0x13d)](CryptoJS[_0x52aafa(0xe8)][_0x52aafa(0xfb)]));}function _0x47b3ea(_0x525ad5,_0x21e89c){const _0x4d3a08=_0x4bdd18;if(!_0x525ad5||!_0x21e89c||!_0x4eef86())return![];try{const _0x1100bc=_0x21e89c[_0x4d3a08(0x10b)]('$');if(_0x1100bc['length']!==0x2)return![];const _0x2413e1=_0x1100bc[0x0],_0x19a3e5=_0x1100bc[0x1],_0x1b162f=CryptoJS[_0x4d3a08(0xf7)](_0x525ad5,_0x2413e1,{'keySize':_0x1ac7e3['RakRx'](0x100,0x20),'iterations':0x186a0,'hasher':CryptoJS[_0x4d3a08(0xf8)][_0x4d3a08(0xe5)]});return _0x1ac7e3[_0x4d3a08(0x122)](_0x1b162f[_0x4d3a08(0x13d)](CryptoJS[_0x4d3a08(0xe8)]['Hex']),_0x19a3e5);}catch(_0x1effe0){return![];}}function _0x4bbb6e(){const _0x23dde9=_0x4bdd18;try{const _0x46b03b=window[_0x23dde9(0x13e)]?window['localStorage'][_0x23dde9(0x119)](_0x3b614d):null;if(_0x1ac7e3[_0x23dde9(0x122)](_0x46b03b,_0x1d8f7c))return!![];if(_0x46b03b&&_0x46b03b[_0x23dde9(0x132)](_0x23dde9(0xef))){const _0x420a3a=_0x1ac7e3['tiivT'](_0x59662c,_0x46b03b);if(_0x1ac7e3[_0x23dde9(0x118)](_0x420a3a,_0x1d8f7c))return!![];}return![];}catch(_0x191d09){return![];}}function _0x18df07(_0x1b36ea){const _0x295a16=_0x4bdd18;if(!_0x1b36ea)return![];const _0x583632=_0x1ac7e3[_0x295a16(0x13b)](String,_0x1b36ea)[_0x295a16(0xfe)]();if(_0x47b3ea(_0x583632,_0x10afc9)){try{window[_0x295a16(0x13e)]&&window[_0x295a16(0x13e)][_0x295a16(0xfd)](_0x3b614d,_0x1d8f7c);}catch(_0x24b523){}return!![];}return![];}function _0x1d6fa9(){const _0x1c4305=_0x4bdd18,_0x185310={'SzTKt':_0x1ac7e3[_0x1c4305(0x105)],'DpEYN':function(_0x1e2e19,_0x27a99d){const _0x5af91a=_0x1c4305;return _0x1ac7e3[_0x5af91a(0xed)](_0x1e2e19,_0x27a99d);},'HwgUa':_0x1c4305(0xf0)},_0x2718e3=document[_0x1c4305(0x116)](_0x1ac7e3[_0x1c4305(0xfc)]);if(!_0x2718e3)return;if(_0x1ac7e3[_0x1c4305(0x111)](_0x4bbb6e)){_0x2718e3[_0x1c4305(0x12e)][_0x1c4305(0x12b)]='none';return;}_0x2718e3[_0x1c4305(0x12e)][_0x1c4305(0x12b)]=_0x1ac7e3['ocMqJ'];const _0x4b88c9=document[_0x1c4305(0x116)](_0x1ac7e3['gtqaF']);if(_0x4b88c9)_0x4b88c9[_0x1c4305(0x12e)]['display']=_0x1ac7e3[_0x1c4305(0x105)];const _0x257d8d=document['getElementById'](_0x1c4305(0x123)),_0x1b7906=document[_0x1c4305(0x116)](_0x1ac7e3[_0x1c4305(0xe9)]),_0x1b45ae=document[_0x1c4305(0x116)](_0x1c4305(0x11a));function _0xe7aac6(){const _0x3e40d7=_0x1c4305,_0x1022f4=_0x257d8d?_0x257d8d[_0x3e40d7(0x117)]:'';if(!_0x1022f4){_0x1b45ae&&(_0x1b45ae['textContent']=_0x1ac7e3[_0x3e40d7(0x13c)],_0x1b45ae[_0x3e40d7(0x12e)][_0x3e40d7(0x12b)]=_0x1ac7e3[_0x3e40d7(0x124)]);return;}if(_0x1ac7e3['nAwqC'](_0x18df07,_0x1022f4)){if(_0x1b45ae)_0x1b45ae[_0x3e40d7(0x12e)][_0x3e40d7(0x12b)]=_0x1ac7e3[_0x3e40d7(0x105)];_0x2718e3[_0x3e40d7(0x12e)][_0x3e40d7(0x136)]='0',_0x2718e3[_0x3e40d7(0x12e)][_0x3e40d7(0xdf)]='opacity\x200.3s\x20ease',_0x1ac7e3['GgcKu'](setTimeout,function(){const _0x32704e=_0x3e40d7;_0x2718e3[_0x32704e(0x12e)]['display']=_0x185310[_0x32704e(0x110)],window[_0x32704e(0x121)]&&_0x185310[_0x32704e(0x100)](typeof window[_0x32704e(0x121)][_0x32704e(0x129)],_0x185310[_0x32704e(0x127)])&&window['AUTH'][_0x32704e(0x129)]();},0x12c);}else _0x1b45ae&&(_0x1b45ae['textContent']=_0x1ac7e3[_0x3e40d7(0xe1)],_0x1b45ae[_0x3e40d7(0x12e)][_0x3e40d7(0x12b)]=_0x1ac7e3[_0x3e40d7(0x124)]),_0x257d8d&&(_0x257d8d[_0x3e40d7(0x117)]='',_0x257d8d[_0x3e40d7(0xf6)]());}if(_0x1b7906)_0x1b7906['addEventListener'](_0x1ac7e3[_0x1c4305(0x10c)],_0xe7aac6);_0x257d8d&&(_0x257d8d[_0x1c4305(0x13a)](_0x1c4305(0xf2),function(_0x4c6625){const _0x109b51=_0x1c4305;if(_0x4c6625[_0x109b51(0x137)]===_0x109b51(0xe0))_0xe7aac6();}),setTimeout(function(){const _0x2abbc0=_0x1c4305;_0x257d8d[_0x2abbc0(0xf6)]();},0x96));}function _0x4c5c62(){const _0xfc12ef=_0x4bdd18,_0x8a94db={'mHRoE':function(_0x1b4ec1,_0x34e702){return _0x1b4ec1===_0x34e702;},'UQgqg':function(_0x24efb7,_0x494f0d,_0x59a210){return _0x24efb7(_0x494f0d,_0x59a210);},'UzLQm':function(_0x3555dc,_0x538cf8,_0x5ee0ed){return _0x3555dc(_0x538cf8,_0x5ee0ed);},'XHaim':function(_0x17a2e8,_0x494a2b){return _0x17a2e8(_0x494a2b);}};if(!window[_0xfc12ef(0x13e)])return;const _0x464275=localStorage[_0xfc12ef(0x119)][_0xfc12ef(0x130)](localStorage),_0x46368f=localStorage[_0xfc12ef(0xfd)][_0xfc12ef(0x130)](localStorage);_0xbef840['forEach'](function(_0x32b180){const _0x270989=_0xfc12ef;try{const _0x20b986=_0x464275(_0x32b180);if(_0x20b986&&!_0x20b986[_0x270989(0x132)](_0x270989(0xef))){const _0x54f562=_0x1ac7e3['tiivT'](_0x565429,_0x20b986);_0x46368f(_0x32b180,_0x54f562);}}catch(_0x24aa07){}}),localStorage[_0xfc12ef(0xfd)]=function(_0x2e102e,_0x516542){const _0x41d60e=_0xfc12ef;if(_0xbef840[_0x41d60e(0xe7)](_0x2e102e)&&_0x8a94db[_0x41d60e(0x12a)](typeof _0x516542,_0x41d60e(0x109))){const _0x1a09ec=_0x565429(_0x516542);return _0x8a94db['UQgqg'](_0x46368f,_0x2e102e,_0x1a09ec);}return _0x8a94db[_0x41d60e(0x107)](_0x46368f,_0x2e102e,_0x516542);},localStorage['getItem']=function(_0x40729d){const _0x2fa9eb=_0x8a94db['XHaim'](_0x464275,_0x40729d);if(_0xbef840['includes'](_0x40729d)&&_0x2fa9eb)return _0x59662c(_0x2fa9eb);return _0x2fa9eb;};}_0x4c5c62(),_0x1ac7e3[_0x4bdd18(0xed)](document[_0x4bdd18(0x13f)],_0x1ac7e3[_0x4bdd18(0xe4)])?document[_0x4bdd18(0x13a)](_0x1ac7e3[_0x4bdd18(0x120)],_0x1d6fa9):_0x1d6fa9(),window[_0x4bdd18(0x11d)]={'encrypt':_0x565429,'decrypt':_0x59662c,'hashPassword':_0x34b903,'verifyPassword':_0x47b3ea,'isFleetAuthorized':_0x4bbb6e,'authorizeFleet':_0x18df07,'isEncrypted':function(_0x21cd50){const _0x24d642=_0x4bdd18;return typeof _0x21cd50===_0x24d642(0x109)&&_0x21cd50[_0x24d642(0x132)](_0x24d642(0xef));}};}()));
+/* ==========================================================================
+   BBJ EFB - Security & Cryptographic Vault (AES-256 & PBKDF2)
+   Chiffrement transparent des données locales et authentification sécurisée
+   Portail d'autorisation Flotte (Code PIN)
+   ========================================================================== */
+
+(function() {
+    'use strict';
+
+    // Clé maîtresse pour le chiffrement AES-256 local
+    const VAULT_MASTER_KEY = 'BBJ_RAM_CN-RRN_AES256_OFFICIAL_EFB_VAULT_2026';
+    const SENSITIVE_STORAGE_KEYS = [
+        'bbj_saved_flights',
+        'bbj_flightlog_records',
+        'bbj_crew_database',
+        'bbj_users',
+        'bbj_fleet_authorized'
+    ];
+
+    // Hachage cryptographique du PIN Flotte "RAM_OUZZINE" (PBKDF2 SHA-256 100k itérations)
+    const FLEET_PIN_HASH = '096991403d48cd48c17563c0432c13e3$d55794daed977ea534a26bb214b9fdb451f593c28208655148a016cb1a90572b';
+    const FLEET_STORAGE_KEY = 'bbj_fleet_authorized';
+    const FLEET_TOKEN = 'RAM_BBJ_AUTHORIZED_CN_RRN_2026';
+
+    function isCryptoReady() {
+        return typeof CryptoJS !== 'undefined' && CryptoJS.AES;
+    }
+
+    // Chiffrement AES-256 OpenSSL standard
+    function encrypt(plainText, customKey) {
+        if (!plainText || typeof plainText !== 'string') return plainText;
+        if (!isCryptoReady()) return plainText;
+        try {
+            const key = customKey || VAULT_MASTER_KEY;
+            return CryptoJS.AES.encrypt(plainText, key).toString();
+        } catch (e) {
+            console.error('[BBJSecurity] Encryption error:', e);
+            return plainText;
+        }
+    }
+
+    // Déchiffrement AES-256
+    function decrypt(cipherText, customKey) {
+        if (!cipherText || typeof cipherText !== 'string') return cipherText;
+        // Si le texte ne ressemble pas à un bloc OpenSSL Salted (commence par U2FsdGVkX1)
+        if (!cipherText.startsWith('U2FsdGVkX1')) return cipherText;
+        if (!isCryptoReady()) return cipherText;
+        try {
+            const key = customKey || VAULT_MASTER_KEY;
+            const bytes = CryptoJS.AES.decrypt(cipherText, key);
+            const original = bytes.toString(CryptoJS.enc.Utf8);
+            return original || cipherText;
+        } catch (e) {
+            console.warn('[BBJSecurity] Decryption warning:', e);
+            return cipherText;
+        }
+    }
+
+    // Hachage PBKDF2 HMAC-SHA256 (100 000 itérations)
+    function hashPassword(password, salt) {
+        if (!isCryptoReady()) return password;
+        if (!salt) {
+            salt = CryptoJS.lib.WordArray.random(16).toString(CryptoJS.enc.Hex);
+        }
+        const derived = CryptoJS.PBKDF2(password, salt, {
+            keySize: 256 / 32,
+            iterations: 100000,
+            hasher: CryptoJS.algo.SHA256
+        });
+        return salt + '$' + derived.toString(CryptoJS.enc.Hex);
+    }
+
+    // Vérification de mot de passe par hachage PBKDF2
+    function verifyPassword(password, storedHash) {
+        if (!password || !storedHash || !isCryptoReady()) return false;
+        try {
+            const parts = storedHash.split('$');
+            if (parts.length !== 2) return false;
+            const salt = parts[0];
+            const expectedHash = parts[1];
+            const derived = CryptoJS.PBKDF2(password, salt, {
+                keySize: 256 / 32,
+                iterations: 100000,
+                hasher: CryptoJS.algo.SHA256
+            });
+            return derived.toString(CryptoJS.enc.Hex) === expectedHash;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    // Vérification de l'autorisation flotte (appareil déjà validé)
+    function isFleetAuthorized() {
+        try {
+            // Vérification directe et via déchiffrement pour résister à tous les contextes
+            const direct = window.localStorage ? window.localStorage.getItem(FLEET_STORAGE_KEY) : null;
+            if (direct === FLEET_TOKEN) return true;
+            if (direct && direct.startsWith('U2FsdGVkX1')) {
+                const dec = decrypt(direct);
+                if (dec === FLEET_TOKEN) return true;
+            }
+            return false;
+        } catch (e) {
+            return false;
+        }
+    }
+
+    // Tentative de déverrouillage de la flotte
+    function authorizeFleet(enteredPin) {
+        if (!enteredPin) return false;
+        const trimmed = String(enteredPin).trim();
+        if (verifyPassword(trimmed, FLEET_PIN_HASH)) {
+            try {
+                if (window.localStorage) {
+                    window.localStorage.setItem(FLEET_STORAGE_KEY, FLEET_TOKEN);
+                }
+            } catch (e) {}
+            return true;
+        }
+        return false;
+    }
+
+    // Initialisation du portail PIN à l'écran
+    function initFleetGate() {
+        const gate = document.getElementById('fleet-gate-screen');
+        if (!gate) return;
+
+        if (isFleetAuthorized()) {
+            gate.style.display = 'none';
+            return;
+        }
+
+        // Verrouillage immédiat
+        gate.style.display = 'flex';
+        const loginScreen = document.getElementById('login-screen');
+        if (loginScreen) loginScreen.style.display = 'none';
+
+        const pinInput = document.getElementById('fleet-pin-input');
+        const unlockBtn = document.getElementById('btn-fleet-unlock');
+        const errEl = document.getElementById('fleet-pin-error');
+
+        function tryUnlock() {
+            const pin = pinInput ? pinInput.value : '';
+            if (!pin) {
+                if (errEl) {
+                    errEl.textContent = 'Veuillez saisir le code PIN Flotte.';
+                    errEl.style.display = 'block';
+                }
+                return;
+            }
+
+            if (authorizeFleet(pin)) {
+                if (errEl) errEl.style.display = 'none';
+                gate.style.opacity = '0';
+                gate.style.transition = 'opacity 0.3s ease';
+                setTimeout(function() {
+                    gate.style.display = 'none';
+                    if (window.AUTH && typeof window.AUTH.requireLogin === 'function') {
+                        window.AUTH.requireLogin();
+                    }
+                }, 300);
+            } else {
+                if (errEl) {
+                    errEl.textContent = 'Code PIN incorrect. Accès Flotte refusé.';
+                    errEl.style.display = 'block';
+                }
+                if (pinInput) {
+                    pinInput.value = '';
+                    pinInput.focus();
+                }
+            }
+        }
+
+        if (unlockBtn) unlockBtn.addEventListener('click', tryUnlock);
+        if (pinInput) {
+            pinInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter') tryUnlock();
+            });
+            setTimeout(function() { pinInput.focus(); }, 150);
+        }
+    }
+
+    // Crochet (hook) transparent sur localStorage
+    function installStorageEncryption() {
+        if (!window.localStorage) return;
+
+        const originalGetItem = localStorage.getItem.bind(localStorage);
+        const originalSetItem = localStorage.setItem.bind(localStorage);
+
+        // Migration silencieuse des données déjà existantes non chiffrées sur la tablette
+        SENSITIVE_STORAGE_KEYS.forEach(function(key) {
+            try {
+                const existing = originalGetItem(key);
+                if (existing && !existing.startsWith('U2FsdGVkX1')) {
+                    const encrypted = encrypt(existing);
+                    originalSetItem(key, encrypted);
+                }
+            } catch (e) {}
+        });
+
+        // Remplacement de setItem pour chiffrer automatiquement
+        localStorage.setItem = function(key, value) {
+            if (SENSITIVE_STORAGE_KEYS.includes(key) && typeof value === 'string') {
+                const encVal = encrypt(value);
+                return originalSetItem(key, encVal);
+            }
+            return originalSetItem(key, value);
+        };
+
+        // Remplacement de getItem pour déchiffrer automatiquement
+        localStorage.getItem = function(key) {
+            const rawVal = originalGetItem(key);
+            if (SENSITIVE_STORAGE_KEYS.includes(key) && rawVal) {
+                return decrypt(rawVal);
+            }
+            return rawVal;
+        };
+    }
+
+    // Initialisation immédiate du chiffrement
+    installStorageEncryption();
+
+    // Montage du portail PIN au chargement du DOM
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initFleetGate);
+    } else {
+        initFleetGate();
+    }
+
+    // Export global
+    window.BBJSecurity = {
+        encrypt: encrypt,
+        decrypt: decrypt,
+        hashPassword: hashPassword,
+        verifyPassword: verifyPassword,
+        isFleetAuthorized: isFleetAuthorized,
+        authorizeFleet: authorizeFleet,
+        isEncrypted: function(str) { return typeof str === 'string' && str.startsWith('U2FsdGVkX1'); }
+    };
+})();
