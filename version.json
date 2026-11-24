@@ -1,6 +1,6 @@
 {
   "version": "5.0",
-  "build": 2026111301,
-  "releaseDate": "13/11/2026",
-  "notes": "Version 5.0 : Ajout du compte utilisateur BOUSBINA GHALI (44499)."
+  "build": 2026112306,
+  "releaseDate": "23/11/2026",
+  "notes": "Version 5.0 : Importation directe automatique 100% sans copier-coller sur PC (WebView2 native et synchronisation directe)."
 }

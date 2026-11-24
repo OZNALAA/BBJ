@@ -1,0 +1,561 @@
+/* ==========================================================================
+   MYROSTER - Styling & Flight Strip Design (Cockpit Day & Night Mode)
+   ========================================================================== */
+
+.roster-container {
+    padding: 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.roster-header-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border, #CBD5E1);
+}
+
+.roster-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.roster-title-wrap h2 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary, #0F172A);
+    margin: 0;
+}
+
+.roster-subtitle {
+    font-size: 12px;
+    color: var(--text-muted, #64748B);
+}
+
+.roster-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* KPI Summary Dashboard */
+.roster-kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
+}
+
+.roster-kpi-card {
+    background: var(--bg-card, #FFFFFF);
+    border: 1px solid var(--border, #CBD5E1);
+    border-radius: 8px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+}
+
+body.cockpit-night-mode .roster-kpi-card {
+    background: #182230;
+    border-color: #283444;
+}
+
+.roster-kpi-icon {
+    font-size: 24px;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(165, 16, 37, 0.08);
+    border-radius: 8px;
+    color: var(--accent, #A51025);
+}
+
+body.cockpit-night-mode .roster-kpi-icon {
+    background: rgba(56, 189, 248, 0.12);
+    color: var(--efb-cyan, #38BDF8);
+}
+
+.roster-kpi-content {
+    flex: 1;
+}
+
+.roster-kpi-val {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    font-weight: 800;
+    color: var(--text-primary, #0F172A);
+    line-height: 1.2;
+}
+
+body.cockpit-night-mode .roster-kpi-val {
+    color: #F8FAFC;
+}
+
+.roster-kpi-lbl {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted, #64748B);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Filter Bar */
+.roster-filter-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    align-items: center;
+    background: var(--bg-card, #FFFFFF);
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border, #CBD5E1);
+}
+
+body.cockpit-night-mode .roster-filter-bar {
+    background: #182230;
+    border-color: #283444;
+}
+
+.roster-filter-bar select,
+.roster-filter-bar input {
+    height: 34px;
+    font-size: 12.5px;
+}
+
+/* Flight Strip Card (Fiche de Strip de Vol) */
+.roster-strips-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.flight-strip-card {
+    background: var(--bg-card, #FFFFFF);
+    border: 1px solid var(--border, #CBD5E1);
+    border-left: 6px solid var(--accent, #A51025);
+    border-radius: 8px;
+    padding: 14px 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+body.cockpit-night-mode .flight-strip-card {
+    background: #151D28;
+    border-color: #243041;
+    border-left-color: var(--efb-cyan, #38BDF8);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+}
+
+.flight-strip-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.flight-strip-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+    border-bottom: 1px dashed var(--border, #E2E8F0);
+    padding-bottom: 8px;
+}
+
+body.cockpit-night-mode .flight-strip-header {
+    border-bottom-color: #283444;
+}
+
+.strip-flight-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 17px;
+    font-weight: 800;
+    color: var(--accent, #A51025);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+body.cockpit-night-mode .strip-flight-badge {
+    color: var(--efb-cyan, #38BDF8);
+}
+
+.strip-date-badge {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-primary);
+    background: rgba(0,0,0,0.05);
+    padding: 3px 8px;
+    border-radius: 4px;
+}
+
+body.cockpit-night-mode .strip-date-badge {
+    background: #1F2C3F;
+    color: #F1F5F9;
+}
+
+.strip-route-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 12px;
+}
+
+.strip-airport-box {
+    display: flex;
+    flex-direction: column;
+}
+
+.strip-airport-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+body.cockpit-night-mode .strip-airport-code {
+    color: #FFFFFF;
+}
+
+.strip-airport-name {
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.strip-arrow-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    min-width: 100px;
+}
+
+.strip-arrow-symbol {
+    font-size: 18px;
+    color: var(--accent, #A51025);
+}
+
+body.cockpit-night-mode .strip-arrow-symbol {
+    color: var(--efb-cyan, #38BDF8);
+}
+
+.strip-time-box {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Badges / Chips on Strip */
+.strip-chips-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.strip-chip {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.strip-chip-forfait {
+    background: rgba(16, 185, 129, 0.12);
+    color: #059669;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+body.cockpit-night-mode .strip-chip-forfait {
+    background: rgba(52, 211, 153, 0.15);
+    color: #34D399;
+    border-color: rgba(52, 211, 153, 0.3);
+}
+
+.strip-chip-night {
+    background: rgba(99, 102, 241, 0.12);
+    color: #4F46E5;
+    border: 1px solid rgba(99, 102, 241, 0.25);
+}
+
+body.cockpit-night-mode .strip-chip-night {
+    background: rgba(129, 140, 248, 0.15);
+    color: #A5B4FC;
+    border-color: rgba(129, 140, 248, 0.3);
+}
+
+.strip-chip-frais {
+    background: rgba(245, 158, 11, 0.12);
+    color: #D97706;
+    border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+body.cockpit-night-mode .strip-chip-frais {
+    background: rgba(251, 191, 36, 0.15);
+    color: #FBBF24;
+    border-color: rgba(251, 191, 36, 0.3);
+}
+
+.strip-chip-ac {
+    background: rgba(100, 116, 139, 0.1);
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+}
+
+/* Crew on Strip */
+.strip-crew-row {
+    font-size: 11.5px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    background: rgba(0,0,0,0.02);
+    padding: 6px 10px;
+    border-radius: 4px;
+}
+
+body.cockpit-night-mode .strip-crew-row {
+    background: #1A2433;
+}
+
+.strip-crew-member {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.strip-rank-tag {
+    font-size: 10px;
+    font-weight: 800;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.strip-rank-cdb {
+    background: #DC2626;
+    color: #FFF;
+}
+
+.strip-rank-opl {
+    background: #2563EB;
+    color: #FFF;
+}
+
+/* Strip Actions Toolbar */
+.strip-footer-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    border-top: 1px solid var(--border, #E2E8F0);
+    padding-top: 10px;
+}
+
+body.cockpit-night-mode .strip-footer-actions {
+    border-top-color: #243041;
+}
+
+.strip-btn-group {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+/* Solar Twilight / Iftar Calculator Modal Styling */
+.sun-calc-result-box {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(239, 68, 68, 0.08));
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 14px;
+    text-align: center;
+}
+
+body.cockpit-night-mode .sun-calc-result-box {
+    background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(16, 185, 129, 0.08));
+    border-color: rgba(245, 158, 11, 0.4);
+}
+
+.sun-calc-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 28px;
+    font-weight: 800;
+    color: #D97706;
+    margin: 6px 0;
+}
+
+body.cockpit-night-mode .sun-calc-time {
+    color: #FBBF24;
+}
+
+.sun-calc-note {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+/* Empty State */
+.roster-empty-state {
+    text-align: center;
+    padding: 48px 16px;
+    background: var(--bg-card);
+    border: 1px dashed var(--border);
+    border-radius: 8px;
+    color: var(--text-muted);
+}
+
+/* CrewAccess Modal Banner & Step Guides */
+.ca-modal-card {
+    background: linear-gradient(135deg, rgba(165, 16, 37, 0.05), rgba(37, 99, 235, 0.05));
+    border: 1px solid rgba(165, 16, 37, 0.2);
+    border-radius: 10px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+
+body.cockpit-night-mode .ca-modal-card {
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.08), rgba(99, 102, 241, 0.08));
+    border-color: rgba(56, 189, 248, 0.3);
+}
+
+.ca-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+}
+
+.ca-brand-wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ca-icon-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
+    background: rgba(165, 16, 37, 0.1);
+    color: var(--accent, #A51025);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+body.cockpit-night-mode .ca-icon-circle {
+    background: rgba(56, 189, 248, 0.15);
+    color: var(--efb-cyan, #38BDF8);
+}
+
+.ca-title-text {
+    font-size: 14.5px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.ca-url-text {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted);
+}
+
+.ca-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 20px;
+    background: rgba(100, 116, 139, 0.12);
+    color: var(--text-secondary);
+}
+
+.ca-status-badge.active {
+    background: rgba(16, 185, 129, 0.15);
+    color: #059669;
+}
+
+body.cockpit-night-mode .ca-status-badge.active {
+    background: rgba(52, 211, 153, 0.2);
+    color: #34D399;
+}
+
+.ca-guide-steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 10px;
+    margin: 14px 0 8px;
+}
+
+.ca-step-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px;
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--text-secondary);
+}
+
+body.cockpit-night-mode .ca-step-item {
+    background: #182230;
+    border-color: #283444;
+}
+
+.ca-step-num {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    text-align: center;
+    border-radius: 50%;
+    background: var(--accent, #A51025);
+    color: #fff;
+    font-weight: 800;
+    font-size: 11px;
+    margin-right: 6px;
+}
+
+body.cockpit-night-mode .ca-step-num {
+    background: var(--efb-cyan, #38BDF8);
+    color: #0F172A;
+}
+
+.ca-actions-bar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-top: 12px;
+}

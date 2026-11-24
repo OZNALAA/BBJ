@@ -6,6 +6,7 @@
     <title>BBJ APP - Load & Balance</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/efb_wizard.css">
+    <link rel="stylesheet" href="css/myroster.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#dc2626">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -121,6 +122,10 @@
             <li class="nav-item" data-panel="flightlog">
                 <span class="nav-icon">📋</span>
                 <span class="nav-label">Flight Log</span>
+            </li>
+            <li class="nav-item" data-panel="myroster" id="nav-item-myroster" style="display:none;">
+                <span class="nav-icon">📅</span>
+                <span class="nav-label">MyRoster</span>
             </li>
             <li class="nav-item" data-panel="crewcontact">
                 <span class="nav-icon">👥</span>
@@ -1133,6 +1138,104 @@
                 </div>
             </div>
         </div>
+
+        <!-- MyRoster Panel -->
+        <div class="panel" id="panel-myroster">
+            <div class="roster-container">
+                <div class="roster-header-bar">
+                    <div class="roster-title-wrap">
+                        <span style="font-size:26px;">📅</span>
+                        <div>
+                            <h2>MyRoster • Strips &amp; Planning RAM</h2>
+                            <div class="roster-subtitle">Gestionnaire de strips de vol, forfaits officiels RAM, calcul d'Iftar &amp; export calendrier</div>
+                        </div>
+                    </div>
+                    <div class="roster-actions">
+                        <button type="button" class="btn btn-accent" id="btn-roster-import">📥 Importer Roster (PDF / Web)</button>
+                        <button type="button" class="btn" id="btn-roster-add">➕ Nouveau Strip</button>
+                        <button type="button" class="btn" id="btn-roster-export-all">📅 Exporter Tous (.ics)</button>
+                        <button type="button" class="btn" id="btn-roster-forfaits">⏱️ Forfaits RAM</button>
+                        <button type="button" class="btn" id="btn-roster-sun">🌙 Iftar en vol</button>
+                    </div>
+                </div>
+
+                <!-- KPI Summary Dashboard -->
+                <div class="roster-kpi-grid">
+                    <div class="roster-kpi-card">
+                        <div class="roster-kpi-icon">✈️</div>
+                        <div class="roster-kpi-content">
+                            <div class="roster-kpi-val" id="kpi-roster-vols">0</div>
+                            <div class="roster-kpi-lbl">Vols Roster</div>
+                        </div>
+                    </div>
+                    <div class="roster-kpi-card">
+                        <div class="roster-kpi-icon">⏱️</div>
+                        <div class="roster-kpi-content">
+                            <div class="roster-kpi-val" id="kpi-roster-forfait">00:00</div>
+                            <div class="roster-kpi-lbl">Total Forfaits</div>
+                        </div>
+                    </div>
+                    <div class="roster-kpi-card">
+                        <div class="roster-kpi-icon">🌙</div>
+                        <div class="roster-kpi-content">
+                            <div class="roster-kpi-val" id="kpi-roster-nuit">00:00</div>
+                            <div class="roster-kpi-lbl">Heures de Nuit</div>
+                        </div>
+                    </div>
+                    <div class="roster-kpi-card">
+                        <div class="roster-kpi-icon">🍽️</div>
+                        <div class="roster-kpi-content">
+                            <div class="roster-kpi-val" id="kpi-roster-repas">0 MAD</div>
+                            <div class="roster-kpi-lbl">Per Diem / Repas</div>
+                        </div>
+                    </div>
+                    <div class="roster-kpi-card">
+                        <div class="roster-kpi-icon">🏨</div>
+                        <div class="roster-kpi-content">
+                            <div class="roster-kpi-val" id="kpi-roster-decoucher">0</div>
+                            <div class="roster-kpi-lbl">Découchers</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters & Search Toolbar -->
+                <div class="roster-filter-bar">
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <label style="font-size:12px; font-weight:700; color:var(--text-muted);">Mois:</label>
+                        <select id="roster-filter-month" class="input-field">
+                            <option value="all">Tous les mois</option>
+                            <option value="2026-11">Novembre 2026</option>
+                            <option value="2026-12">Décembre 2026</option>
+                            <option value="2027-01">Janvier 2027</option>
+                            <option value="2027-02">Février 2027</option>
+                            <option value="2027-03">Mars 2027</option>
+                        </select>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:6px;">
+                        <label style="font-size:12px; font-weight:700; color:var(--text-muted);">Statut:</label>
+                        <select id="roster-filter-status" class="input-field">
+                            <option value="all">Tous les vols</option>
+                            <option value="upcoming" selected>Vols à venir</option>
+                            <option value="past">Vols passés</option>
+                        </select>
+                    </div>
+                    <div style="flex:1; min-width:200px;">
+                        <input type="search" id="roster-search" class="input-field" placeholder="🔍 Rechercher (n° vol, aéroport, CDB, OPL)...">
+                    </div>
+                </div>
+
+                <!-- Flight Strips List -->
+                <div class="roster-strips-list" id="roster-strips-list"></div>
+
+                <!-- Empty State -->
+                <div class="roster-empty-state" id="roster-empty-state" style="display:none;">
+                    <div style="font-size:40px; margin-bottom:10px;">📋</div>
+                    <div style="font-size:16px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">Aucun strip de vol trouvé</div>
+                    <div style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Ajoutez manuellement un strip ou importez votre planning CrewAccess RAM.</div>
+                    <button type="button" class="btn btn-accent" onclick="document.getElementById('btn-roster-add').click()">➕ Créer un Strip</button>
+                </div>
+            </div>
+        </div>
     </main>
 
     <!-- Zone d'impression (remplie dynamiquement par printPanel) -->
@@ -1203,6 +1306,215 @@
         </div>
     </div>
 
+    <!-- Modals MyRoster -->
+    <!-- Modal Saisie / Édition d'un Strip -->
+    <div class="modal" id="modal-roster-flight">
+        <div class="modal-box" style="max-width:560px; width:95vw; border-radius:12px; padding:22px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom:1px solid var(--border); padding-bottom:10px;">
+                <h3 style="font-size:17px; font-weight:800; margin:0;" id="mrf-title">✈️ Strip de Vol</h3>
+                <span class="modal-close" style="font-size:24px; cursor:pointer; line-height:1;">&times;</span>
+            </div>
+            <div class="form-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">N° Vol</label>
+                    <input type="text" id="mrf-flightnum" class="input-field" placeholder="ex: MRS001, AT700" style="text-transform:uppercase; font-weight:700;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Date (UTC)</label>
+                    <input type="date" id="mrf-date" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Origine (OACI / IATA)</label>
+                    <input type="text" id="mrf-origin" class="input-field" placeholder="ex: GMMN, CMN" style="text-transform:uppercase; font-weight:700;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Destination (OACI / IATA)</label>
+                    <input type="text" id="mrf-dest" class="input-field" placeholder="ex: LFPO, ORY" style="text-transform:uppercase; font-weight:700;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">STD (Départ UTC)</label>
+                    <input type="time" id="mrf-std" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">STA (Arrivée UTC)</label>
+                    <input type="time" id="mrf-sta" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Forfait RAM Officiel</label>
+                    <input type="text" id="mrf-forfait" class="input-field" placeholder="Auto ou ex: 03h10" style="font-weight:700; color:var(--accent);">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Table Forfait</label>
+                    <input type="text" id="mrf-table" class="input-field" placeholder="ex: TABLE 3" readonly style="background:var(--bg-card); opacity:0.8;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Heures de Nuit</label>
+                    <input type="time" id="mrf-nighthours" class="input-field" value="00:00">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Immatriculation Avion</label>
+                    <input type="text" id="mrf-acreg" class="input-field" value="CN-RRN" style="text-transform:uppercase; font-weight:700;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Commandant de Bord (CDB)</label>
+                    <input type="text" id="mrf-cdb" class="input-field" placeholder="Nom CDB">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Copilote (OPL)</label>
+                    <input type="text" id="mrf-opl" class="input-field" placeholder="Nom OPL">
+                </div>
+            </div>
+            <div class="form-group" style="margin-top:12px;">
+                <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Remarques &amp; Notes d'escale</label>
+                <input type="text" id="mrf-notes" class="input-field" placeholder="Infos hôtel, assistance escale, briefing...">
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+                <button type="button" class="btn modal-cancel">Annuler</button>
+                <button type="button" class="btn btn-accent" id="btn-mrf-save">💾 Enregistrer le Strip</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Importation Roster (Style CrewLounge CONNECT) -->
+    <div class="modal" id="modal-roster-import">
+        <div class="modal-box" style="max-width:620px; width:95vw; border-radius:16px; padding:24px; box-shadow:0 20px 50px rgba(0,0,0,0.25);">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom:1px solid var(--border); padding-bottom:12px;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg, #10B981, #059669); color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px;">
+                        📥
+                    </div>
+                    <div>
+                        <h3 style="font-size:17px; font-weight:800; margin:0; color:var(--text-primary);">Importation Planning Roster</h3>
+                        <div style="font-size:11.5px; color:var(--text-muted);">Format officiel Royal Air Maroc / Jeppesen CrewAccess</div>
+                    </div>
+                </div>
+                <span class="modal-close" style="font-size:24px; cursor:pointer; line-height:1; color:var(--text-muted);">&times;</span>
+            </div>
+
+            <!-- Onglets de sélection de méthode (Style CrewLounge CONNECT) -->
+            <div style="display:flex; background:rgba(0,0,0,0.04); border-radius:10px; padding:4px; margin-bottom:18px; gap:4px;">
+                <button type="button" class="btn btn-sm mri-tab-btn active" id="tab-btn-pdf" style="flex:1; font-weight:700; border-radius:8px; border:none; padding:8px 12px; background:#fff; color:#065F46; box-shadow:0 2px 6px rgba(0,0,0,0.08);">
+                    📄 Fichier Roster (PDF)
+                </button>
+                <button type="button" class="btn btn-sm mri-tab-btn" id="tab-btn-web" style="flex:1; font-weight:700; border-radius:8px; border:none; padding:8px 12px; background:transparent; color:var(--text-muted);">
+                    🌐 Portail CrewAccess RAM
+                </button>
+            </div>
+
+            <!-- CONTENU ONGLET 1 : FICHIER PDF (MÉTHODE OFFICIELLE RAPIDE) -->
+            <div id="mri-panel-pdf" style="display:block;">
+                <div id="mri-pdf-dropzone" style="background:linear-gradient(135deg, rgba(16,185,129,0.06), rgba(6,182,212,0.06)); border:2px dashed #10B981; border-radius:14px; padding:28px 20px; text-align:center; cursor:pointer; transition:all 0.2s ease;">
+                    <input type="file" id="mri-pdf-file-input" accept=".pdf,application/pdf" style="display:none;">
+                    <div style="width:56px; height:56px; border-radius:50%; background:rgba(16,185,129,0.18); color:#059669; display:flex; align-items:center; justify-content:center; font-size:26px; margin:0 auto 12px auto;">
+                        📄
+                    </div>
+                    <div style="font-size:16px; font-weight:800; color:#065F46; margin-bottom:6px;">
+                        Glissez votre Roster PDF ici
+                    </div>
+                    <div style="font-size:12.5px; color:var(--text-muted); max-width:440px; margin:0 auto 16px auto; line-height:1.45;">
+                        Prend en charge tous les fichiers PDF officiels RAM :<br>
+                        <code>Others Roster (FD).pdf</code>, <code>Published Roster</code> ou <code>Historical Roster</code>.
+                    </div>
+                    <button type="button" class="btn" id="btn-mri-select-pdf" style="background:#10B981; color:#fff; font-weight:800; padding:10px 24px; border-radius:8px; border:none; box-shadow:0 4px 14px rgba(16,185,129,0.35); cursor:pointer;">
+                        📂 Parcourir mes fichiers...
+                    </button>
+                    <div id="mri-pdf-status" style="display:none; font-size:13px; font-weight:700; margin-top:14px;"></div>
+                </div>
+
+                <div style="margin-top:14px; padding:10px 14px; background:rgba(59,130,246,0.06); border-radius:8px; display:flex; align-items:center; gap:10px; font-size:12px; color:#1E40AF;">
+                    <span>💡</span>
+                    <span><strong>Avantage :</strong> 100% des vols AT réels sont extraits avec dates, aéroports ICAO (GMMN, LFPO...), STD/STA et durée.</span>
+                </div>
+            </div>
+
+            <!-- CONTENU ONGLET 2 : PORTAIL WEB CREWACCESS -->
+            <div id="mri-panel-web" style="display:none;">
+                <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:18px; margin-bottom:14px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
+                        <div style="font-size:13.5px; font-weight:700; color:var(--text-primary);">
+                            Connexion à CrewAccess RAM
+                        </div>
+                        <a href="https://crewaccess.ram.jepphost.com/access-ui/" target="_blank" rel="noopener" class="btn btn-sm btn-outline" style="text-decoration:none;">
+                            ↗️ Ouvrir dans un onglet
+                        </a>
+                    </div>
+                    <p style="font-size:12px; color:var(--text-muted); line-height:1.45; margin:0 0 14px 0;">
+                        Ouvrez le portail CrewAccess RAM, affichez votre planning du mois, puis cliquez sur le bouton ci-dessous pour importer directement.
+                    </p>
+                    <button type="button" class="btn btn-accent" id="btn-mri-web-import" style="width:100%; padding:12px; font-weight:800; font-size:14px; border-radius:8px;">
+                        ⚡ Importer depuis le presse-papiers ou CrewAccess
+                    </button>
+                </div>
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:18px; border-top:1px solid var(--border); padding-top:12px;">
+                <button type="button" class="btn modal-cancel">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Calculateur Coucher de Soleil & Iftar en vol -->
+    <div class="modal" id="modal-roster-sun">
+        <div class="modal-box" style="max-width:480px; width:95vw; border-radius:12px; padding:22px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--border); padding-bottom:10px;">
+                <h3 style="font-size:17px; font-weight:800; margin:0;">🌙 Calcul Iftar &amp; Soleil en vol</h3>
+                <span class="modal-close" style="font-size:24px; cursor:pointer; line-height:1;">&times;</span>
+            </div>
+            <p style="font-size:12px; color:var(--text-muted); line-height:1.45; margin-bottom:14px;">
+                Calcule l'heure exacte du coucher du soleil et de rupture du jeûne (Iftar) en tenant compte de la <strong>dépression de l'horizon due à l'altitude de croisière</strong> (Algorithme astronomique NOAA + correction altimétrique).
+            </p>
+            <div class="form-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Date</label>
+                    <input type="date" id="mrs-date" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Aéroport / Repère</label>
+                    <input type="text" id="mrs-airport" class="input-field" placeholder="ex: GMMN, LFPO" style="text-transform:uppercase; font-weight:700;">
+                </div>
+            </div>
+            <div class="form-group" style="margin-top:10px;">
+                <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Altitude de vol (ft)</label>
+                <input type="number" id="mrs-alt" class="input-field" value="37000" step="1000" min="0" max="45000">
+            </div>
+            <button type="button" class="btn btn-accent" id="btn-mrs-calculate" style="width:100%; margin-top:14px;">🌙 Calculer l'heure de rupture du jeûne</button>
+            <div id="mrs-result-box" class="sun-calc-result-box" style="margin-top:14px; min-height:60px;">
+                <div style="font-size:12.5px; color:var(--text-muted);">Cliquez sur Calculer pour afficher l'heure UTC en vol.</div>
+            </div>
+            <div style="display:flex; justify-content:flex-end; margin-top:16px;">
+                <button type="button" class="btn modal-cancel">Fermer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Forfaits & Frais d'escale RAM -->
+    <div class="modal" id="modal-roster-forfaits">
+        <div class="modal-box" style="max-width:500px; width:95vw; border-radius:12px; padding:22px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--border); padding-bottom:10px;">
+                <h3 style="font-size:17px; font-weight:800; margin:0;">⏱️ Consultation Forfaits &amp; Frais RAM</h3>
+                <span class="modal-close" style="font-size:24px; cursor:pointer; line-height:1;">&times;</span>
+            </div>
+            <p style="font-size:12px; color:var(--text-muted); line-height:1.45; margin-bottom:14px;">
+                Base officielle RAM intégrée : <strong>19 480 forfaits de ligne</strong> et <strong>309 escales internationales</strong> (Per diem, repas et découchers).
+            </p>
+            <div class="form-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Départ (OACI/IATA)</label>
+                    <input type="text" id="mfd-orig" class="input-field" placeholder="ex: CMN ou GMMN" value="GMMN" style="text-transform:uppercase; font-weight:700;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Arrivée (OACI/IATA)</label>
+                    <input type="text" id="mfd-dest" class="input-field" placeholder="ex: ORY ou LFPO" style="text-transform:uppercase; font-weight:700;">
+                </div>
+            </div>
+            <button type="button" class="btn btn-accent" id="btn-mrf-search-forfait" style="width:100%; margin-top:12px;">🔍 Rechercher Forfait &amp; Frais</button>
+            <div id="mfd-result" style="margin-top:14px; min-height:50px;"></div>
+            <div style="display:flex; justify-content:flex-end; margin-top:16px;">
+                <button type="button" class="btn modal-cancel">Fermer</button>
+            </div>
+        </div>
+    </div>
+
     <script src="js/crypto-js.min.js"></script>
     <script src="js/security.js"></script>
     <script src="js/data.js"></script>
@@ -1221,6 +1533,9 @@
     <script src="js/flights.js"></script>
     <script src="js/xlsx.mini.min.js"></script>
     <script src="js/flightlog.js"></script>
+    <script src="js/myroster_data.js"></script>
+    <script src="js/pdf.min.js"></script>
+    <script src="js/myroster.js"></script>
     <script src="js/updater.js"></script>
     <script src="js/app.js"></script>
     <script>

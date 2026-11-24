@@ -1,32 +1,32 @@
 /* js/wizard.js — Parcours "New W&B Calculation". */
 window.BBJ_WIZARD = (() => {
     let current = 0;
-    let correctedDow = 48950;
-    let correctedDoi = 41.38;
+    let correctedDow = 48704;
+    let correctedDoi = 42.72;
     let perfLimit = 0;
     let envelopeFilter = null;
     let blockFuelState = 0;
-    let taxiFuelState = 200;
-    let azfwState = 49772;
-    let payloadState = 822;
+    let taxiFuelState = 0;
+    let azfwState = 48704;
+    let payloadState = 0;
     let vipVersionState = true;
 
     const wzFlightInfo = {
-        origin: 'GMME',
-        dest: 'GMME',
-        flightNum: '0603',
-        date: '2023-10-19',
-        time: '10:30',
+        origin: '',
+        dest: '',
+        flightNum: '',
+        date: '',
+        time: '',
         preparedBy: '',
         captain: ''
     };
 
     const wzState = {
-        observers: 1, cabincrew: 2, extracc: 2,
-        staff: 8, premium: 0, viplounge: 0, vipoffice: 0,
+        observers: 0, cabincrew: 2, extracc: 0,
+        staff: 0, premium: 0, viplounge: 0, vipoffice: 0,
         perftow: 79015, perfldg: 66360, perfzwf: 62731,
         load: { A: 200, B: 0, C: 300, D: 0, E: 0, F: 0, G: 0 },
-        fwdhold: 150, afthold: 0, tripfuel: 8200,
+        fwdhold: 0, afthold: 0, tripfuel: 0,
         waterQty: 120
     };
 
@@ -63,6 +63,7 @@ window.BBJ_WIZARD = (() => {
         const tx = domGet('wz-taxifuel');
         if (tx) taxiFuelState = parseInt(tx.value, 10) || 0;
         updateTelemetryStrip();
+        updateTripFuelAlert();
     }
 
     function updateTelemetryStrip() {
@@ -71,19 +72,42 @@ window.BBJ_WIZARD = (() => {
         const zfwEl = document.getElementById('wz-strip-zfw');
         const fuelEl = document.getElementById('wz-strip-fuel');
         const towEl = document.getElementById('wz-strip-tow');
+        const tripEl = document.getElementById('wz-strip-trip');
+        const tripAlertEl = document.getElementById('wz-strip-trip-alert');
+
         if (dowEl) dowEl.textContent = (correctedDow != null ? correctedDow : 48704).toLocaleString() + ' kg';
         if (payEl) payEl.textContent = (payloadState != null ? payloadState : 0).toLocaleString() + ' kg';
         if (zfwEl) zfwEl.textContent = (azfwState != null ? azfwState : 48704).toLocaleString() + ' kg';
         if (fuelEl) fuelEl.textContent = (blockFuelState != null ? blockFuelState : 0).toLocaleString() + ' kg';
         const estTow = (azfwState || 0) + (blockFuelState || 0) - (taxiFuelState || 0);
         if (towEl) towEl.textContent = estTow.toLocaleString() + ' kg';
+
+        const tf = wzState.tripfuel || 0;
+        if (tripEl) tripEl.textContent = tf.toLocaleString() + ' kg';
+        if (tripAlertEl) {
+            tripAlertEl.style.display = (tf <= 0) ? 'inline-flex' : 'none';
+        }
+    }
+
+    function updateTripFuelAlert() {
+        const tf = wzState.tripfuel || 0;
+        const isMissing = (tf <= 0);
+        const alertBadge = document.getElementById('wz-tripfuel-alert');
+        const alertBtm = document.getElementById('wz-tripfuel-alert-bottom');
+        const tfInput = document.getElementById('wz-tripfuel');
+        if (alertBadge) alertBadge.style.display = isMissing ? 'inline-flex' : 'none';
+        if (alertBtm) alertBtm.style.display = isMissing ? 'block' : 'none';
+        if (tfInput) tfInput.classList.toggle('wz-field-trip-missing', isMissing);
+
+        const stripAlert = document.getElementById('wz-strip-trip-alert');
+        if (stripAlert) stripAlert.style.display = isMissing ? 'inline-flex' : 'none';
     }
 
     function pickerHTML(id) {
         return '<div class="airport-picker" id="' + id + '">'
             + '<div class="airport-trigger"><span class="airport-trigger-text">—</span><span class="airport-caret">▾</span></div>'
             + '<div class="airport-dropdown">'
-            + '<div class="airport-search-wrap"><input type="text" class="airport-search" placeholder="Rechercher aéroport…"></div>'
+            + '<div class="airport-search-wrap"><input type="text" class="airport-search" placeholder="Recherche OACI, IATA (ex: RBA, CMN), ville…"></div>'
             + '<div class="airport-list"></div>'
             + '</div></div>';
     }
@@ -106,12 +130,12 @@ window.BBJ_WIZARD = (() => {
             + '<div class="form-group"><label>Destination</label>' + pickerHTML('wz-dest-picker') + '</div>'
             + '<div class="form-group"><label>Flight Number</label>'
             + '<div class="flight-field"><span class="flight-prefix">MRS</span>'
-            + '<input type="text" id="wz-flight" value="' + (wzFlightInfo.flightNum !== undefined ? wzFlightInfo.flightNum : '0603') + '" inputmode="numeric" pattern="[0-9]*" class="input-field">'
+            + '<input type="text" id="wz-flight" value="' + (wzFlightInfo.flightNum !== undefined ? wzFlightInfo.flightNum : '') + '" inputmode="numeric" pattern="[0-9]*" class="input-field" placeholder="0000">'
             + '</div></div>'
             + '<div class="form-group"><label>Date</label>'
-            + '<input type="date" id="wz-date" value="' + (wzFlightInfo.date !== undefined ? wzFlightInfo.date : '2023-10-19') + '" class="input-field"></div>'
+            + '<input type="date" id="wz-date" value="' + (wzFlightInfo.date !== undefined ? wzFlightInfo.date : '') + '" class="input-field"></div>'
             + '<div class="form-group"><label>Time (UTC)</label>'
-            + '<input type="time" id="wz-time" value="' + (wzFlightInfo.time !== undefined ? wzFlightInfo.time : '10:30') + '" class="input-field"></div>'
+            + '<input type="time" id="wz-time" value="' + (wzFlightInfo.time !== undefined ? wzFlightInfo.time : '') + '" class="input-field"></div>'
             + '<div class="form-group"><label>Prepared by</label>'
             + '<select id="wz-preparedby" class="input-field"></select></div>'
             + '<div class="form-group"><label>Captain</label>'
@@ -390,9 +414,9 @@ window.BBJ_WIZARD = (() => {
             + '<h2 class="section-title">Cockpit Crew &amp; Flight Deck Configuration</h2>'
             + renderCockpitSVG()
             + '<div class="form-grid">'
-            + selectField('wz-observers', 'Observers (Jumpseats)', 2, wzState.observers !== undefined ? wzState.observers : 1)
+            + selectField('wz-observers', 'Observers (Jumpseats)', 2, wzState.observers !== undefined ? wzState.observers : 0)
             + selectField('wz-cabincrew', 'Base Cabin Crew', 4, wzState.cabincrew !== undefined ? wzState.cabincrew : 2)
-            + selectField('wz-extracc', 'Extra CC in Zone B (Max 4)', 4, wzState.extracc !== undefined ? wzState.extracc : 2)
+            + selectField('wz-extracc', 'Extra CC in Zone B (Max 4)', 4, wzState.extracc !== undefined ? wzState.extracc : 0)
             + '</div>'
             + '<div class="form-grid" style="margin-top:16px;">'
             + '<div class="form-group"><label>Corrected DOW (kg)</label>'
@@ -408,7 +432,7 @@ window.BBJ_WIZARD = (() => {
         if (typeof BBJ_DATA === 'undefined') return;
         const observers = wizardNum('wz-observers');
         const cabincrew = wizardNum('wz-cabincrew');
-        const extracc = wizardNum('wz-extracc');
+        const extracc = wzState.extracc !== undefined ? wzState.extracc : wizardNum('wz-extracc');
         const w = (BBJ_DATA.crew && BBJ_DATA.crew.observer) ? BBJ_DATA.crew.observer.wt : 82;
         let dow = 48704 + observers * w + (cabincrew - 2) * w + extracc * w;
         const ccAdj = (2 - cabincrew) * (2.451 / 2);
@@ -429,6 +453,15 @@ window.BBJ_WIZARD = (() => {
             const deltaWaterIdx = wRow.idx - 6;
             dow += deltaWaterKg;
             doi += deltaWaterIdx;
+        }
+
+        // Surplus Extra CC beyond 16 seats in Zone B moved to Zone C (Option A)
+        const totalB = (wzState.staff || 0) + extracc;
+        const extraInC = Math.max(0, totalB - 16);
+        if (extraInC > 0 && typeof getGalleyIndexInterp === 'function') {
+            const extraCWeight = extraInC * 82;
+            const extraCIdx = getGalleyIndexInterp(extraCWeight, 'C');
+            doi += extraCIdx;
         }
 
         correctedDow = Math.round(dow);
@@ -461,34 +494,66 @@ window.BBJ_WIZARD = (() => {
         }
     }
 
-    function updateStaffOptions(max) {
+    function updateZoneBAndCBadges() {
+        const xcc = wzState.extracc || 0;
+        const stf = wzState.staff || 0;
+        const totalB = stf + xcc;
+        const extraInC = Math.max(0, totalB - 16);
+        const extraInB = xcc - extraInC;
+        const extraCWeight = extraInC * 82;
+
+        const occEl = document.getElementById('wz-zoneb-occ-txt');
+        if (occEl) {
+            if (extraInC > 0) {
+                occEl.innerHTML = '16 / 16 max (Staff: ' + stf + ', Extra CC: ' + extraInB + ') <span style="color:#F59E0B; font-weight:700;">[+' + extraInC + ' Extra CC en Zone C]</span>';
+            } else {
+                occEl.textContent = totalB + ' / 16 max (Staff: ' + stf + ', Extra CC: ' + xcc + ')';
+            }
+        }
+        const staffTag = document.getElementById('cockpit-staff-tag');
+        if (staffTag) {
+            staffTag.textContent = 'Staff: ' + stf + ' / 16 max';
+        }
+        const xccBadge = document.getElementById('wz-zoneb-extracc-badge');
+        if (xccBadge) {
+            if (extraInC > 0) {
+                xccBadge.innerHTML = extraInB + ' <span style="font-size:9px; color:#F59E0B;">(+' + extraInC + ' en C)</span>';
+            } else {
+                xccBadge.textContent = String(xcc);
+            }
+        }
+        const xccTag = document.getElementById('cockpit-extracc-tag');
+        if (xccTag) {
+            xccTag.textContent = 'Extra CC: ' + xcc + (extraInC > 0 ? ' (' + extraInB + ' en B, ' + extraInC + ' en C)' : ' in Zone B');
+        }
+
+        const zcBadge = document.getElementById('wz-zonec-extracc-badge');
+        const boxZoneC = document.getElementById('box-zone-c');
+        if (zcBadge) {
+            if (extraInC > 0) {
+                zcBadge.style.display = 'inline-flex';
+                zcBadge.textContent = '+' + extraInC + ' Extra CC (' + extraCWeight + ' kg)';
+                if (boxZoneC) boxZoneC.classList.add('zone-c-overflow');
+            } else {
+                zcBadge.style.display = 'none';
+                if (boxZoneC) boxZoneC.classList.remove('zone-c-overflow');
+            }
+        }
+    }
+
+    function updateStaffOptions() {
         const staffEl = domGet('wz-staff');
-        const currentVal = Math.min(wzState.staff, max);
+        const currentVal = Math.min(Math.max(0, wzState.staff || 0), 16);
         wzState.staff = currentVal;
         if (staffEl) {
             let opts = '';
-            for (let i = 0; i <= max; i++) {
+            for (let i = 0; i <= 16; i++) {
                 opts += '<option value="' + i + '"' + (i === currentVal ? ' selected' : '') + '>' + i + '</option>';
             }
             staffEl.innerHTML = opts;
             staffEl.value = String(currentVal);
         }
-        const occEl = document.getElementById('wz-zoneb-occ-txt');
-        if (occEl) {
-            occEl.textContent = (wzState.staff + wzState.extracc) + ' / 16 max (Staff: ' + wzState.staff + ', Extra CC: ' + wzState.extracc + ')';
-        }
-        const staffTag = document.getElementById('cockpit-staff-tag');
-        if (staffTag) {
-            staffTag.textContent = 'Staff: ' + wzState.staff + ' / ' + max + ' max';
-        }
-        const xccBadge = document.getElementById('wz-zoneb-extracc-badge');
-        if (xccBadge) {
-            xccBadge.textContent = String(wzState.extracc);
-        }
-        const xccTag = document.getElementById('cockpit-extracc-tag');
-        if (xccTag) {
-            xccTag.textContent = 'Extra CC in Zone B: ' + wzState.extracc;
-        }
+        updateZoneBAndCBadges();
         updateCabinLopaSeats();
     }
 
@@ -518,9 +583,7 @@ window.BBJ_WIZARD = (() => {
             xccEl.addEventListener('change', function() {
                 const xcc = parseInt(this.value, 10) || 0;
                 wzState.extracc = xcc;
-                const maxStaff = Math.max(0, 16 - xcc);
-                if (wzState.staff > maxStaff) wzState.staff = maxStaff;
-                updateStaffOptions(maxStaff);
+                updateStaffOptions();
                 updateCorrected();
                 updatePayload();
             });
@@ -573,7 +636,8 @@ window.BBJ_WIZARD = (() => {
             + '<text x="310" y="159" fill="#94A3B8" font-family="JetBrains Mono" font-size="8" text-anchor="middle">LAV</text>'
             + '<rect x="334" y="142" width="24" height="28" rx="3" fill="#1E293B" stroke="#475569"/>'
             + '<text x="346" y="159" fill="#94A3B8" font-family="JetBrains Mono" font-size="8" text-anchor="middle">G6</text>'
-            + '<text x="329" y="113" fill="#64748B" font-family="Chakra Petch" font-size="9" text-anchor="middle">GALLEY</text>'
+            + '<text x="329" y="90" fill="#64748B" font-family="Chakra Petch" font-size="8" text-anchor="middle">GALLEY</text>'
+            + renderZoneCSeatsSVG()
             + '</g>'
 
             // Zone D (366 to 486): Premium Class (12 TTOL seats: 3 rows of 4 seats)
@@ -617,21 +681,46 @@ window.BBJ_WIZARD = (() => {
         const yPos = [56, 76, 124, 144];
         let html = '';
         let seatIndex = 0;
-        const xcc = wzState.extracc || 0;
+        const totalB = (wzState.staff || 0) + (wzState.extracc || 0);
+        const extraInC = Math.max(0, totalB - 16);
+        const extraInB = (wzState.extracc || 0) - extraInC;
         const stf = wzState.staff || 0;
 
         for (let r = 0; r < rows.length; r++) {
             for (let c = 0; c < yPos.length; c++) {
                 seatIndex++;
                 let cls = 'empty';
-                if (seatIndex <= xcc) {
+                if (seatIndex <= extraInB) {
                     cls = 'occupied-cc';
-                } else if (seatIndex <= xcc + stf) {
+                } else if (seatIndex <= extraInB + stf) {
                     cls = 'occupied-staff';
                 }
                 html += '<circle id="ttol-seat-b-' + seatIndex + '" class="ttol-seat ' + cls + '" cx="' + rows[r] + '" cy="' + yPos[c] + '" r="6.5" stroke-width="1.5"/>';
             }
         }
+        return html;
+    }
+
+    function renderZoneCSeatsSVG() {
+        const totalB = (wzState.staff || 0) + (wzState.extracc || 0);
+        const extraInC = Math.max(0, totalB - 16);
+        const coords = [
+            { x: 316, y: 104 },
+            { x: 342, y: 104 },
+            { x: 316, y: 120 },
+            { x: 342, y: 120 }
+        ];
+        let html = '<g id="svg-zone-c-seats">';
+        for (let i = 0; i < coords.length; i++) {
+            const idx = i + 1;
+            const isVisible = idx <= extraInC;
+            const disp = isVisible ? '' : ' style="display:none;"';
+            html += '<circle id="ttol-seat-c-' + idx + '" class="ttol-seat occupied-cc" cx="' + coords[i].x + '" cy="' + coords[i].y + '" r="6.5" stroke-width="1.5"' + disp + '/>';
+        }
+        const tagDisp = extraInC > 0 ? '' : ' style="display:none;"';
+        const tagTxt = extraInC > 0 ? '+' + extraInC + ' CC' : '';
+        html += '<text id="svg-zonec-cc-tag" x="329" y="134" fill="#F59E0B" font-family="JetBrains Mono" font-size="7" font-weight="700" text-anchor="middle"' + tagDisp + '>' + tagTxt + '</text>';
+        html += '</g>';
         return html;
     }
 
@@ -709,18 +798,37 @@ window.BBJ_WIZARD = (() => {
 
     function updateCabinLopaSeats() {
         // Update Zone B seats
-        const xcc = wzState.extracc || 0;
+        const totalB = (wzState.staff || 0) + (wzState.extracc || 0);
+        const extraInC = Math.max(0, totalB - 16);
+        const extraInB = (wzState.extracc || 0) - extraInC;
         const stf = wzState.staff || 0;
         for (let i = 1; i <= 16; i++) {
             const el = document.getElementById('ttol-seat-b-' + i);
             if (el) {
-                if (i <= xcc) {
+                if (i <= extraInB) {
                     el.className.baseVal = 'ttol-seat occupied-cc';
-                } else if (i <= xcc + stf) {
+                } else if (i <= extraInB + stf) {
                     el.className.baseVal = 'ttol-seat occupied-staff';
                 } else {
                     el.className.baseVal = 'ttol-seat empty';
                 }
+            }
+        }
+
+        // Update Zone C seats (Extra CC in Galley)
+        for (let i = 1; i <= 4; i++) {
+            const el = document.getElementById('ttol-seat-c-' + i);
+            if (el) {
+                el.style.display = (i <= extraInC) ? '' : 'none';
+            }
+        }
+        const cTag = document.getElementById('svg-zonec-cc-tag');
+        if (cTag) {
+            if (extraInC > 0) {
+                cTag.style.display = '';
+                cTag.textContent = '+' + extraInC + ' CC';
+            } else {
+                cTag.style.display = 'none';
             }
         }
 
@@ -729,7 +837,7 @@ window.BBJ_WIZARD = (() => {
         for (let i = 1; i <= 12; i++) {
             const el = document.getElementById('ttol-seat-d-' + i);
             if (el) {
-                el.className.baseVal = (i <= prem) ? 'ttol-seat occupied-pax' : 'empty';
+                el.className.baseVal = (i <= prem) ? 'ttol-seat occupied-pax' : 'ttol-seat empty';
             }
         }
 
@@ -794,13 +902,28 @@ window.BBJ_WIZARD = (() => {
     function renderCargo() {
         const isVip = (vipVersionState !== undefined) ? vipVersionState : true;
         const xcc = wzState.extracc || 0;
-        const maxStaff = Math.max(0, 16 - xcc);
-        const currentStaff = Math.min(wzState.staff || 0, maxStaff);
+        const currentStaff = Math.min(Math.max(0, wzState.staff || 0), 16);
+        const totalB = currentStaff + xcc;
+        const extraInC = Math.max(0, totalB - 16);
+        const extraInB = xcc - extraInC;
+        const extraCWeight = extraInC * 82;
 
         const valA = isVip ? 200 : (wzState.load.A || 0);
         const valC = isVip ? 300 : (wzState.load.C || 0);
         const lockAttrA = isVip ? ' readonly class="field-locked"' : '';
         const lockAttrC = isVip ? ' readonly class="field-locked"' : '';
+
+        const occTxt = (extraInC > 0)
+            ? '16 / 16 max (Staff: ' + currentStaff + ', Extra CC: ' + extraInB + ') <span style="color:#F59E0B; font-weight:700;">[+' + extraInC + ' Extra CC en Zone C]</span>'
+            : (currentStaff + xcc) + ' / 16 max (Staff: ' + currentStaff + ', Extra CC: ' + xcc + ')';
+
+        const xccBadgeTxt = (extraInC > 0)
+            ? extraInB + ' <span style="font-size:9px; color:#F59E0B;">(+' + extraInC + ' en C)</span>'
+            : String(xcc);
+
+        const zcBadgeDisplay = extraInC > 0 ? 'inline-flex' : 'none';
+        const zcBadgeTxt = '+' + extraInC + ' Extra CC (' + extraCWeight + ' kg)';
+        const boxCClass = 'lopa-zone-box' + (extraInC > 0 ? ' zone-c-overflow' : '');
 
         return '<div class="wizard-section">'
             + '<h2 class="section-title">BBJ2 Cabin LOPA &amp; Zone Distribution</h2>'
@@ -817,26 +940,27 @@ window.BBJ_WIZARD = (() => {
             // Zone B (Staff)
             + '<div class="lopa-zone-box zone-b-highlight" id="box-zone-b">'
             + '<div class="lopa-box-header"><span class="lopa-box-title">ZONE B — STAFF</span><span class="lopa-box-arm">181-354"</span></div>'
-            + '<div class="lopa-box-metric" id="wz-zoneb-occ-txt">' + (currentStaff + xcc) + ' / 16 max (Staff: ' + currentStaff + ', Extra CC: ' + xcc + ')</div>'
+            + '<div class="lopa-box-metric" id="wz-zoneb-occ-txt">' + occTxt + '</div>'
             + '<div style="display:flex; gap:4px; margin-top:3px;">'
             + '<div style="flex:1;"><label style="font-size:8px; color:var(--efb-muted);">Staff</label>'
             + '<select id="wz-staff" class="input-field" style="padding:2px 4px; font-size:11px; width:100%;">'
-            + Array.from({length: maxStaff + 1}, (_, i) => '<option value="' + i + '"' + (i === currentStaff ? ' selected' : '') + '>' + i + '</option>').join('')
+            + Array.from({length: 17}, (_, i) => '<option value="' + i + '"' + (i === currentStaff ? ' selected' : '') + '>' + i + '</option>').join('')
             + '</select></div>'
             + '<div style="flex:1;"><label style="font-size:8px; color:#F59E0B;">Extra CC</label>'
-            + '<div id="wz-zoneb-extracc-badge" style="font-size:11px; font-family:\'JetBrains Mono\'; font-weight:700; color:#F59E0B; padding:3px 4px; background:rgba(245,158,11,0.15); border-radius:4px; text-align:center;">' + xcc + '</div>'
+            + '<div id="wz-zoneb-extracc-badge" style="font-size:11px; font-family:\'JetBrains Mono\'; font-weight:700; color:#F59E0B; padding:3px 4px; background:rgba(245,158,11,0.15); border-radius:4px; text-align:center;">' + xccBadgeTxt + '</div>'
             + '</div></div>'
             + '<div class="lopa-box-input-wrap"><label style="font-size:9px; color:var(--efb-muted);">Load (kg)</label>'
             + '<input type="text" id="wz-load-b" value="' + (wzState.load.B || 0) + '" inputmode="numeric" maxlength="3"></div>'
             + '<div class="lopa-zone-weight-box"><span class="lopa-weight-lbl">Poids Zone B</span><span class="lopa-weight-val" id="wz-box-wt-b">0 kg</span></div>'
             + '</div>'
             // Zone C
-            + '<div class="lopa-zone-box" id="box-zone-c">'
+            + '<div class="' + boxCClass + '" id="box-zone-c">'
             + '<div class="lopa-box-header"><span class="lopa-box-title">ZONE C</span><span class="lopa-box-arm">354-465"</span></div>'
             + '<div class="lopa-box-arm">Galley Area' + (isVip ? ' (Galley 300kg)' : '') + '</div>'
+            + '<div id="wz-zonec-extracc-badge" class="wz-zonec-extracc-badge" style="display:' + zcBadgeDisplay + ';">' + zcBadgeTxt + '</div>'
             + '<div class="lopa-box-input-wrap"><label style="font-size:9px; color:var(--efb-muted);">Load (kg)' + (isVip ? ' [Fixe VIP]' : '') + '</label>'
             + '<input type="text" id="wz-load-c" value="' + valC + '" inputmode="numeric" maxlength="3"' + lockAttrC + '></div>'
-            + '<div class="lopa-zone-weight-box"><span class="lopa-weight-lbl">Poids Zone C</span><span class="lopa-weight-val" id="wz-box-wt-c">' + (isVip ? '300 kg (Inclus DOW)' : valC + ' kg') + '</span></div>'
+            + '<div class="lopa-zone-weight-box"><span class="lopa-weight-lbl">Poids Zone C</span><span class="lopa-weight-val" id="wz-box-wt-c">' + (isVip ? (extraInC > 0 ? (300 + extraCWeight) + ' kg (300kg DOW + ' + extraCWeight + 'kg Extra CC)' : '300 kg (Inclus DOW)') : ((valC + extraCWeight) + ' kg')) + '</span></div>'
             + '</div>'
             // Zone D (Premium)
             + '<div class="lopa-zone-box" id="box-zone-d">'
@@ -899,7 +1023,7 @@ window.BBJ_WIZARD = (() => {
             + '<span class="cargo-hold-max">Max: 2,948 kg</span>'
             + '</div>'
             + '<div class="form-group" style="margin:0;">'
-            + '<input type="text" id="wz-fwdhold" value="' + (wzState.fwdhold !== undefined ? wzState.fwdhold : 150) + '" inputmode="numeric" pattern="[0-9]*" maxlength="4" class="input-field" style="font-size:16px; font-weight:700;">'
+            + '<input type="text" id="wz-fwdhold" value="' + (wzState.fwdhold !== undefined ? wzState.fwdhold : 0) + '" inputmode="numeric" pattern="[0-9]*" maxlength="4" class="input-field" style="font-size:16px; font-weight:700;">'
             + '</div>'
             + '<div class="cargo-hold-bar">'
             + '<div class="cargo-hold-bar-fill" id="bar-fill-fwd" style="width:' + Math.min(100, Math.round(((wzState.fwdhold || 0) / 2948) * 100)) + '%;"></div>'
@@ -951,6 +1075,13 @@ window.BBJ_WIZARD = (() => {
         const cargo = wzState.fwdhold + wzState.afthold;
         const payload = Math.round(pax * paxWt) + loads + cargo;
         payloadState = payload;
+
+        const totalB = (wzState.staff || 0) + (wzState.extracc || 0);
+        const extraInC = Math.max(0, totalB - 16);
+        const extraInB = (wzState.extracc || 0) - extraInC;
+        const extraCWeight = extraInC * 82;
+
+        updateCorrected();
         azfwState = correctedDow + payload;
         const el = document.getElementById('wz-payload');
         const az = document.getElementById('wz-azfw');
@@ -959,30 +1090,34 @@ window.BBJ_WIZARD = (() => {
 
         // Update Zone Total Weights (Pax weight + Load in cabin)
         const wtA = isVip ? 200 : (wzState.load.A || 0);
-        const wtB = Math.round(((wzState.staff || 0) + (wzState.extracc || 0)) * paxWt) + (wzState.load.B || 0);
-        const wtC = isVip ? 300 : (wzState.load.C || 0);
+        const wtB = Math.round(((wzState.staff || 0) + extraInB) * paxWt) + (wzState.load.B || 0);
+        const wtC = (isVip ? 300 : (wzState.load.C || 0)) + extraCWeight;
         const wtD = Math.round((wzState.premium || 0) * paxWt) + (wzState.load.D || 0);
         const wtE = Math.round((wzState.viplounge || 0) * paxWt) + (wzState.load.E || 0);
         const wtF = Math.round((wzState.vipoffice || 0) * paxWt) + (wzState.load.F || 0);
         const wtG = wzState.load.G || 0;
 
-        const setWt = function(id, val, isVipIncluded) {
+        const setWt = function(id, val, isVipIncluded, noteExtra) {
             const d = document.getElementById(id);
             if (d) {
                 if (isVipIncluded) {
-                    d.textContent = val.toLocaleString() + ' kg (Inclus DOW)';
+                    if (noteExtra) {
+                        d.textContent = val.toLocaleString() + ' kg (300kg DOW + ' + noteExtra + 'kg Extra CC)';
+                    } else {
+                        d.textContent = val.toLocaleString() + ' kg (Inclus DOW)';
+                    }
                 } else {
                     d.textContent = val.toLocaleString() + ' kg';
                 }
             }
         };
-        setWt('wz-box-wt-a', wtA, isVip);
-        setWt('wz-box-wt-b', wtB, false);
-        setWt('wz-box-wt-c', wtC, isVip);
-        setWt('wz-box-wt-d', wtD, false);
-        setWt('wz-box-wt-e', wtE, false);
-        setWt('wz-box-wt-f', wtF, false);
-        setWt('wz-box-wt-g', wtG, false);
+        setWt('wz-box-wt-a', wtA, isVip, 0);
+        setWt('wz-box-wt-b', wtB, false, 0);
+        setWt('wz-box-wt-c', wtC, isVip, extraCWeight);
+        setWt('wz-box-wt-d', wtD, false, 0);
+        setWt('wz-box-wt-e', wtE, false, 0);
+        setWt('wz-box-wt-f', wtF, false, 0);
+        setWt('wz-box-wt-g', wtG, false, 0);
 
         // Update Cargo Hold Visual Bars
         const fwdBar = document.getElementById('bar-fill-fwd');
@@ -1000,6 +1135,7 @@ window.BBJ_WIZARD = (() => {
             if (aftTxt) aftTxt.textContent = pct + '%';
         }
 
+        updateZoneBAndCBadges();
         updateCabinLopaSeats();
         updateTelemetryStrip();
     }
@@ -1016,10 +1152,6 @@ window.BBJ_WIZARD = (() => {
         if (staffEl) {
             staffEl.addEventListener('change', function() {
                 wzState.staff = parseInt(this.value, 10) || 0;
-                const occEl = document.getElementById('wz-zoneb-occ-txt');
-                if (occEl) {
-                    occEl.textContent = (wzState.staff + wzState.extracc) + ' / 16 max (Staff: ' + wzState.staff + ', Extra CC: ' + wzState.extracc + ')';
-                }
                 updatePayload();
             });
         }
@@ -1256,9 +1388,16 @@ window.BBJ_WIZARD = (() => {
             + '<div class="wizard-section" style="margin-top:16px;">'
             + '<h2 class="section-title">Fuel Usage &amp; Block Fuel</h2>'
             + '<div class="form-grid">'
-            + numberField('wz-blockfuel', 'Block Fuel (kg)', (blockFuelState !== undefined && blockFuelState !== null) ? blockFuelState : 18000, 28585, 5, true)
-            + numberField('wz-taxifuel', 'Taxi Fuel (kg)', (taxiFuelState !== undefined && taxiFuelState !== null) ? taxiFuelState : 200, null, 5)
-            + numberField('wz-tripfuel', 'Trip Fuel (kg)', (wzState.tripfuel !== undefined && wzState.tripfuel !== null) ? wzState.tripfuel : 8200, null, 5)
+            + numberField('wz-blockfuel', 'Block Fuel (kg)', (blockFuelState !== undefined && blockFuelState !== null) ? blockFuelState : 0, 28585, 5, true)
+            + numberField('wz-taxifuel', 'Taxi Fuel (kg)', (taxiFuelState !== undefined && taxiFuelState !== null) ? taxiFuelState : 0, null, 5)
+            + '<div class="form-group wz-tripfuel-group">'
+            + '<div style="display:flex; justify-content:space-between; align-items:center;">'
+            + '<label for="wz-tripfuel">Trip Fuel (kg)</label>'
+            + '<span id="wz-tripfuel-alert" class="wz-trip-missing-badge" style="display:' + ((!wzState.tripfuel || wzState.tripfuel <= 0) ? 'inline-flex' : 'none') + ';">⚠️ TRIP Missing</span>'
+            + '</div>'
+            + '<input type="text" id="wz-tripfuel" value="' + (wzState.tripfuel !== undefined && wzState.tripfuel !== null ? wzState.tripfuel : 0) + '" inputmode="numeric" pattern="[0-9]*" maxlength="5" class="input-field' + ((!wzState.tripfuel || wzState.tripfuel <= 0) ? ' wz-field-trip-missing' : '') + '">'
+            + '<div id="wz-tripfuel-alert-bottom" class="wz-trip-missing-text" style="display:' + ((!wzState.tripfuel || wzState.tripfuel <= 0) ? 'block' : 'none') + '; color:#EF4444; font-size:11px; font-weight:700; margin-top:4px;">⚠️ TRIP Missing</div>'
+            + '</div>'
             + '</div></div>'
             + '<div class="wizard-section" style="margin-top:16px;">'
             + '<h2 class="section-title">Computed Limitations</h2>'
@@ -1346,10 +1485,13 @@ window.BBJ_WIZARD = (() => {
     function syncFuelState() {
         const bf = document.getElementById('wz-blockfuel');
         const tx = document.getElementById('wz-taxifuel');
+        const tf = document.getElementById('wz-tripfuel');
         if (bf) blockFuelState = parseInt(bf.value, 10) || 0;
         if (tx) taxiFuelState = parseInt(tx.value, 10) || 0;
+        if (tf) wzState.tripfuel = parseInt(tf.value, 10) || 0;
         updateFuelTanksVisual(blockFuelState);
         updateTelemetryStrip();
+        updateTripFuelAlert();
     }
 
     function initFuel() {
@@ -1364,6 +1506,7 @@ window.BBJ_WIZARD = (() => {
         updateBlockFuel();
         updatePerfCalc();
         updateFuelTanksVisual(blockFuelState);
+        updateTripFuelAlert();
         ['wz-fuelbefore', 'wz-supplied', 'wz-density', 'wz-perf-tow', 'wz-perf-ldg', 'wz-perf-zfw', 'wz-taxifuel', 'wz-tripfuel', 'wz-blockfuel'].forEach(function(id) {
             const el = document.getElementById(id);
             if (el) el.addEventListener('input', function() { updateBlockFuel(); updatePerfCalc(); syncFuelState(); });
@@ -1376,6 +1519,7 @@ window.BBJ_WIZARD = (() => {
             + '<h2 class="section-title" style="margin:0;">Resume & Save</h2>'
             + '<button type="button" id="wz-print-btn" class="btn">🖨️ PRINT</button>'
             + '</div>'
+            + '<div id="wz-top-persons-summary"></div>'
             + '<canvas id="wz-trim-canvas" class="wz-trim-canvas"></canvas>'
             + '<div class="wz-summary" id="wz-summary"></div>'
             + '<div id="wz-suggestions"></div>'
@@ -1391,6 +1535,9 @@ window.BBJ_WIZARD = (() => {
 
 function wizardInputs() {
         const isVip = (vipVersionState !== undefined) ? vipVersionState : true;
+        const totalB = (wzState.staff || 0) + (wzState.extracc || 0);
+        const extraInC = Math.max(0, totalB - 16);
+        const extraInB = (wzState.extracc || 0) - extraInC;
         return {
             correctedDow: correctedDow,
             correctedDoi: correctedDoi,
@@ -1399,6 +1546,8 @@ function wizardInputs() {
             observers: 0,
             cabincrew: 0,
             extracc: wzState.extracc,
+            extraInB: extraInB,
+            extraInC: extraInC,
             staff: wzState.staff,
             premium: wzState.premium,
             vipLounge: wzState.viplounge,
@@ -1492,7 +1641,8 @@ function wizardInputs() {
     function searchCargoShiftFwdToAft(envId) {
         const curFwd = wzState.fwdhold;
         const curAft = wzState.afthold;
-        const maxShift = Math.min(curFwd, 1588 - curAft);
+        // Limite opérationnelle stricte de la soute arrière : max 700 kg
+        const maxShift = Math.min(curFwd, 700 - curAft);
         if (maxShift <= 0) return null;
         let best = null;
         for (let x = 10; x <= maxShift; x += 10) {
@@ -1515,31 +1665,12 @@ function wizardInputs() {
             x: best.x,
             newFwd: best.newFwd,
             newAft: best.newAft,
-            label: 'Décaler ' + best.x + ' kg en soutes : FWD (' + curFwd + ' → ' + best.newFwd + ' kg) → AFT (' + curAft + ' → ' + best.newAft + ' kg)'
+            label: 'Décaler ' + best.x + ' kg en soutes : FWD (' + curFwd + ' → ' + best.newFwd + ' kg) → AFT (' + curAft + ' → ' + best.newAft + ' kg [max 700 kg])'
         };
     }
 
     function searchZoneBtoDProposal(envId) {
-        // Option A: Déplacer des PAX (Staff Zone B -> Premium Zone D)
-        const maxPax = Math.min(wzState.staff, 12 - wzState.premium);
-        for (let n = 1; n <= maxPax; n++) {
-            const nn = n;
-            const rr = tryCalculate(function(inp) {
-                inp.staff = wzState.staff - nn;
-                inp.premium = wzState.premium + nn;
-            });
-            if (!phaseOk(envId, rr)) continue;
-            if (envId === 'zfw' && (!phaseOk('tow', rr) || !phaseOk('ldw', rr))) continue;
-            if (envId === 'tow' && (!phaseOk('zfw', rr) || !phaseOk('ldw', rr))) continue;
-            if (envId === 'ldw' && (!phaseOk('zfw', rr) || !phaseOk('tow', rr))) continue;
-            return {
-                kind: 'paxshift',
-                phaseLabel: envId.toUpperCase(),
-                n: nn,
-                label: 'Déplacer ' + nn + ' PAX : Zone B (Staff) → Zone D (Premium)'
-            };
-        }
-        // Option B: Déplacer de la charge (Zone B -> Zone D)
+        // Déplacer uniquement de la charge utile (LOAD) en cabine : Zone B -> Zone D (zéro transfert PAX)
         const curB = wzState.load.B || 0;
         const curD = wzState.load.D || 0;
         const maxLoad = Math.min(curB, 454 - curD);
@@ -1559,32 +1690,10 @@ function wizardInputs() {
                 from: 'B',
                 to: 'D',
                 x: xx,
-                label: 'Déplacer ' + xx + ' kg de charge : Zone B → Zone D'
+                label: 'Déplacer ' + xx + ' kg de LOAD : Zone B → Zone D'
             };
         }
         return null;
-    }
-
-    function searchPaxProposal(envId, extraCheck) {
-        const zones = [['staff', 'Staff (Zone B)'], ['premium', 'Premium PAX (Zone D)'], ['viplounge', 'VIP Lounge (Zone E)'], ['vipoffice', 'VIP Office (Zone F)']];
-        let best = null;
-        for (const zk of zones) {
-            const key = zk[0];
-            const cnt = wzState[key];
-            for (let n = 1; n <= cnt; n++) {
-                const nn = n;
-                const rr = tryCalculate(function(inp) { inp[key] = cnt - nn; });
-                if (extraCheck && !extraCheck(rr)) continue;
-                if (!phaseOk(envId, rr)) continue;
-                if (!best || n < best.n) { best = { key: key, n: n, label: zk[1] }; break; }
-            }
-            if (best && best.n === 1) break;
-        }
-        if (!best) return null;
-        return {
-            kind: 'pax', phaseLabel: envId.toUpperCase(), key: best.key, n: best.n,
-            label: 'Retirer ' + best.n + ' pax — ' + best.label
-        };
     }
 
     function searchCargoProposal(extraCheck) {
@@ -1609,6 +1718,26 @@ function wizardInputs() {
         };
     }
 
+    function searchLoadReductionProposal(extraCheck) {
+        const zones = ['B', 'D', 'E', 'F'];
+        for (const z of zones) {
+            const cur = wzState.load[z] || 0;
+            if (cur >= 10) {
+                for (let x = 10; x <= cur; x += 10) {
+                    const xx = x;
+                    const rr = tryCalculate(function(inp) { inp.zoneLoad[z] = cur - xx; });
+                    if (extraCheck && !extraCheck(rr)) continue;
+                    if (!phaseOk('tow', rr) || !phaseOk('ldw', rr) || !phaseOk('zfw', rr)) continue;
+                    return {
+                        kind: 'loadreduce', phaseLabel: 'TOW', zone: z, x: xx,
+                        label: 'Retirer ' + xx + ' kg de LOAD en Zone ' + z
+                    };
+                }
+            }
+        }
+        return null;
+    }
+
     function buildSuggestions(r) {
         const out = [];
         const phases = [
@@ -1620,15 +1749,15 @@ function wizardInputs() {
             if (phaseInside(ph.envId, ph.idx, ph.wt, r)) continue;
             const props = [];
 
-            // 1. Proposer d'ajouter du fuel sans dépasser la limitation du jour (ne jamais réduire le fuel)
+            // 1. Favoriser TOUJOURS l'ajout de carburant jusqu'à la limite max du jour
             let p = (ph.key !== 'zfw') ? searchFuelAdditionProposal(ph.envId) : null;
 
-            // 2. Sinon décaler la charge dans les soutes depuis avant vers l'arrière sans dépasser la limite arrière
+            // 2. Sinon décaler la charge dans les soutes FWD -> AFT (butée max exploitation AFT: 700 kg)
             if (!p) {
                 p = searchCargoShiftFwdToAft(ph.envId);
             }
 
-            // 3. Sinon déplacer de la ZONE B en D
+            // 3. Sinon déplacer du LOAD en cabine : ZONE B -> Zone D (zéro transfert PAX)
             if (!p) {
                 p = searchZoneBtoDProposal(ph.envId);
             }
@@ -1643,19 +1772,34 @@ function wizardInputs() {
                 const l2 = currentPerfLimit(rr.blockFuel, taxiFuelState, wzState.tripfuel);
                 return rr.tow <= l2 && rr.tow <= 79015;
             };
-            for (let d = 100; d <= 5000; d += 100) {
-                const nb = blockFuelState - d;
-                if (nb < 0) break;
-                const rr = tryCalculate(function(inp) { inp.blockFuel = nb; });
-                if (!wCheck(rr)) continue;
-                if (!phaseOk('tow', rr) || !phaseOk('ldw', rr)) continue;
-                props.push({ kind: 'fuel', phaseLabel: 'TOW', delta: -d, newBlock: nb, label: 'Réduire le fuel de ' + d + ' kg (Block → ' + nb.toLocaleString('en-US') + ' kg)' });
-                break;
+
+            // Règle : Ne JAMAIS proposer de réduire le carburant que si Block Fuel - Trip Fuel > 7T (7 000 kg)
+            const currentReserve = blockFuelState - (wzState.tripfuel || 0);
+            if (currentReserve > 7000) {
+                const maxReduction = currentReserve - 7000;
+                for (let d = 100; d <= maxReduction; d += 100) {
+                    const nb = blockFuelState - d;
+                    if (nb - (wzState.tripfuel || 0) < 7000) break;
+                    const rr = tryCalculate(function(inp) { inp.blockFuel = nb; });
+                    if (!wCheck(rr)) continue;
+                    if (!phaseOk('tow', rr) || !phaseOk('ldw', rr)) continue;
+                    props.push({
+                        kind: 'fuel',
+                        phaseLabel: 'TOW',
+                        delta: -d,
+                        newBlock: nb,
+                        label: 'Réduire le fuel de ' + d + ' kg (Block → ' + nb.toLocaleString('en-US') + ' kg, Réserve ' + (nb - (wzState.tripfuel || 0)).toLocaleString('en-US') + ' kg ≥ 7 T)'
+                    });
+                    break;
+                }
             }
-            const p = searchPaxProposal('tow', wCheck);
-            if (p) props.push(p);
+
+            // Pas de débarquement de PAX : uniquement Cargo et LOAD cabine
             const c = searchCargoProposal(wCheck);
             if (c) props.push(c);
+            const ld = searchLoadReductionProposal(wCheck);
+            if (ld) props.push(ld);
+
             if (props.length) out.push({ key: 'toww', title: 'TOW dépasse la limitation du jour (' + lim.toLocaleString('en-US') + ' kg)', props: props.slice(0, 3) });
         }
         return out;
@@ -1722,6 +1866,12 @@ function wizardInputs() {
             const el = domGet(p.key === 'fwdhold' ? 'wz-fwdhold' : 'wz-afthold');
             if (el) el.value = String(nv);
             updatePayload();
+        } else if (p.kind === 'loadreduce') {
+            const nv = Math.max(0, wzState.load[p.zone] - p.x);
+            wzState.load[p.zone] = nv;
+            const el = domGet('wz-load-' + p.zone.toLowerCase());
+            if (el) el.value = String(nv);
+            updatePayload();
         }
         appliedLog.push({ time: new Date().toLocaleTimeString(), label: p.label, phase: p.phaseLabel });
         updateTelemetryStrip();
@@ -1784,11 +1934,26 @@ function wizardInputs() {
             + '<h1 style="margin:0;">NEW LOAD & BALANCE SHEET BBJ2</h1>'
             + '<div class="header-sub">CN-MVI | BBJ2 | S/N: 37545</div>'
             + '</div>';
+        const pilots = 2;
+        const obs = wzState.observers || 0;
+        const totalFlightCrew = pilots + obs;
+        const baseCC = wzState.cabincrew !== undefined ? wzState.cabincrew : 2;
+        const extraCC = wzState.extracc || 0;
+        const totalCabinCrew = baseCC + extraCC;
+        const staff = wzState.staff || 0;
+        const premium = wzState.premium || 0;
+        const vipLounge = wzState.viplounge || 0;
+        const vipOffice = wzState.vipoffice || 0;
+        const totalPax = staff + premium + vipLounge + vipOffice;
+        const totalPersons = totalFlightCrew + totalCabinCrew + totalPax;
+        const totalPayload = payloadState != null ? payloadState : 0;
+
         html += '<table class="data-table" style="width:100%; margin:10px 0 14px;"><tbody>'
             + '<tr><td><b>Origin</b></td><td>' + (orig || '—') + '</td><td><b>Destination</b></td><td>' + (dest || '—') + '</td></tr>'
             + '<tr><td><b>Flight N°</b></td><td>' + (num || '—') + '</td><td><b>Date</b></td><td>' + (fdate || '—') + '</td></tr>'
             + '<tr><td><b>Time (UTC)</b></td><td>' + (ftime || '—') + '</td><td><b>Prepared by</b></td><td>' + (prepName || '—') + '</td></tr>'
             + '<tr><td><b>Captain</b></td><td>' + (capName || '—') + '</td><td><b>Limitation du jour</b></td><td>' + lim.toLocaleString('en-US') + ' kg</td></tr>'
+            + '<tr><td><b>Total Personnes (POB)</b></td><td><b>' + totalPersons + '</b> (Flight Crew: ' + totalFlightCrew + ' | Cabin Crew: ' + totalCabinCrew + ' | PAX: ' + totalPax + ')</td><td><b>Total Payload</b></td><td><b>' + totalPayload.toLocaleString('en-US') + ' kg</b></td></tr>'
             + '</tbody></table>';
         html += '<table class="data-table" style="width:100%;"><thead><tr><th>Phase</th><th>Poids</th><th>Index</th><th>MAC</th><th>Statut</th></tr></thead><tbody>'
             + rowP('ZFW', r.zfw, r.zfwIdx, phaseInside('zfw', r.zfwIdx, r.zfw, r), false, macZp)
@@ -1828,6 +1993,77 @@ function wizardInputs() {
         });
     }
 
+    function renderTopPersonsSummary() {
+        const topEl = document.getElementById('wz-top-persons-summary');
+        if (!topEl) return;
+
+        const pilots = 2;
+        const obs = wzState.observers || 0;
+        const totalFlightCrew = pilots + obs;
+
+        const baseCC = wzState.cabincrew !== undefined ? wzState.cabincrew : 2;
+        const extraCC = wzState.extracc || 0;
+        const totalCabinCrew = baseCC + extraCC;
+
+        const staff = wzState.staff || 0;
+        const premium = wzState.premium || 0;
+        const vipLounge = wzState.viplounge || 0;
+        const vipOffice = wzState.vipoffice || 0;
+        const totalPax = staff + premium + vipLounge + vipOffice;
+
+        const totalPersons = totalFlightCrew + totalCabinCrew + totalPax;
+        const totalPayload = payloadState != null ? payloadState : 0;
+        const cargoTotal = (wzState.fwdhold || 0) + (wzState.afthold || 0);
+
+        topEl.innerHTML = '<div class="wz-top-summary-strip">'
+            // 1. Total Personnes (POB)
+            + '<div class="wz-top-sum-card main-pob">'
+            + '<div class="wz-top-sum-icon">👥</div>'
+            + '<div class="wz-top-sum-body">'
+            + '<span class="wz-top-sum-lbl">TOTAL PERSONNES (POB)</span>'
+            + '<span class="wz-top-sum-val accent-val">' + totalPersons + '</span>'
+            + '<span class="wz-top-sum-sub">Cockpit: ' + totalFlightCrew + ' | PNC: ' + totalCabinCrew + ' | PAX: ' + totalPax + '</span>'
+            + '</div>'
+            + '</div>'
+            // 2. Flight Crew
+            + '<div class="wz-top-sum-card">'
+            + '<div class="wz-top-sum-icon">👨‍✈️</div>'
+            + '<div class="wz-top-sum-body">'
+            + '<span class="wz-top-sum-lbl">TOTAL FLIGHT CREW</span>'
+            + '<span class="wz-top-sum-val">' + totalFlightCrew + '</span>'
+            + '<span class="wz-top-sum-sub">2 Pilotes' + (obs > 0 ? ' + ' + obs + ' Obs' : '') + '</span>'
+            + '</div>'
+            + '</div>'
+            // 3. Cabin Crew
+            + '<div class="wz-top-sum-card">'
+            + '<div class="wz-top-sum-icon">👩‍✈️</div>'
+            + '<div class="wz-top-sum-body">'
+            + '<span class="wz-top-sum-lbl">TOTAL CABIN CREW</span>'
+            + '<span class="wz-top-sum-val" style="color:#F59E0B;">' + totalCabinCrew + '</span>'
+            + '<span class="wz-top-sum-sub">' + baseCC + ' Base CC' + (extraCC > 0 ? ' + ' + extraCC + ' Extra' : '') + '</span>'
+            + '</div>'
+            + '</div>'
+            // 4. Total PAX
+            + '<div class="wz-top-sum-card">'
+            + '<div class="wz-top-sum-icon">💺</div>'
+            + '<div class="wz-top-sum-body">'
+            + '<span class="wz-top-sum-lbl">TOTAL PAX</span>'
+            + '<span class="wz-top-sum-val" style="color:#38BDF8;">' + totalPax + '</span>'
+            + '<span class="wz-top-sum-sub">Staff: ' + staff + ' | Prem: ' + premium + ' | VIP: ' + (vipLounge + vipOffice) + '</span>'
+            + '</div>'
+            + '</div>'
+            // 5. Total Payload
+            + '<div class="wz-top-sum-card main-payload">'
+            + '<div class="wz-top-sum-icon">📦</div>'
+            + '<div class="wz-top-sum-body">'
+            + '<span class="wz-top-sum-lbl">TOTAL PAYLOAD</span>'
+            + '<span class="wz-top-sum-val accent-val">' + totalPayload.toLocaleString('en-US') + ' kg</span>'
+            + '<span class="wz-top-sum-sub">Pax + Soutes (' + cargoTotal.toLocaleString('en-US') + ' kg) + Fret</span>'
+            + '</div>'
+            + '</div>'
+            + '</div>';
+    }
+
     function macForPoint(idx, wtKg) {
         if (typeof calculateGeometricMac === 'function') {
             return calculateGeometricMac(idx, wtKg);
@@ -1841,6 +2077,7 @@ function wizardInputs() {
     function fmtMac(m) { return (m == null) ? '—' : ((Math.round(m * 10) / 10) + '%'); }
 
     function drawWizardChart() {
+        renderTopPersonsSummary();
         const canvas = document.getElementById('wz-trim-canvas');
         if (!canvas || typeof window.calculate !== 'function' || typeof window.drawCanvas !== 'function') return;
         const co = document.getElementById('wz-charge-offerte');
@@ -1888,6 +2125,8 @@ function wizardInputs() {
                     ? '<span class="' + macCls + '">' + fmtMac(macVal) + ' (HORS LIMITE)</span>'
                     : '<span class="' + macCls + '">' + fmtMac(macVal) + '</span>';
 
+                const isTripMissingOnLaw = (envId === 'ldw' && (!wzState.tripfuel || wzState.tripfuel <= 0));
+
                 return '<div class="' + cls + '" data-env="' + envId + '"' + style + '>'
                     + '<div class="wz-sum-line-top">'
                     + '<b class="wz-sum-phase-lbl">' + label + '</b> '
@@ -1900,6 +2139,7 @@ function wizardInputs() {
                     + '<span class="wz-sum-mac-badge">' + macHtml + '</span>'
                     + '</div>'
                     + (alert ? '<div class="wz-sum-alert-tag">⚠️ DÉPASSE LA LIMITATION DU JOUR</div>' : '')
+                    + (isTripMissingOnLaw ? '<div class="wz-sum-alert-tag wz-trip-missing-tag">⚠️ TRIP Missing</div>' : '')
                     + '</div>';
             }
 
@@ -1969,7 +2209,19 @@ function wizardInputs() {
             function fmtIdx(v) { return (v > 0 ? '+' : '') + (Math.round(v * 100) / 100); }
             const px = function(n, z) { return (typeof getPaxIndex === 'function') ? getPaxIndex(n, z) : 0; };
             const lidx = function(z) { return (typeof getGalleyIndexInterp === 'function') ? getGalleyIndexInterp(wzState.load[z], z) : 0; };
-            const zonePaxIdx = { B: px(wzState.staff + wzState.extracc, 'S'), D: px(wzState.premium, 'P'), E: px(wzState.viplounge, 'L'), F: px(wzState.vipoffice, 'O'), G: 0 };
+            const totalB = (wzState.staff || 0) + (wzState.extracc || 0);
+            const extraInC = Math.max(0, totalB - 16);
+            const extraInB = (wzState.extracc || 0) - extraInC;
+            const extraCWeight = extraInC * 82;
+            const extraCIdx = (extraInC > 0 && typeof getGalleyIndexInterp === 'function') ? getGalleyIndexInterp(extraCWeight, 'C') : 0;
+
+            const zonePaxIdx = {
+                B: px(wzState.staff + extraInB, 'S'),
+                D: px(wzState.premium, 'P'),
+                E: px(wzState.viplounge, 'L'),
+                F: px(wzState.vipoffice, 'O'),
+                G: 0
+            };
             const zonePaxCnt = { B: wzState.staff, D: wzState.premium, E: wzState.viplounge, F: wzState.vipoffice, G: 0 };
             const isVip = (vipVersionState !== undefined) ? vipVersionState : true;
             let totalPaxIdx = 0, totalLoad = 0, totalLoadIdx = 0;
@@ -1982,17 +2234,32 @@ function wizardInputs() {
             const fwdIdx = (typeof vlookupTrue !== 'undefined') ? vlookupTrue(BBJ_DATA.cargoIndex.FWD, 'wt', wzState.fwdhold).idx : 0;
             const aftIdx = (typeof vlookupTrue !== 'undefined') ? vlookupTrue(BBJ_DATA.cargoIndex.AFT, 'wt', wzState.afthold).idx : 0;
             let rh = '<div class="wizard-section" style="margin-top:16px;">'
-                + '<h2 class="section-title">Récapitulatif PAX & Load par zone</h2>'
+                + '<h2 class="section-title">Récapitulatif PAX &amp; Load par zone</h2>'
                 + '<div class="table-scroll"><table class="data-table wz-recap-table"><thead><tr>'
                 + '<th>Zone</th><th>PAX</th><th>Index PAX</th><th>Load (kg)</th><th>Index Load</th></tr></thead><tbody>';
             ['A', 'B', 'C', 'D', 'E', 'F', 'G'].forEach(function(z) {
-                const paxCell = (z === 'B')
-                    ? (zonePaxCnt.B + (wzState.extracc ? ' +' + wzState.extracc + ' CC' : ''))
-                    : (z === 'A' || z === 'C' ? '—' : String(zonePaxCnt[z]));
-                const idxCell = (z === 'A' || z === 'C') ? '—' : fmtIdx(zonePaxIdx[z] || 0);
-                const ccNote = (z === 'B') ? '<span class="wz-note">S(' + (wzState.staff + wzState.extracc) + ')</span>' : '';
-                const loadCell = (isVip && (z === 'A' || z === 'C')) ? (wzState.load[z] + ' <span class="wz-note">(Inclus DOW)</span>') : String(wzState.load[z]);
-                const loadIdxCell = (isVip && (z === 'A' || z === 'C')) ? '<span class="wz-note">Inclus DOW</span>' : fmtIdx(lidx(z));
+                let paxCell = (z === 'A' || z === 'C' ? '—' : String(zonePaxCnt[z]));
+                let idxCell = (z === 'A' || z === 'C') ? '—' : fmtIdx(zonePaxIdx[z] || 0);
+                let ccNote = '';
+                if (z === 'B') {
+                    paxCell = zonePaxCnt.B + (wzState.extracc ? ' +' + extraInB + ' CC' + (extraInC > 0 ? ' <span style="color:#F59E0B;">(+' + extraInC + ' en C)</span>' : '') : '');
+                    ccNote = '<span class="wz-note">S(' + (wzState.staff + extraInB) + ')</span>';
+                } else if (z === 'C' && extraInC > 0) {
+                    paxCell = '<span style="color:#F59E0B; font-weight:700;">+' + extraInC + ' Extra CC</span>';
+                    idxCell = '<span style="color:#F59E0B; font-weight:700;">' + fmtIdx(extraCIdx) + ' <span class="wz-note">(inclus DOI)</span></span>';
+                }
+                let loadCell = String(wzState.load[z]);
+                let loadIdxCell = fmtIdx(lidx(z));
+                if (isVip && (z === 'A' || z === 'C')) {
+                    if (z === 'C' && extraInC > 0) {
+                        loadCell = (300 + extraCWeight) + ' <span class="wz-note">(300kg DOW + ' + extraCWeight + 'kg Extra CC)</span>';
+                    } else {
+                        loadCell = wzState.load[z] + ' <span class="wz-note">(Inclus DOW)</span>';
+                    }
+                    loadIdxCell = '<span class="wz-note">Inclus DOW</span>';
+                } else if (z === 'C' && extraInC > 0) {
+                    loadCell = (wzState.load.C + extraCWeight) + ' <span class="wz-note">(+' + extraCWeight + 'kg Extra CC)</span>';
+                }
                 rh += '<tr><td><b>Zone ' + z + '</b></td><td>' + paxCell + '</td><td>' + idxCell + (ccNote ? ' ' + ccNote : '') + '</td>'
                     + '<td>' + loadCell + '</td><td>' + loadIdxCell + '</td></tr>';
             });
@@ -2000,9 +2267,9 @@ function wizardInputs() {
             rh += '<tr><td><b>FWD HOLD</b></td><td>—</td><td>—</td><td>' + wzState.fwdhold + '</td><td>' + fmtIdx(fwdIdx) + '</td></tr>'
                 + '<tr><td><b>AFT HOLD</b></td><td>—</td><td>—</td><td>' + wzState.afthold + '</td><td>' + fmtIdx(aftIdx) + '</td></tr>'
                 + '<tr class="wz-recap-total"><td><b>TOTAL</b></td><td><b>' + totalPaxCount + '</b></td><td><b>' + fmtIdx(totalPaxIdx) + '</b></td>'
-                + '<td><b>' + (totalLoad + wzState.fwdhold + wzState.afthold) + '</b></td><td><b>' + fmtIdx(totalLoadIdx + fwdIdx + aftIdx) + '</b></td></tr>';
+                + '<td><b>' + (totalLoad + wzState.fwdhold + wzState.afthold + extraCWeight) + '</b></td><td><b>' + fmtIdx(totalLoadIdx + fwdIdx + aftIdx) + '</b></td></tr>';
             rh += '</tbody></table></div>'
-                + '<div class="wz-note" style="margin-top:6px;">Index total avant DOI : DOI ' + correctedDoi + ' ' + fmtIdx(totalPaxIdx) + ' ' + fmtIdx(totalLoadIdx + fwdIdx + aftIdx) + ' = <b>' + r.zfwIdx + '</b></div>'
+                + '<div class="wz-note" style="margin-top:6px;">Index total avec DOI : DOI ' + (typeof correctedDoi === 'number' ? correctedDoi.toFixed(2) : correctedDoi) + ' ' + fmtIdx(totalPaxIdx) + ' ' + fmtIdx(totalLoadIdx + fwdIdx + aftIdx) + ' = <b>' + r.zfwIdx + '</b></div>'
                 + '</div>';
             recapEl.innerHTML = rh;
         }
@@ -2267,6 +2534,7 @@ function saveWizardFlight() {
     }
 
     function init() {
+        resetWizardState(true);
         update();
         updateTelemetryStrip();
 
@@ -2362,11 +2630,7 @@ function saveWizardFlight() {
         }
     }
 
-    function clearAllWizardData() {
-        if (!confirm('Voulez-vous réinitialiser toutes les saisies (Reset Inputs) ?')) {
-            return;
-        }
-
+    function resetWizardState(skipToast) {
         // Reset VIP VERSION to ON
         vipVersionState = true;
         const vipToggle = document.getElementById('wz-toggle-vip');
@@ -2407,6 +2671,9 @@ function saveWizardFlight() {
         blockFuelState = 0;
         taxiFuelState = 0;
         payloadState = 0;
+        correctedDow = 48704;
+        correctedDoi = 42.72;
+        azfwState = 48704;
 
         // Invalidate step cache so all steps re-render fresh
         for (const k in stepCache) {
@@ -2418,13 +2685,21 @@ function saveWizardFlight() {
         updateCorrected();
         updatePayload();
         updateTelemetryStrip();
+        updateTripFuelAlert();
 
-        if (typeof toast === 'function') {
+        if (!skipToast && typeof toast === 'function') {
             toast('Reset Inputs effectué (VERSION VIP active)');
         }
     }
 
-    return { init, go, get current() { return current; } };
+    function clearAllWizardData() {
+        if (!confirm('Voulez-vous réinitialiser toutes les saisies (Reset Inputs) ?')) {
+            return;
+        }
+        resetWizardState(false);
+    }
+
+    return { init, go, resetWizardState, get current() { return current; } };
 })();
 
 document.addEventListener('DOMContentLoaded', function() {
