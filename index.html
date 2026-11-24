@@ -1385,7 +1385,10 @@
                     </div>
                     <div>
                         <h3 style="font-size:17px; font-weight:800; margin:0; color:var(--text-primary);">Importation Planning Roster</h3>
-                        <div style="font-size:11.5px; color:var(--text-muted);">Format officiel Royal Air Maroc / Jeppesen CrewAccess</div>
+                        <div style="display:flex; align-items:center; gap:8px; margin-top:3px; flex-wrap:wrap;">
+                            <div style="font-size:11.5px; color:var(--text-muted);">Format officiel Royal Air Maroc / Jeppesen CrewAccess</div>
+                            <span id="mri-os-badge" style="font-size:10.5px; font-weight:800; padding:2px 8px; border-radius:6px; background:rgba(0,0,0,0.06); color:var(--text-secondary);">Détection...</span>
+                        </div>
                     </div>
                 </div>
                 <span class="modal-close" style="font-size:24px; cursor:pointer; line-height:1; color:var(--text-muted);">&times;</span>
@@ -1408,7 +1411,7 @@
                     <div style="width:56px; height:56px; border-radius:50%; background:rgba(16,185,129,0.18); color:#059669; display:flex; align-items:center; justify-content:center; font-size:26px; margin:0 auto 12px auto;">
                         📄
                     </div>
-                    <div style="font-size:16px; font-weight:800; color:#065F46; margin-bottom:6px;">
+                    <div id="mri-dropzone-title" style="font-size:16px; font-weight:800; color:#065F46; margin-bottom:6px;">
                         Glissez votre Roster PDF ici
                     </div>
                     <div style="font-size:12.5px; color:var(--text-muted); max-width:440px; margin:0 auto 16px auto; line-height:1.45;">
@@ -1444,8 +1447,8 @@
                         </a>
                     </div>
 
-                    <div style="background:rgba(59,130,246,0.06); border:1px solid rgba(59,130,246,0.18); border-radius:10px; padding:12px 14px; margin-bottom:14px; font-size:12px; line-height:1.5; color:var(--text-primary);">
-                        <strong>📱 Sur iPad (Safari) :</strong><br>
+                    <div id="mri-os-instructions" style="background:rgba(59,130,246,0.06); border:1px solid rgba(59,130,246,0.18); border-radius:10px; padding:12px 14px; margin-bottom:14px; font-size:12px; line-height:1.5; color:var(--text-primary);">
+                        <strong>📱 Instructions d'importation :</strong><br>
                         1. Affichez votre planning sur le portail CrewAccess RAM, sélectionnez et copiez le texte.<br>
                         2. Collez-le ci-dessous puis touchez <strong>⚡ Analyser &amp; Importer les vols</strong>.
                     </div>
@@ -1466,11 +1469,11 @@
                     <div id="mri-web-status" style="display:none; font-size:13px; font-weight:700; margin-top:12px;"></div>
 
                     <div style="margin-top:16px; padding-top:14px; border-top:1px dashed var(--border);">
-                        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:4px;">
-                            ⭐ Signet Safari 1-Touch (Sans sélection manuelle) :
+                        <div id="mri-shortcut-title" style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:4px;">
+                            ⭐ Signet 1-Touch (Sans sélection manuelle) :
                         </div>
-                        <p style="font-size:11.5px; color:var(--text-muted); margin:0 0 8px 0; line-height:1.4;">
-                            Sur CrewAccess, un clic sur ce signet Safari copie l'intégralité de votre planning dans le presse-papiers iOS sans manipulation.
+                        <p id="mri-shortcut-desc" style="font-size:11.5px; color:var(--text-muted); margin:0 0 8px 0; line-height:1.4;">
+                            Sur CrewAccess, un clic sur ce signet copie l'intégralité de votre planning dans le presse-papiers sans manipulation.
                         </p>
                         <a href="javascript:(function(){try{var t=document.body.innerText||document.body.textContent;var el=document.createElement('textarea');el.value=t;document.body.appendChild(el);el.select();document.execCommand('copy');document.body.removeChild(el);alert('✅ Planning CrewAccess copié !\n\nOuvrez BBJ > MyRoster > Coller pour importer.');}catch(e){alert('Erreur: '+e.message);}})();" class="btn btn-sm" style="background:#F59E0B; color:#fff; font-weight:800; text-decoration:none; display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:6px;" onclick="alert('Pour iPad : Ajoutez cette page aux signets Safari, puis remplacez son adresse par le script copié.'); return false;">
                             ⭐ ⚡ Copier Roster CrewAccess

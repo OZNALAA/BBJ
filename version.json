@@ -1,6 +1,6 @@
 {
-  "version": "5.2",
-  "build": 2026112402,
+  "version": "5.3",
+  "build": 2026112403,
   "releaseDate": "24/11/2026",
-  "notes": "Version 5.2 : Importation Roster complète (Vols réguliers AT, missions VIP BBJ, et tous les services sol BRF, MIS, CA, RV, SIM, OFF)."
+  "notes": "Version 5.3 : Adaptation dynamique du système d'importation selon l'OS (Android, iPad iOS, PC Windows/Mac)."
 }
