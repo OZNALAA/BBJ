@@ -559,3 +559,248 @@ body.cockpit-night-mode .ca-step-num {
     align-items: center;
     margin-top: 12px;
 }
+
+/* ==========================================================================
+   MYROSTER - VUE CALENDRIER & LOGBOOK (Style CrewLounge PILOTLOG / CONNECT)
+   ========================================================================== */
+
+.roster-view-switcher {
+    display: flex;
+    background: rgba(0, 0, 0, 0.05);
+    padding: 3px;
+    border-radius: 8px;
+    gap: 4px;
+}
+
+body.cockpit-night-mode .roster-view-switcher {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.btn-view-mode {
+    border: none;
+    background: transparent;
+    color: var(--text-muted);
+    font-weight: 700;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.btn-view-mode.active {
+    background: #FFFFFF;
+    color: var(--accent, #A51025);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+body.cockpit-night-mode .btn-view-mode.active {
+    background: #1E293B;
+    color: var(--efb-cyan, #38BDF8);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Grille du Calendrier */
+.roster-calendar-view {
+    animation: fadeIn 0.2s ease-in-out;
+}
+
+.cal-month-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 6px;
+    margin-bottom: 20px;
+}
+
+.cal-day-cell {
+    background: var(--bg-card, #FFFFFF);
+    border: 1px solid var(--border, #E2E8F0);
+    border-radius: 10px;
+    min-height: 90px;
+    padding: 6px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    position: relative;
+}
+
+.cal-day-cell:hover {
+    border-color: var(--accent, #A51025);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+body.cockpit-night-mode .cal-day-cell {
+    background: #182230;
+    border-color: #283444;
+}
+
+body.cockpit-night-mode .cal-day-cell:hover {
+    border-color: var(--efb-cyan, #38BDF8);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.cal-day-cell.other-month {
+    opacity: 0.35;
+    background: rgba(0, 0, 0, 0.02);
+}
+
+body.cockpit-night-mode .cal-day-cell.other-month {
+    background: rgba(0, 0, 0, 0.2);
+    opacity: 0.25;
+}
+
+.cal-day-cell.today {
+    border: 2px solid #2563EB;
+}
+
+body.cockpit-night-mode .cal-day-cell.today {
+    border: 2px solid var(--efb-cyan, #38BDF8);
+}
+
+.cal-day-cell.selected {
+    border: 2px solid var(--accent, #A51025);
+    background: rgba(165, 16, 37, 0.04);
+}
+
+body.cockpit-night-mode .cal-day-cell.selected {
+    border: 2px solid #F59E0B;
+    background: rgba(245, 158, 11, 0.08);
+}
+
+.cal-day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 4px;
+}
+
+.cal-day-num {
+    font-size: 12px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.cal-day-cell.today .cal-day-num {
+    background: #2563EB;
+    color: #fff;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+body.cockpit-night-mode .cal-day-cell.today .cal-day-num {
+    background: var(--efb-cyan, #38BDF8);
+    color: #0F172A;
+}
+
+/* Pastilles / Chips d'événements dans les cellules */
+.cal-events-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+    overflow: hidden;
+}
+
+.cal-chip {
+    font-size: 10px;
+    font-weight: 800;
+    padding: 2px 4px;
+    border-radius: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    line-height: 1.2;
+}
+
+.cal-chip-flight {
+    background: rgba(37, 99, 235, 0.14);
+    color: #1D4ED8;
+    border-left: 2px solid #2563EB;
+}
+
+body.cockpit-night-mode .cal-chip-flight {
+    background: rgba(56, 189, 248, 0.2);
+    color: #38BDF8;
+    border-left: 2px solid #38BDF8;
+}
+
+.cal-chip-vip {
+    background: rgba(217, 119, 6, 0.16);
+    color: #B45309;
+    border-left: 2px solid #D97706;
+}
+
+body.cockpit-night-mode .cal-chip-vip {
+    background: rgba(245, 158, 11, 0.25);
+    color: #FCD34D;
+    border-left: 2px solid #F59E0B;
+}
+
+.cal-chip-brf {
+    background: rgba(14, 165, 233, 0.14);
+    color: #0369A1;
+    border-left: 2px solid #0EA5E9;
+}
+
+.cal-chip-sim {
+    background: rgba(239, 68, 68, 0.15);
+    color: #B91C1C;
+    border-left: 2px solid #EF4444;
+}
+
+body.cockpit-night-mode .cal-chip-sim {
+    background: rgba(248, 113, 113, 0.25);
+    color: #F87171;
+    border-left: 2px solid #F87171;
+}
+
+.cal-chip-rv {
+    background: rgba(234, 88, 12, 0.15);
+    color: #C2410C;
+    border-left: 2px solid #EA580C;
+}
+
+.cal-chip-off, .cal-chip-ca {
+    background: rgba(16, 185, 129, 0.14);
+    color: #047857;
+    border-left: 2px solid #10B981;
+}
+
+body.cockpit-night-mode .cal-chip-off, body.cockpit-night-mode .cal-chip-ca {
+    background: rgba(52, 211, 153, 0.2);
+    color: #34D399;
+    border-left: 2px solid #34D399;
+}
+
+.cal-chip-mis {
+    background: rgba(139, 92, 246, 0.14);
+    color: #6D28D9;
+    border-left: 2px solid #8B5CF6;
+}
+
+/* Tiroir de détails du jour */
+.cal-day-details-panel {
+    animation: fadeIn 0.15s ease-out;
+}
+
+/* Responsiveness Tablette & Mobile */
+@media (max-width: 768px) {
+    .cal-day-cell {
+        min-height: 60px;
+        padding: 4px;
+    }
+    .cal-chip {
+        font-size: 8.5px;
+        padding: 1px 3px;
+    }
+    .cal-weekdays-grid {
+        font-size: 10px;
+    }
+}
+

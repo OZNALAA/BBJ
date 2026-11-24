@@ -1,6 +1,6 @@
 {
-  "version": "5.3",
-  "build": 2026112403,
+  "version": "5.4",
+  "build": 2026112404,
   "releaseDate": "24/11/2026",
-  "notes": "Version 5.3 : Adaptation dynamique du système d'importation selon l'OS (Android, iPad iOS, PC Windows/Mac)."
+  "notes": "Version 5.4 : MyRoster inspiré de CrewLounge PILOTLOG (Édition & conversion en Carnet de Vol Flight Log, double vue Liste / Calendrier mensuel interactif, import direct AIMS & planning démo)."
 }

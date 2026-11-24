@@ -143,7 +143,7 @@
             </button>
             <div class="sidebar-user" id="sidebar-user"></div>
             <div class="sidebar-app-info" id="sidebar-app-info">
-                <span class="app-version">Version 5.3</span>
+                <span class="app-version">Version 5.4</span>
                 <span class="app-author">© CDB OUZZINE ALAA-EDDINE</span>
                 <span class="app-device-badge" id="sidebar-device-badge">💻 Système PC</span>
             </div>
@@ -1200,6 +1200,10 @@
 
                 <!-- Filters & Search Toolbar -->
                 <div class="roster-filter-bar">
+                    <div class="roster-view-switcher" style="display:flex; background:rgba(0,0,0,0.06); padding:3px; border-radius:8px; gap:4px;">
+                        <button type="button" class="btn btn-sm btn-view-mode active" id="btn-roster-view-list" style="border-radius:6px; font-weight:800; font-size:12px; padding:6px 12px;">📋 Liste</button>
+                        <button type="button" class="btn btn-sm btn-view-mode" id="btn-roster-view-calendar" style="border-radius:6px; font-weight:800; font-size:12px; padding:6px 12px;">📅 Calendrier</button>
+                    </div>
                     <div style="display:flex; align-items:center; gap:6px;">
                         <label style="font-size:12px; font-weight:700; color:var(--text-muted);">Mois:</label>
                         <select id="roster-filter-month" class="input-field">
@@ -1212,11 +1216,14 @@
                         </select>
                     </div>
                     <div style="display:flex; align-items:center; gap:6px;">
-                        <label style="font-size:12px; font-weight:700; color:var(--text-muted);">Statut:</label>
+                        <label style="font-size:12px; font-weight:700; color:var(--text-muted);">Type:</label>
                         <select id="roster-filter-status" class="input-field">
-                            <option value="all">Tous les vols</option>
-                            <option value="upcoming" selected>Vols à venir</option>
-                            <option value="past">Vols passés</option>
+                            <option value="all">Tous les événements</option>
+                            <option value="flights">✈️ Vols uniquement</option>
+                            <option value="ground">🏢 Services Sol &amp; Simu</option>
+                            <option value="off">🌴 Repos &amp; Congés</option>
+                            <option value="upcoming" selected>À venir</option>
+                            <option value="past">Passés</option>
                         </select>
                     </div>
                     <div style="flex:1; min-width:200px;">
@@ -1224,8 +1231,49 @@
                     </div>
                 </div>
 
-                <!-- Flight Strips List -->
+                <!-- Flight Strips List (Vue Liste) -->
                 <div class="roster-strips-list" id="roster-strips-list"></div>
+
+                <!-- Interactive Calendar View (Vue Calendrier Style CrewLounge) -->
+                <div class="roster-calendar-view" id="roster-calendar-view" style="display:none;">
+                    <div class="cal-nav-bar" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:10px 16px;">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <button type="button" class="btn btn-sm btn-outline" id="cal-btn-prev" title="Mois précédent" style="font-weight:900;">◀</button>
+                            <h3 id="cal-month-title" style="margin:0; font-size:16px; font-weight:800; min-width:170px; text-align:center; color:var(--text-primary);">Novembre 2026</h3>
+                            <button type="button" class="btn btn-sm btn-outline" id="cal-btn-next" title="Mois suivant" style="font-weight:900;">▶</button>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <button type="button" class="btn btn-sm btn-outline" id="cal-btn-today" style="font-weight:700; font-size:11.5px;">Aujourd'hui</button>
+                            <button type="button" class="btn btn-sm btn-accent" id="cal-btn-add-day" style="font-weight:700; font-size:11.5px;">➕ Ajouter Strip</button>
+                        </div>
+                    </div>
+
+                    <!-- En-têtes des jours de la semaine -->
+                    <div class="cal-weekdays-grid" style="display:grid; grid-template-columns:repeat(7, 1fr); text-align:center; font-size:11.5px; font-weight:800; color:var(--text-muted); padding-bottom:8px;">
+                        <div>LUN</div>
+                        <div>MAR</div>
+                        <div>MER</div>
+                        <div>JEU</div>
+                        <div>VEN</div>
+                        <div>SAM</div>
+                        <div>DIM</div>
+                    </div>
+
+                    <!-- Grille des jours du mois -->
+                    <div class="cal-month-grid" id="cal-month-grid" style="display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; margin-bottom:18px;"></div>
+
+                    <!-- Tiroir de détails du jour sélectionné -->
+                    <div class="cal-day-details-panel" id="cal-day-details-panel" style="background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:16px; box-shadow:0 4px 14px rgba(0,0,0,0.05);">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:8px;">
+                            <div style="font-size:14px; font-weight:800; color:var(--text-primary); display:flex; align-items:center; gap:8px;">
+                                <span>📅</span>
+                                <span id="cal-selected-day-title">Détails de la journée</span>
+                            </div>
+                            <span style="font-size:11.5px; color:var(--text-muted);" id="cal-selected-day-count">0 activité(s)</span>
+                        </div>
+                        <div id="cal-selected-day-strips" style="display:flex; flex-direction:column; gap:10px;"></div>
+                    </div>
+                </div>
 
                 <!-- Empty State -->
                 <div class="roster-empty-state" id="roster-empty-state" style="display:none;">
@@ -1315,12 +1363,27 @@
                 <span class="modal-close" style="font-size:24px; cursor:pointer; line-height:1;">&times;</span>
             </div>
             <div class="form-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
-                <div class="form-group">
-                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">N° Vol</label>
-                    <input type="text" id="mrf-flightnum" class="input-field" placeholder="ex: MRS001, AT700" style="text-transform:uppercase; font-weight:700;">
+                <div class="form-group" style="grid-column:1 / -1;">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Type d'Activité / Service</label>
+                    <select id="mrf-activity-type" class="input-field" style="font-weight:800;">
+                        <option value="FLIGHT">✈️ Vol Commercial (AT)</option>
+                        <option value="VIP">👑 Vol VIP BBJ (Royal)</option>
+                        <option value="BRF">📋 Briefing / Présentation</option>
+                        <option value="SIM">🎯 Simulateur (Entraînement / Contrôle)</option>
+                        <option value="RV">⏳ Réserve (Aéroport / Domicile)</option>
+                        <option value="OFF">🌴 Jour OFF (Repos réglementaire)</option>
+                        <option value="CA">🏖️ Congé Annuel</option>
+                        <option value="MIS">🏢 Mission Sol</option>
+                        <option value="MED">🩺 Visite Médicale CEMPN</option>
+                        <option value="INST">🧑‍🏫 Instruction Sol</option>
+                    </select>
                 </div>
                 <div class="form-group">
-                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Date (UTC)</label>
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">N° Vol / Code</label>
+                    <input type="text" id="mrf-flightnum" class="input-field" placeholder="ex: MRS001, AT700, SIM" style="text-transform:uppercase; font-weight:700;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Date Départ (UTC)</label>
                     <input type="date" id="mrf-date" class="input-field">
                 </div>
                 <div class="form-group">
@@ -1332,13 +1395,50 @@
                     <input type="text" id="mrf-dest" class="input-field" placeholder="ex: LFPO, ORY" style="text-transform:uppercase; font-weight:700;">
                 </div>
                 <div class="form-group">
-                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">STD (Départ UTC)</label>
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">STD (Départ prévu UTC)</label>
                     <input type="time" id="mrf-std" class="input-field">
                 </div>
                 <div class="form-group">
-                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">STA (Arrivée UTC)</label>
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">STA (Arrivée prévue UTC)</label>
                     <input type="time" id="mrf-sta" class="input-field">
                 </div>
+
+                <!-- Section Carnet de Vol / Flight Log Réel (Inspiré CrewLounge PILOTLOG) -->
+                <div class="mrf-flightlog-box" style="grid-column:1 / -1; background:rgba(37,99,235,0.05); border:1px solid rgba(37,99,235,0.22); border-radius:10px; padding:12px; margin:4px 0;">
+                    <div style="font-size:12px; font-weight:800; color:#1D4ED8; margin-bottom:8px; display:flex; align-items:center; justify-content:space-between;">
+                        <span>📋 Données Réelles de Vol (Carnet de Vol / Flight Log)</span>
+                        <span style="font-size:10.5px; font-weight:700; background:rgba(37,99,235,0.12); padding:2px 6px; border-radius:4px;">Auto-synchronisé</span>
+                    </div>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                        <div class="form-group">
+                            <label style="font-size:11px; font-weight:700; color:var(--text-muted);">Bloc Départ (Off-Block réel)</label>
+                            <input type="time" id="mrf-offblock" class="input-field">
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size:11px; font-weight:700; color:var(--text-muted);">Bloc Arrivée (On-Block réel)</label>
+                            <input type="time" id="mrf-onblock" class="input-field">
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size:11px; font-weight:700; color:var(--text-muted);">Fonction à bord</label>
+                            <select id="mrf-pilot-function" class="input-field" style="font-weight:700;">
+                                <option value="PIC">CDB / PIC (Commandant)</option>
+                                <option value="COP">OPL / COP (Copilote)</option>
+                                <option value="PICUS">PICUS (Sous supervision)</option>
+                                <option value="DUAL">DUAL (Double commande)</option>
+                                <option value="INSTR">INSTRUCTOR (Instructeur)</option>
+                                <option value="REL">RELIEF (Pilote renfort)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label style="font-size:11px; font-weight:700; color:var(--text-muted);">Atterrissages (Jour / Nuit)</label>
+                            <div style="display:flex; gap:6px;">
+                                <input type="number" id="mrf-ldg-day" class="input-field" placeholder="Jour" title="Atterrissages Jour" min="0" max="10" value="1">
+                                <input type="number" id="mrf-ldg-night" class="input-field" placeholder="Nuit" title="Atterrissages Nuit" min="0" max="10" value="0">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="form-group">
                     <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Forfait RAM Officiel</label>
                     <input type="text" id="mrf-forfait" class="input-field" placeholder="Auto ou ex: 03h10" style="font-weight:700; color:var(--accent);">
@@ -1368,9 +1468,16 @@
                 <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Remarques &amp; Notes d'escale</label>
                 <input type="text" id="mrf-notes" class="input-field" placeholder="Infos hôtel, assistance escale, briefing...">
             </div>
-            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-top:20px;">
                 <button type="button" class="btn modal-cancel">Annuler</button>
-                <button type="button" class="btn btn-accent" id="btn-mrf-save">💾 Enregistrer le Strip</button>
+                <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                    <button type="button" class="btn btn-outline" id="btn-mrf-convert-fl" style="font-size:12px; font-weight:700; border-color:#2563EB; color:#2563EB;">
+                        📋 Convertir en Flight Log
+                    </button>
+                    <button type="button" class="btn btn-accent" id="btn-mrf-save" style="font-size:12px; font-weight:800;">
+                        💾 Enregistrer Strip
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -1463,6 +1570,9 @@
                         </button>
                         <button type="button" class="btn btn-outline" id="btn-mri-paste-clipboard" style="flex:1; padding:11px 16px; font-weight:700; font-size:13px; border-radius:8px;">
                             📋 Coller
+                        </button>
+                        <button type="button" class="btn btn-outline" id="btn-mri-load-demo" style="flex:1; padding:11px 16px; font-weight:700; font-size:13px; border-radius:8px;" title="Charger un planning de test RAM complet avec vols et services sol">
+                            🧪 Planning Démo
                         </button>
                     </div>
 
