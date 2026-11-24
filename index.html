@@ -1431,19 +1431,51 @@
             <div id="mri-panel-web" style="display:none;">
                 <div style="background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:18px; margin-bottom:14px;">
                     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
-                        <div style="font-size:13.5px; font-weight:700; color:var(--text-primary);">
-                            Connexion à CrewAccess RAM
+                        <div>
+                            <div style="font-size:14px; font-weight:800; color:var(--text-primary);">
+                                🌐 Importation Web &amp; Presse-papiers
+                            </div>
+                            <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">
+                                Compatible iPad Safari, iPhone, Android et PC (100% autonome)
+                            </div>
                         </div>
-                        <a href="https://crewaccess.ram.jepphost.com/access-ui/" target="_blank" rel="noopener" class="btn btn-sm btn-outline" style="text-decoration:none;">
-                            ↗️ Ouvrir dans un onglet
+                        <a href="https://crewaccess.ram.jepphost.com/access-ui/" target="_blank" rel="noopener" class="btn btn-sm btn-outline" style="text-decoration:none; font-size:12px; font-weight:700;">
+                            ↗️ Ouvrir CrewAccess RAM
                         </a>
                     </div>
-                    <p style="font-size:12px; color:var(--text-muted); line-height:1.45; margin:0 0 14px 0;">
-                        Ouvrez le portail CrewAccess RAM, affichez votre planning du mois, puis cliquez sur le bouton ci-dessous pour importer directement.
-                    </p>
-                    <button type="button" class="btn btn-accent" id="btn-mri-web-import" style="width:100%; padding:12px; font-weight:800; font-size:14px; border-radius:8px;">
-                        ⚡ Importer depuis le presse-papiers ou CrewAccess
-                    </button>
+
+                    <div style="background:rgba(59,130,246,0.06); border:1px solid rgba(59,130,246,0.18); border-radius:10px; padding:12px 14px; margin-bottom:14px; font-size:12px; line-height:1.5; color:var(--text-primary);">
+                        <strong>📱 Sur iPad (Safari) :</strong><br>
+                        1. Affichez votre planning sur le portail CrewAccess RAM, sélectionnez et copiez le texte.<br>
+                        2. Collez-le ci-dessous puis touchez <strong>⚡ Analyser &amp; Importer les vols</strong>.
+                    </div>
+
+                    <div style="margin-bottom:12px;">
+                        <textarea id="mri-web-paste-area" rows="6" placeholder="Collez ici le texte ou tableau de votre planning CrewAccess RAM (ex: vos vols AT, activités BBJ VIP, dates, etc.)..." style="width:100%; border:1px solid var(--border); border-radius:8px; padding:10px; font-size:12px; font-family:monospace; resize:vertical; background:var(--bg-input); color:var(--text-primary); box-sizing:border-box;"></textarea>
+                    </div>
+
+                    <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                        <button type="button" class="btn btn-accent" id="btn-mri-parse-text" style="flex:2; padding:11px 16px; font-weight:800; font-size:13.5px; border-radius:8px;">
+                            ⚡ Analyser &amp; Importer les vols
+                        </button>
+                        <button type="button" class="btn btn-outline" id="btn-mri-paste-clipboard" style="flex:1; padding:11px 16px; font-weight:700; font-size:13px; border-radius:8px;">
+                            📋 Coller
+                        </button>
+                    </div>
+
+                    <div id="mri-web-status" style="display:none; font-size:13px; font-weight:700; margin-top:12px;"></div>
+
+                    <div style="margin-top:16px; padding-top:14px; border-top:1px dashed var(--border);">
+                        <div style="font-size:12px; font-weight:700; color:var(--text-primary); margin-bottom:4px;">
+                            ⭐ Signet Safari 1-Touch (Sans sélection manuelle) :
+                        </div>
+                        <p style="font-size:11.5px; color:var(--text-muted); margin:0 0 8px 0; line-height:1.4;">
+                            Sur CrewAccess, un clic sur ce signet Safari copie l'intégralité de votre planning dans le presse-papiers iOS sans manipulation.
+                        </p>
+                        <a href="javascript:(function(){try{var t=document.body.innerText||document.body.textContent;var el=document.createElement('textarea');el.value=t;document.body.appendChild(el);el.select();document.execCommand('copy');document.body.removeChild(el);alert('✅ Planning CrewAccess copié !\n\nOuvrez BBJ > MyRoster > Coller pour importer.');}catch(e){alert('Erreur: '+e.message);}})();" class="btn btn-sm" style="background:#F59E0B; color:#fff; font-weight:800; text-decoration:none; display:inline-flex; align-items:center; gap:6px; padding:6px 14px; border-radius:6px;" onclick="alert('Pour iPad : Ajoutez cette page aux signets Safari, puis remplacez son adresse par le script copié.'); return false;">
+                            ⭐ ⚡ Copier Roster CrewAccess
+                        </a>
+                    </div>
                 </div>
             </div>
 
