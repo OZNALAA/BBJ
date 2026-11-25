@@ -143,7 +143,7 @@
             </button>
             <div class="sidebar-user" id="sidebar-user"></div>
             <div class="sidebar-app-info" id="sidebar-app-info">
-                <span class="app-version">Version 5.4</span>
+                <span class="app-version">Version 5.5</span>
                 <span class="app-author">© CDB OUZZINE ALAA-EDDINE</span>
                 <span class="app-device-badge" id="sidebar-device-badge">💻 Système PC</span>
             </div>
@@ -583,6 +583,10 @@
                     <button type="button" class="btn-wizard-clear" id="wizard-clear-all" title="Réinitialiser toutes les saisies (Reset Inputs)">
                         <span class="btn-clear-icon">🗑️</span>
                         <span>Reset Inputs</span>
+                    </button>
+                    <button type="button" class="btn btn-accent btn-wizard-print" id="btn-wizard-print-header" title="Imprimer la Fiche Masse &amp; Centrage (Load &amp; Trim Sheet)">
+                        <span>🖨️</span>
+                        <span>PRINT (Load &amp; Trim Sheet)</span>
                     </button>
                 </div>
                 <div class="wizard-content" id="wizard-content"></div>
@@ -1159,128 +1163,254 @@
                     </div>
                 </div>
 
-                <!-- KPI Summary Dashboard -->
-                <div class="roster-kpi-grid">
-                    <div class="roster-kpi-card">
-                        <div class="roster-kpi-icon">✈️</div>
-                        <div class="roster-kpi-content">
-                            <div class="roster-kpi-val" id="kpi-roster-vols">0</div>
-                            <div class="roster-kpi-lbl">Vols Roster</div>
-                        </div>
-                    </div>
-                    <div class="roster-kpi-card">
-                        <div class="roster-kpi-icon">⏱️</div>
-                        <div class="roster-kpi-content">
-                            <div class="roster-kpi-val" id="kpi-roster-forfait">00:00</div>
-                            <div class="roster-kpi-lbl">Total Forfaits</div>
-                        </div>
-                    </div>
-                    <div class="roster-kpi-card">
-                        <div class="roster-kpi-icon">🌙</div>
-                        <div class="roster-kpi-content">
-                            <div class="roster-kpi-val" id="kpi-roster-nuit">00:00</div>
-                            <div class="roster-kpi-lbl">Heures de Nuit</div>
-                        </div>
-                    </div>
-                    <div class="roster-kpi-card">
-                        <div class="roster-kpi-icon">🍽️</div>
-                        <div class="roster-kpi-content">
-                            <div class="roster-kpi-val" id="kpi-roster-repas">0 MAD</div>
-                            <div class="roster-kpi-lbl">Per Diem / Repas</div>
-                        </div>
-                    </div>
-                    <div class="roster-kpi-card">
-                        <div class="roster-kpi-icon">🏨</div>
-                        <div class="roster-kpi-content">
-                            <div class="roster-kpi-val" id="kpi-roster-decoucher">0</div>
-                            <div class="roster-kpi-lbl">Découchers</div>
-                        </div>
-                    </div>
+                <!-- Sub-Navigation MyRoster : Planning & Strips vs Carnet de Vol Dédié -->
+                <div class="myroster-subnav-tabs" style="display:flex; gap:10px; margin-bottom:16px; border-bottom:1px solid var(--border); padding-bottom:12px;">
+                    <button type="button" class="btn myroster-tab-btn active" id="btn-tab-planning" style="font-weight:800; font-size:13px; display:flex; align-items:center; gap:8px; border-radius:8px; padding:9px 18px;">
+                        <span>📅</span> <span>Planning &amp; Strips</span>
+                    </button>
+                    <button type="button" class="btn myroster-tab-btn" id="btn-tab-logbook" style="font-weight:800; font-size:13px; display:flex; align-items:center; gap:8px; border-radius:8px; padding:9px 18px; background:transparent; color:var(--text-secondary); border:1px solid var(--border);">
+                        <span>📘</span> <span>Carnet de Vol (Logbook Réel)</span>
+                        <span class="badge" id="myroster-logbook-badge" style="background:rgba(37,99,235,0.15); color:#2563EB; font-size:11px; padding:2px 6px; border-radius:10px; font-weight:800;">0 vol(s)</span>
+                    </button>
                 </div>
 
-                <!-- Filters & Search Toolbar -->
-                <div class="roster-filter-bar">
-                    <div class="roster-view-switcher" style="display:flex; background:rgba(0,0,0,0.06); padding:3px; border-radius:8px; gap:4px;">
-                        <button type="button" class="btn btn-sm btn-view-mode active" id="btn-roster-view-list" style="border-radius:6px; font-weight:800; font-size:12px; padding:6px 12px;">📋 Liste</button>
-                        <button type="button" class="btn btn-sm btn-view-mode" id="btn-roster-view-calendar" style="border-radius:6px; font-weight:800; font-size:12px; padding:6px 12px;">📅 Calendrier</button>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:6px;">
-                        <label style="font-size:12px; font-weight:700; color:var(--text-muted);">Mois:</label>
-                        <select id="roster-filter-month" class="input-field">
-                            <option value="all">Tous les mois</option>
-                            <option value="2026-11">Novembre 2026</option>
-                            <option value="2026-12">Décembre 2026</option>
-                            <option value="2027-01">Janvier 2027</option>
-                            <option value="2027-02">Février 2027</option>
-                            <option value="2027-03">Mars 2027</option>
-                        </select>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:6px;">
-                        <label style="font-size:12px; font-weight:700; color:var(--text-muted);">Type:</label>
-                        <select id="roster-filter-status" class="input-field">
-                            <option value="all">Tous les événements</option>
-                            <option value="flights">✈️ Vols uniquement</option>
-                            <option value="ground">🏢 Services Sol &amp; Simu</option>
-                            <option value="off">🌴 Repos &amp; Congés</option>
-                            <option value="upcoming" selected>À venir</option>
-                            <option value="past">Passés</option>
-                        </select>
-                    </div>
-                    <div style="flex:1; min-width:200px;">
-                        <input type="search" id="roster-search" class="input-field" placeholder="🔍 Rechercher (n° vol, aéroport, CDB, OPL)...">
-                    </div>
-                </div>
-
-                <!-- Flight Strips List (Vue Liste) -->
-                <div class="roster-strips-list" id="roster-strips-list"></div>
-
-                <!-- Interactive Calendar View (Vue Calendrier Style CrewLounge) -->
-                <div class="roster-calendar-view" id="roster-calendar-view" style="display:none;">
-                    <div class="cal-nav-bar" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:10px 16px;">
-                        <div style="display:flex; align-items:center; gap:8px;">
-                            <button type="button" class="btn btn-sm btn-outline" id="cal-btn-prev" title="Mois précédent" style="font-weight:900;">◀</button>
-                            <h3 id="cal-month-title" style="margin:0; font-size:16px; font-weight:800; min-width:170px; text-align:center; color:var(--text-primary);">Novembre 2026</h3>
-                            <button type="button" class="btn btn-sm btn-outline" id="cal-btn-next" title="Mois suivant" style="font-weight:900;">▶</button>
-                        </div>
-                        <div style="display:flex; align-items:center; gap:8px;">
-                            <button type="button" class="btn btn-sm btn-outline" id="cal-btn-today" style="font-weight:700; font-size:11.5px;">Aujourd'hui</button>
-                            <button type="button" class="btn btn-sm btn-accent" id="cal-btn-add-day" style="font-weight:700; font-size:11.5px;">➕ Ajouter Strip</button>
-                        </div>
-                    </div>
-
-                    <!-- En-têtes des jours de la semaine -->
-                    <div class="cal-weekdays-grid" style="display:grid; grid-template-columns:repeat(7, 1fr); text-align:center; font-size:11.5px; font-weight:800; color:var(--text-muted); padding-bottom:8px;">
-                        <div>LUN</div>
-                        <div>MAR</div>
-                        <div>MER</div>
-                        <div>JEU</div>
-                        <div>VEN</div>
-                        <div>SAM</div>
-                        <div>DIM</div>
-                    </div>
-
-                    <!-- Grille des jours du mois -->
-                    <div class="cal-month-grid" id="cal-month-grid" style="display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; margin-bottom:18px;"></div>
-
-                    <!-- Tiroir de détails du jour sélectionné -->
-                    <div class="cal-day-details-panel" id="cal-day-details-panel" style="background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:16px; box-shadow:0 4px 14px rgba(0,0,0,0.05);">
-                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:8px;">
-                            <div style="font-size:14px; font-weight:800; color:var(--text-primary); display:flex; align-items:center; gap:8px;">
-                                <span>📅</span>
-                                <span id="cal-selected-day-title">Détails de la journée</span>
+                <!-- SECTION 1 : PLANNING & STRIPS (LISTE & CALENDRIER) -->
+                <div class="myroster-section" id="myroster-section-planning">
+                    <!-- KPI Summary Dashboard -->
+                    <div class="roster-kpi-grid">
+                        <div class="roster-kpi-card">
+                            <div class="roster-kpi-icon">✈️</div>
+                            <div class="roster-kpi-content">
+                                <div class="roster-kpi-val" id="kpi-roster-vols">0</div>
+                                <div class="roster-kpi-lbl">Vols Roster</div>
                             </div>
-                            <span style="font-size:11.5px; color:var(--text-muted);" id="cal-selected-day-count">0 activité(s)</span>
                         </div>
-                        <div id="cal-selected-day-strips" style="display:flex; flex-direction:column; gap:10px;"></div>
+                        <div class="roster-kpi-card">
+                            <div class="roster-kpi-icon">⏱️</div>
+                            <div class="roster-kpi-content">
+                                <div class="roster-kpi-val" id="kpi-roster-forfait">00:00</div>
+                                <div class="roster-kpi-lbl">Total Forfaits</div>
+                            </div>
+                        </div>
+                        <div class="roster-kpi-card">
+                            <div class="roster-kpi-icon">🌙</div>
+                            <div class="roster-kpi-content">
+                                <div class="roster-kpi-val" id="kpi-roster-nuit">00:00</div>
+                                <div class="roster-kpi-lbl">Heures de Nuit</div>
+                            </div>
+                        </div>
+                        <div class="roster-kpi-card">
+                            <div class="roster-kpi-icon">🍽️</div>
+                            <div class="roster-kpi-content">
+                                <div class="roster-kpi-val" id="kpi-roster-repas">0 MAD</div>
+                                <div class="roster-kpi-lbl">Per Diem / Repas</div>
+                            </div>
+                        </div>
+                        <div class="roster-kpi-card">
+                            <div class="roster-kpi-icon">🏨</div>
+                            <div class="roster-kpi-content">
+                                <div class="roster-kpi-val" id="kpi-roster-decoucher">0</div>
+                                <div class="roster-kpi-lbl">Découchers</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Filters & Search Toolbar -->
+                    <div class="roster-filter-bar">
+                        <div class="roster-view-switcher" style="display:flex; background:rgba(0,0,0,0.06); padding:3px; border-radius:8px; gap:4px;">
+                            <button type="button" class="btn btn-sm btn-view-mode active" id="btn-roster-view-list" style="border-radius:6px; font-weight:800; font-size:12px; padding:6px 12px;">📋 Liste</button>
+                            <button type="button" class="btn btn-sm btn-view-mode" id="btn-roster-view-calendar" style="border-radius:6px; font-weight:800; font-size:12px; padding:6px 12px;">📅 Calendrier</button>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <label style="font-size:12px; font-weight:700; color:var(--text-muted);">Mois:</label>
+                            <select id="roster-filter-month" class="input-field">
+                                <option value="all">Tous les mois</option>
+                                <option value="2026-11">Novembre 2026</option>
+                                <option value="2026-12">Décembre 2026</option>
+                                <option value="2027-01">Janvier 2027</option>
+                                <option value="2027-02">Février 2027</option>
+                                <option value="2027-03">Mars 2027</option>
+                            </select>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <label style="font-size:12px; font-weight:700; color:var(--text-muted);">Type:</label>
+                            <select id="roster-filter-status" class="input-field">
+                                <option value="all">Tous les événements</option>
+                                <option value="flights">✈️ Vols uniquement</option>
+                                <option value="ground">🏢 Services Sol &amp; Simu</option>
+                                <option value="off">🌴 Repos &amp; Congés</option>
+                                <option value="upcoming" selected>À venir</option>
+                                <option value="past">Passés</option>
+                            </select>
+                        </div>
+                        <div style="flex:1; min-width:200px;">
+                            <input type="search" id="roster-search" class="input-field" placeholder="🔍 Rechercher (n° vol, aéroport, CDB, OPL)...">
+                        </div>
+                    </div>
+
+                    <!-- Flight Strips List (Vue Liste) -->
+                    <div class="roster-strips-list" id="roster-strips-list"></div>
+
+                    <!-- Interactive Calendar View (Vue Calendrier Style CrewLounge) -->
+                    <div class="roster-calendar-view" id="roster-calendar-view" style="display:none;">
+                        <div class="cal-nav-bar" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; background:var(--bg-card); border:1px solid var(--border); border-radius:10px; padding:10px 16px;">
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <button type="button" class="btn btn-sm btn-outline" id="cal-btn-prev" title="Mois précédent" style="font-weight:900;">◀</button>
+                                <h3 id="cal-month-title" style="margin:0; font-size:16px; font-weight:800; min-width:170px; text-align:center; color:var(--text-primary);">Novembre 2026</h3>
+                                <button type="button" class="btn btn-sm btn-outline" id="cal-btn-next" title="Mois suivant" style="font-weight:900;">▶</button>
+                            </div>
+                            <div style="display:flex; align-items:center; gap:8px;">
+                                <button type="button" class="btn btn-sm btn-outline" id="cal-btn-today" style="font-weight:700; font-size:11.5px;">Aujourd'hui</button>
+                                <button type="button" class="btn btn-sm btn-accent" id="cal-btn-add-day" style="font-weight:700; font-size:11.5px;">➕ Ajouter Strip</button>
+                            </div>
+                        </div>
+
+                        <!-- En-têtes des jours de la semaine -->
+                        <div class="cal-weekdays-grid" style="display:grid; grid-template-columns:repeat(7, 1fr); text-align:center; font-size:11.5px; font-weight:800; color:var(--text-muted); padding-bottom:8px;">
+                            <div>LUN</div>
+                            <div>MAR</div>
+                            <div>MER</div>
+                            <div>JEU</div>
+                            <div>VEN</div>
+                            <div>SAM</div>
+                            <div>DIM</div>
+                        </div>
+
+                        <!-- Grille des jours du mois -->
+                        <div class="cal-month-grid" id="cal-month-grid" style="display:grid; grid-template-columns:repeat(7, 1fr); gap:6px; margin-bottom:18px;"></div>
+
+                        <!-- Tiroir de détails du jour sélectionné -->
+                        <div class="cal-day-details-panel" id="cal-day-details-panel" style="background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:16px; box-shadow:0 4px 14px rgba(0,0,0,0.05);">
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; border-bottom:1px solid var(--border); padding-bottom:8px;">
+                                <div style="font-size:14px; font-weight:800; color:var(--text-primary); display:flex; align-items:center; gap:8px;">
+                                    <span>📅</span>
+                                    <span id="cal-selected-day-title">Détails de la journée</span>
+                                </div>
+                                <span style="font-size:11.5px; color:var(--text-muted);" id="cal-selected-day-count">0 activité(s)</span>
+                            </div>
+                            <div id="cal-selected-day-strips" style="display:flex; flex-direction:column; gap:10px;"></div>
+                        </div>
+                    </div>
+
+                    <!-- Empty State Planning -->
+                    <div class="roster-empty-state" id="roster-empty-state" style="display:none;">
+                        <div style="font-size:40px; margin-bottom:10px;">📋</div>
+                        <div style="font-size:16px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">Aucun strip de vol trouvé</div>
+                        <div style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Ajoutez manuellement un strip ou importez votre planning CrewAccess RAM.</div>
+                        <button type="button" class="btn btn-accent" onclick="document.getElementById('btn-roster-add').click()">➕ Créer un Strip</button>
                     </div>
                 </div>
 
-                <!-- Empty State -->
-                <div class="roster-empty-state" id="roster-empty-state" style="display:none;">
-                    <div style="font-size:40px; margin-bottom:10px;">📋</div>
-                    <div style="font-size:16px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">Aucun strip de vol trouvé</div>
-                    <div style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Ajoutez manuellement un strip ou importez votre planning CrewAccess RAM.</div>
-                    <button type="button" class="btn btn-accent" onclick="document.getElementById('btn-roster-add').click()">➕ Créer un Strip</button>
+                <!-- SECTION 2 : CARNET DE VOL DÉDIÉ MYROSTER (PILOTE LOGBOOK INDÉPENDANT) -->
+                <div class="myroster-section" id="myroster-section-logbook" style="display:none;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:16px; background:var(--bg-card); border:1px solid var(--border); border-radius:12px; padding:14px 18px;">
+                        <div>
+                            <h3 style="font-size:17px; font-weight:800; margin:0; color:var(--text-primary); display:flex; align-items:center; gap:8px;">
+                                <span>📘</span> Carnet de Vol Personnel (Pilote Logbook BBJ)
+                            </h3>
+                            <div style="font-size:11.5px; color:var(--text-muted); margin-top:2px;">
+                                Historique officiel de vos vols réels effectués, heures bloc, nuit, IFR &amp; atterrissages (100% autonome)
+                            </div>
+                        </div>
+                        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                            <button type="button" class="btn btn-accent" id="btn-logbook-add-entry" style="font-weight:800; font-size:12.5px;">➕ Saisir un Vol</button>
+                            <button type="button" class="btn btn-outline" id="btn-logbook-import-from-strips" style="font-weight:700; font-size:12px;" title="Convertir des vols du planning en vols réels">📥 Convertir Planning</button>
+                            <button type="button" class="btn btn-outline" id="btn-logbook-export-csv" style="font-weight:700; font-size:12px;">📊 Exporter CSV</button>
+                            <button type="button" class="btn btn-outline" id="btn-logbook-print" style="font-weight:700; font-size:12px;">🖨️ Imprimer</button>
+                        </div>
+                    </div>
+
+                    <!-- Logbook Cumulative KPI Grid -->
+                    <div class="roster-kpi-grid" style="grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));">
+                        <div class="roster-kpi-card">
+                            <div class="roster-kpi-icon" style="color:#2563EB; background:rgba(37,99,235,0.1);">⏱️</div>
+                            <div class="roster-kpi-content">
+                                <div class="roster-kpi-val" id="kpi-logbook-flight">00:00</div>
+                                <div class="roster-kpi-lbl">Temps de Vol Total</div>
+                            </div>
+                        </div>
+                        <div class="roster-kpi-card">
+                            <div class="roster-kpi-icon" style="color:#059669; background:rgba(16,185,129,0.1);">🛫</div>
+                            <div class="roster-kpi-content">
+                                <div class="roster-kpi-val" id="kpi-logbook-block">00:00</div>
+                                <div class="roster-kpi-lbl">Temps de Bloc Total</div>
+                            </div>
+                        </div>
+                        <div class="roster-kpi-card">
+                            <div class="roster-kpi-icon" style="color:#D97706; background:rgba(217,119,6,0.1);">👨‍✈️</div>
+                            <div class="roster-kpi-content">
+                                <div class="roster-kpi-val" id="kpi-logbook-pic">00:00</div>
+                                <div class="roster-kpi-lbl">Heures CDB / PIC</div>
+                            </div>
+                        </div>
+                        <div class="roster-kpi-card">
+                            <div class="roster-kpi-icon" style="color:#7C3AED; background:rgba(124,58,237,0.1);">🌙</div>
+                            <div class="roster-kpi-content">
+                                <div class="roster-kpi-val" id="kpi-logbook-night">00:00</div>
+                                <div class="roster-kpi-lbl">Heures de Nuit</div>
+                            </div>
+                        </div>
+                        <div class="roster-kpi-card">
+                            <div class="roster-kpi-icon" style="color:#0284C7; background:rgba(2,132,199,0.1);">🛬</div>
+                            <div class="roster-kpi-content">
+                                <div class="roster-kpi-val" id="kpi-logbook-landings">0 / 0</div>
+                                <div class="roster-kpi-lbl">Att. Jour / Nuit</div>
+                            </div>
+                        </div>
+                        <div class="roster-kpi-card">
+                            <div class="roster-kpi-icon" style="color:#DC2626; background:rgba(220,38,38,0.1);">🎯</div>
+                            <div class="roster-kpi-content">
+                                <div class="roster-kpi-val" id="kpi-logbook-ifr">00:00</div>
+                                <div class="roster-kpi-lbl">Heures IFR</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Logbook Filters Toolbar -->
+                    <div class="roster-filter-bar" style="margin-top:12px;">
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <label style="font-size:12px; font-weight:700; color:var(--text-muted);">Année:</label>
+                            <select id="logbook-filter-year" class="input-field">
+                                <option value="all">Toutes les années</option>
+                                <option value="2026" selected>2026</option>
+                                <option value="2025">2025</option>
+                                <option value="2024">2024</option>
+                            </select>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <label style="font-size:12px; font-weight:700; color:var(--text-muted);">Fonction:</label>
+                            <select id="logbook-filter-function" class="input-field">
+                                <option value="all">Toutes les fonctions</option>
+                                <option value="PIC">CDB / PIC</option>
+                                <option value="COP">OPL / COP</option>
+                                <option value="PICUS">PICUS</option>
+                                <option value="INSTR">Instructeur</option>
+                            </select>
+                        </div>
+                        <div style="display:flex; align-items:center; gap:6px;">
+                            <label style="font-size:12px; font-weight:700; color:var(--text-muted);">Avion:</label>
+                            <select id="logbook-filter-ac" class="input-field">
+                                <option value="all">Tous les appareils</option>
+                                <option value="CN-RRN">CN-RRN (BBJ2)</option>
+                                <option value="B737">Flotte B737 RAM</option>
+                                <option value="SIM">Simulateur</option>
+                            </select>
+                        </div>
+                        <div style="flex:1; min-width:200px;">
+                            <input type="search" id="logbook-search" class="input-field" placeholder="🔍 Rechercher vol logbook (n° vol, aéroport, OPL)...">
+                        </div>
+                    </div>
+
+                    <!-- Logbook Entries List -->
+                    <div class="myroster-logbook-list" id="myroster-logbook-list" style="margin-top:12px;"></div>
+
+                    <!-- Logbook Empty State -->
+                    <div class="roster-empty-state" id="myroster-logbook-empty" style="display:none;">
+                        <div style="font-size:40px; margin-bottom:10px;">📘</div>
+                        <div style="font-size:16px; font-weight:700; color:var(--text-primary); margin-bottom:6px;">Carnet de Vol vide</div>
+                        <div style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Saisissez un vol manuellement ou convertissez vos strips du planning ci-dessus.</div>
+                        <button type="button" class="btn btn-accent" id="btn-empty-add-logbook">➕ Enregistrer mon premier vol</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1472,12 +1602,173 @@
                 <button type="button" class="btn modal-cancel">Annuler</button>
                 <div style="display:flex; gap:8px; flex-wrap:wrap;">
                     <button type="button" class="btn btn-outline" id="btn-mrf-convert-fl" style="font-size:12px; font-weight:700; border-color:#2563EB; color:#2563EB;">
-                        📋 Convertir en Flight Log
+                        📘 Archiver dans Carnet de Vol
                     </button>
                     <button type="button" class="btn btn-accent" id="btn-mrf-save" style="font-size:12px; font-weight:800;">
                         💾 Enregistrer Strip
                     </button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Saisie / Édition d'un Vol dans le CARNET DE VOL DÉDIÉ (Logbook Réel) -->
+    <div class="modal" id="modal-myroster-logbook-entry">
+        <div class="modal-box" style="max-width:680px; width:95vw; border-radius:14px; padding:22px; max-height:92vh; overflow-y:auto;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; border-bottom:1px solid var(--border); padding-bottom:10px;">
+                <h3 style="font-size:17px; font-weight:800; margin:0; color:var(--text-primary);" id="mle-title">📘 Saisie Vol Carnet de Vol</h3>
+                <span class="modal-close" style="font-size:24px; cursor:pointer; line-height:1;">&times;</span>
+            </div>
+            <div class="form-grid" style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Date de Vol (UTC)</label>
+                    <input type="date" id="mle-date" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">N° de Vol / Mission</label>
+                    <input type="text" id="mle-flightnum" class="input-field" placeholder="ex: MRS001 VIP, AT700" style="text-transform:uppercase; font-weight:700;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Type d'Avion</label>
+                    <input type="text" id="mle-actype" class="input-field" value="B737-BBJ2" style="font-weight:700;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Immatriculation</label>
+                    <input type="text" id="mle-acreg" class="input-field" value="CN-RRN" style="text-transform:uppercase; font-weight:700;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Départ (OACI / IATA)</label>
+                    <input type="text" id="mle-origin" class="input-field" placeholder="GMMN / CMN" style="text-transform:uppercase; font-weight:700;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Arrivée (OACI / IATA)</label>
+                    <input type="text" id="mle-dest" class="input-field" placeholder="LFPO / ORY" style="text-transform:uppercase; font-weight:700;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Bloc Départ (Chocks Off)</label>
+                    <input type="time" id="mle-offblock" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Bloc Arrivée (Chocks On)</label>
+                    <input type="time" id="mle-onblock" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Décollage (Airborne)</label>
+                    <input type="time" id="mle-takeoff" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Atterrissage (Touchdown)</label>
+                    <input type="time" id="mle-landing" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Temps de Bloc (Total)</label>
+                    <input type="text" id="mle-blocktime" class="input-field" placeholder="00:00" style="font-weight:800; color:#2563EB;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Temps de Vol Réel</label>
+                    <input type="text" id="mle-flighttime" class="input-field" placeholder="00:00" style="font-weight:800; color:#059669;">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Fonction Pilote</label>
+                    <select id="mle-pilot-function" class="input-field" style="font-weight:800;">
+                        <option value="PIC">CDB / PIC (Commandant)</option>
+                        <option value="COP">OPL / COP (Copilote)</option>
+                        <option value="PICUS">PICUS (Commandant sous surveillance)</option>
+                        <option value="DUAL">DUAL (Double commande)</option>
+                        <option value="INSTR">INSTRUCTOR (Instructeur)</option>
+                        <option value="REL">RELIEF (Pilote de renfort)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Approche</label>
+                    <select id="mle-approach" class="input-field">
+                        <option value="ILS CAT I">ILS CAT I</option>
+                        <option value="ILS CAT II">ILS CAT II</option>
+                        <option value="ILS CAT III">ILS CAT III</option>
+                        <option value="RNP / RNAV">RNP / RNAV (GNSS)</option>
+                        <option value="VOR / DME">VOR / DME</option>
+                        <option value="VISUELLE">Approche Visuelle</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Atterrissages (Jour / Nuit)</label>
+                    <div style="display:flex; gap:6px;">
+                        <input type="number" id="mle-ldg-day" class="input-field" placeholder="Jour" title="Atterrissages Jour" min="0" max="10" value="1">
+                        <input type="number" id="mle-ldg-night" class="input-field" placeholder="Nuit" title="Atterrissages Nuit" min="0" max="10" value="0">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Temps de Nuit (Night Time)</label>
+                    <input type="time" id="mle-nighttime" class="input-field" value="00:00">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Temps IFR</label>
+                    <input type="time" id="mle-ifrtime" class="input-field" value="00:00">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Commandant de Bord (CDB)</label>
+                    <input type="text" id="mle-cdb" class="input-field" placeholder="Nom CDB">
+                </div>
+                <div class="form-group" style="grid-column:1 / -1;">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Copilote / Membres d'Équipage</label>
+                    <input type="text" id="mle-opl" class="input-field" placeholder="Nom OPL / équipage...">
+                </div>
+                <div class="form-group" style="grid-column:1 / -1;">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Remarques Opérationnelles</label>
+                    <input type="text" id="mle-notes" class="input-field" placeholder="Conditions météo, carburant, déroulement du vol...">
+                </div>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:20px; border-top:1px solid var(--border); padding-top:14px;">
+                <button type="button" class="btn modal-cancel">Annuler</button>
+                <button type="button" class="btn btn-accent" id="btn-mle-save" style="font-weight:800;">💾 Enregistrer dans le Carnet de Vol</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Rapide : Conversion Strip -> Carnet de Vol Dédié -->
+    <div class="modal" id="modal-convert-to-logbook">
+        <div class="modal-box" style="max-width:500px; width:92vw; border-radius:14px; padding:22px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; border-bottom:1px solid var(--border); padding-bottom:10px;">
+                <h3 style="font-size:17px; font-weight:800; margin:0; color:var(--text-primary);">📘 Enregistrer dans mon Carnet de Vol</h3>
+                <span class="modal-close" style="font-size:24px; cursor:pointer; line-height:1;">&times;</span>
+            </div>
+            <div id="mcl-summary" style="background:rgba(37,99,235,0.06); border:1px solid rgba(37,99,235,0.2); border-radius:10px; padding:12px; margin-bottom:16px;">
+                <div style="font-size:15px; font-weight:800; color:#1D4ED8;" id="mcl-flight-title">AT 700 • GMMN ➔ LFPO</div>
+                <div style="font-size:12px; color:var(--text-muted); margin-top:4px;" id="mcl-flight-sub">Date : 24/11/2026 • Prévu : 08:00z - 11:15z</div>
+            </div>
+            <p style="font-size:12px; color:var(--text-secondary); margin-bottom:14px;">
+                Ajustez les heures réelles de départ/arrivée bloc si nécessaire :
+            </p>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px;">
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Bloc Départ (Off-Block)</label>
+                    <input type="time" id="mcl-offblock" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Bloc Arrivée (On-Block)</label>
+                    <input type="time" id="mcl-onblock" class="input-field">
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Fonction</label>
+                    <select id="mcl-function" class="input-field" style="font-weight:700;">
+                        <option value="PIC">CDB / PIC</option>
+                        <option value="COP">OPL / COP</option>
+                        <option value="PICUS">PICUS</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label style="font-size:11.5px; font-weight:700; color:var(--text-muted);">Atterrissage</label>
+                    <div style="display:flex; gap:6px;">
+                        <input type="number" id="mcl-ldg-day" class="input-field" placeholder="Jour" value="1" min="0" max="10">
+                        <input type="number" id="mcl-ldg-night" class="input-field" placeholder="Nuit" value="0" min="0" max="10">
+                    </div>
+                </div>
+            </div>
+            <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:18px;">
+                <button type="button" class="btn modal-cancel">Annuler</button>
+                <button type="button" class="btn btn-accent" id="btn-mcl-confirm" style="font-weight:800; background:#2563EB;">
+                    📘 Confirmer l'enregistrement
+                </button>
             </div>
         </div>
     </div>

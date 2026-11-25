@@ -1332,8 +1332,25 @@ body.efb-light-mode #panel-newcalc .wizard-step.active .ws-num {
 /* Wizard Sub-Bar & Clear Button */
 .wizard-sub-bar {
   display: flex;
-  justify-content: flex-end;
-  padding: 6px 12px 2px 12px;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px 4px 12px;
+}
+
+.btn-wizard-print {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Chakra Petch', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 5px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
 }
 
 .btn-wizard-clear {

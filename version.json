@@ -1,6 +1,6 @@
 {
-  "version": "5.4",
-  "build": 2026112404,
-  "releaseDate": "24/11/2026",
-  "notes": "Version 5.4 : MyRoster inspiré de CrewLounge PILOTLOG (Édition & conversion en Carnet de Vol Flight Log, double vue Liste / Calendrier mensuel interactif, import direct AIMS & planning démo)."
+  "version": "5.5",
+  "build": 2026112502,
+  "releaseDate": "25/11/2026",
+  "notes": "Version 5.5 : Correction et fiabilisation complète du bouton PRINT dans Weight & Balance (accessible directement depuis toutes les étapes du wizard), résolution de l'export window.printPanel et du graphique de centrage."
 }
